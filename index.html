@@ -1,0 +1,4469 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Daily Work Web - Tracer Online</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ============================================================
+       LOADING PAGE STYLES
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b1120;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      padding: 1.2rem;
+    }
+
+    /* ===== LOADING WRAPPER ===== */
+    .loading-wrapper {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 2.4rem;
+      padding: 2.8rem 1.8rem 2.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      text-align: center;
+      transition: 0.6s ease;
+      position: relative;
+      z-index: 10;
+    }
+
+    .loading-wrapper.hidden {
+      opacity: 0;
+      transform: scale(0.96);
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+    }
+
+    /* ===== LOGO / ICON ===== */
+    .logo-container {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 96px;
+      height: 96px;
+      margin-bottom: 1.4rem;
+    }
+
+    .logo-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(108, 92, 231, 0.15);
+      animation: ringPulse 2.4s ease-in-out infinite;
+    }
+
+    .logo-ring:nth-child(2) {
+      border-color: rgba(162, 155, 254, 0.08);
+      animation-delay: 0.8s;
+      border-width: 3px;
+    }
+
+    .logo-ring:nth-child(3) {
+      border-color: rgba(108, 92, 231, 0.05);
+      animation-delay: 1.6s;
+      border-width: 4px;
+    }
+
+    @keyframes ringPulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.25); opacity: 0.9; }
+    }
+
+    .logo-icon {
+      position: relative;
+      z-index: 2;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 16px 48px rgba(108, 92, 231, 0.35);
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .logo-icon:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-icon svg {
+      width: 36px;
+      height: 36px;
+      fill: white;
+    }
+
+    .loading-title {
+      color: #f0f4ff;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.2rem;
+    }
+
+    .loading-sub {
+      color: #8b9fc9;
+      font-size: 0.9rem;
+      font-weight: 400;
+      margin-bottom: 2rem;
+      border-left: 3px solid #6c5ce7;
+      padding-left: 0.8rem;
+      display: inline-block;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6c5ce7, #a29bfe, #fdcb6e);
+      border-radius: 20px;
+      transition: width 0.1s ease;
+      position: relative;
+      box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 20px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25));
+      border-radius: 20px;
+    }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.6rem;
+    }
+
+    .progress-percent {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #a29bfe;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.5px;
+    }
+
+    .progress-status {
+      font-size: 0.75rem;
+      color: #8b9fc9;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress-status .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #46d47c;
+      animation: dotPulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.6); }
+    }
+
+    .task-list-loading {
+      margin-top: 1.2rem;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .task-list-loading .task-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #5f7197;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-list-loading .task-label i {
+      color: #6c5ce7;
+    }
+
+    .loading-task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      animation: fadeSlide 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    .loading-task-item:nth-child(1) { animation-delay: 0.1s; }
+    .loading-task-item:nth-child(2) { animation-delay: 0.3s; }
+    .loading-task-item:nth-child(3) { animation-delay: 0.5s; }
+    .loading-task-item:last-child { border-bottom: none; }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateX(-8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .loading-task-item .task-icon-small {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(108, 92, 231, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .loading-task-item .task-icon-small i {
+      font-size: 0.7rem;
+      color: #a29bfe;
+    }
+
+    .loading-task-item .task-info {
+      flex: 1;
+    }
+
+    .loading-task-item .task-name {
+      color: #d3def5;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .loading-task-item .task-meta {
+      color: #5f7197;
+      font-size: 0.6rem;
+      display: flex;
+      gap: 12px;
+      margin-top: 1px;
+    }
+
+    .loading-task-item .task-status-badge {
+      font-size: 0.5rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 30px;
+      background: rgba(255, 215, 0, 0.12);
+      color: #ffd700;
+      flex-shrink: 0;
+    }
+
+    .loading-task-item .task-status-badge.done {
+      background: rgba(0, 206, 209, 0.12);
+      color: #00ced1;
+    }
+
+    .spinner-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0.8rem 0 0.2rem;
+    }
+
+    .spinner-dots span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6c5ce7;
+      animation: bounceDot 1.4s ease-in-out infinite both;
+    }
+
+    .spinner-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .spinner-dots span:nth-child(2) { animation-delay: -0.16s; }
+    .spinner-dots span:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes bounceDot {
+      0%, 80%, 100% { transform: scale(0.4); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    .loading-footer {
+      margin-top: 1.6rem;
+      color: #4a5a7a;
+      font-size: 0.6rem;
+      letter-spacing: 0.5px;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding-top: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .loading-footer .badge {
+      background: rgba(108, 92, 231, 0.1);
+      padding: 0.1rem 0.8rem;
+      border-radius: 30px;
+      color: #a29bfe;
+      font-size: 0.55rem;
+      border: 1px solid rgba(108, 92, 231, 0.08);
+    }
+
+    .loading-footer i {
+      color: #5f7197;
+    }
+
+    /* ============================================================
+       MAIN APP STYLES
+       ============================================================ */
+    #appContainer {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 2rem;
+      padding: 1.5rem 1.2rem;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: none;
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    #appContainer.show {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .page { display: none; animation: fadeUp 0.4s ease forwards; }
+    .page.active { display: block; }
+
+    .auth-header { text-align: center; margin-bottom: 1.8rem; }
+    .auth-header .logo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border-radius: 24px;
+      margin-bottom: 0.8rem;
+      box-shadow: 0 12px 32px rgba(108, 92, 231, 0.35);
+      position: relative;
+    }
+    .auth-header .logo-icon svg { width: 38px; height: 38px; fill: white; }
+    .auth-header .logo-icon .ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      border: 2px solid rgba(255,255,255,0.15);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    .auth-header h2 { color: #f0f4ff; font-weight: 600; font-size: 1.6rem; letter-spacing: -0.5px; }
+    .auth-header p { color: #9aa9c9; font-size: 0.9rem; margin-top: 0.2rem; }
+
+    .input-group { margin-bottom: 1.2rem; }
+    .input-group label { display: block; color: #c8d6f0; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.3rem; }
+    .input-group .input-icon { position: relative; }
+    .input-group .input-icon i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #7b8fb0; font-size: 0.95rem; }
+    .input-group input, .input-group textarea, .input-group select {
+      width: 100%; padding: 0.8rem 1rem 0.8rem 3rem;
+      background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px; font-size: 0.95rem; color: #f0f4ff; outline: none;
+      transition: 0.25s; box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .input-group textarea { padding: 0.8rem 1rem; min-height: 70px; resize: vertical; }
+    .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+      border-color: #6c5ce7; background: rgba(255,255,255,0.07);
+      box-shadow: 0 0 0 3px rgba(108,92,231,0.15), inset 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .input-group input::placeholder, .input-group textarea::placeholder { color: #4a5a7a; }
+    .input-group select { appearance: none; cursor: pointer; }
+
+    .btn-primary {
+      width: 100%; padding: 0.85rem; border: none;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border-radius: 16px;
+      font-size: 1rem; font-weight: 600; color: white; cursor: pointer;
+      transition: 0.25s; box-shadow: 0 8px 24px rgba(108, 92, 231, 0.3);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-primary:hover { transform: scale(1.01); box-shadow: 0 12px 32px rgba(108, 92, 231, 0.45); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-danger { background: linear-gradient(135deg, #ff6b6b, #ee5a24); box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3); }
+    .btn-danger:hover { box-shadow: 0 12px 32px rgba(255, 107, 107, 0.45); }
+    .btn-success { background: linear-gradient(135deg, #00b894, #00cec9); box-shadow: 0 8px 24px rgba(0, 206, 201, 0.3); }
+    .btn-success:hover { box-shadow: 0 12px 32px rgba(0, 206, 201, 0.45); }
+    .btn-small { padding: 0.3rem 0.7rem; font-size: 0.7rem; width: auto; border-radius: 12px; }
+
+    .auth-footer { text-align: center; margin-top: 1.5rem; color: #7b8fb0; font-size: 0.85rem; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 1.2rem; }
+    .auth-footer a { color: #a29bfe; text-decoration: none; font-weight: 500; cursor: pointer; transition: 0.2s; }
+    .auth-footer a:hover { color: #c8bfff; }
+
+    .error-msg { background: rgba(255,70,70,0.1); border-left: 3px solid #ff5e5e; padding: 0.6rem 1rem; border-radius: 14px; color: #ffbaba; font-size: 0.85rem; margin-bottom: 1rem; display: none; align-items: center; gap: 10px; }
+    .error-msg.show { display: flex; }
+    .success-msg { background: rgba(70, 212, 124, 0.1); border-left: 3px solid #46d47c; padding: 0.6rem 1rem; border-radius: 14px; color: #9ae6b8; font-size: 0.85rem; margin-bottom: 1rem; display: none; align-items: center; gap: 10px; }
+    .success-msg.show { display: flex; }
+    .info-msg { background: rgba(108, 92, 231, 0.1); border-left: 3px solid #6c5ce7; padding: 0.6rem 1rem; border-radius: 14px; color: #b8aaff; font-size: 0.85rem; margin-bottom: 1rem; display: none; align-items: center; gap: 10px; }
+    .info-msg.show { display: flex; }
+
+    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.2); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .home-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
+    .home-header .user-info { display: flex; align-items: center; gap: 12px; }
+    .home-header .avatar {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      width: 44px; height: 44px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 600; color: white;
+      box-shadow: 0 6px 16px rgba(108,92,231,0.3);
+      text-transform: uppercase;
+    }
+    .home-header .avatar.admin-avatar { background: linear-gradient(135deg, #ff6b6b, #ffd93d); box-shadow: 0 6px 16px rgba(255,107,107,0.3); }
+    .home-header .greeting h2 { color: #f0f4ff; font-weight: 600; font-size: 1.2rem; }
+    .home-header .greeting .role-badge {
+      display: inline-block; font-size: 0.55rem; padding: 0.1rem 0.6rem;
+      border-radius: 30px; font-weight: 600; margin-left: 6px; vertical-align: middle;
+    }
+    .role-badge.admin { background: rgba(255,107,107,0.2); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.2); }
+    .role-badge.user { background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.2); }
+    .home-header .greeting p { color: #9aa9c9; font-size: 0.75rem; margin-top: 1px; }
+    .logout-btn {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06);
+      color: #d3def5; padding: 0.5rem 1.2rem; border-radius: 14px;
+      font-size: 0.8rem; cursor: pointer; transition: 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .logout-btn:hover { background: rgba(255,70,70,0.12); border-color: #ff6b6b; color: #ffbaba; }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+      margin: 1.2rem 0 0.8rem;
+    }
+    .home-card {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(4px);
+      padding: 1rem 0.4rem;
+      border-radius: 18px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: 0.25s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+    }
+    .home-card:active { transform: scale(0.96); }
+    .home-card .icon-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: rgba(108,92,231,0.12);
+      margin-bottom: 0.3rem;
+    }
+    .home-card .icon-wrap i { font-size: 1.4rem; color: #a29bfe; }
+    .home-card .icon-wrap .task-icon { background: rgba(0, 206, 209, 0.12); }
+    .home-card .icon-wrap .task-icon i { color: #00ced1; }
+    .home-card .icon-wrap .report-icon { background: rgba(255, 215, 0, 0.12); }
+    .home-card .icon-wrap .report-icon i { color: #ffd700; }
+    .home-card .icon-wrap .jadwal-icon { background: rgba(255, 215, 0, 0.12); }
+    .home-card .icon-wrap .jadwal-icon i { color: #ffd700; }
+    .home-card .icon-wrap .admin-icon { background: rgba(255, 107, 107, 0.15); }
+    .home-card .icon-wrap .admin-icon i { color: #ff6b6b; }
+    .home-card .icon-wrap .user-icon { background: rgba(108, 92, 231, 0.15); }
+    .home-card .icon-wrap .user-icon i { color: #a29bfe; }
+    .home-card .icon-wrap .stat-icon { background: rgba(0, 206, 209, 0.12); }
+    .home-card .icon-wrap .stat-icon i { color: #00ced1; }
+    .home-card h4 { color: #e8eeff; font-weight: 500; font-size: 0.85rem; margin-top: 0.1rem; }
+    .home-card p { color: #8b9fc9; font-size: 0.65rem; }
+    .home-card .admin-lock {
+      position: absolute; top: 6px; right: 8px; font-size: 0.55rem;
+      color: #ff6b6b; background: rgba(255,107,107,0.15);
+      padding: 0.05rem 0.4rem; border-radius: 30px;
+      border: 1px solid rgba(255,107,107,0.15);
+    }
+    .home-card .task-count {
+      position: absolute; top: 6px; right: 8px;
+      font-size: 0.55rem; color: #00ced1;
+      background: rgba(0,206,209,0.15);
+      padding: 0.05rem 0.4rem; border-radius: 30px;
+      border: 1px solid rgba(0,206,209,0.15);
+    }
+    .home-card.disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.3); }
+    .home-card.disabled:active { transform: none; }
+
+    /* ===== TASK SIGNATURE SECTION ===== */
+    .task-signature-section {
+      margin-top: 0.8rem;
+      padding: 0.8rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .task-signature-section .sign-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+    .task-signature-section .sign-header h5 {
+      color: #a29bfe;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .task-signature-section .sign-header .sign-badge {
+      font-size: 0.5rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 30px;
+    }
+    .task-signature-section .sign-header .sign-badge.signed {
+      background: rgba(0,206,209,0.15);
+      color: #00ced1;
+    }
+    .task-signature-section .sign-header .sign-badge.not-signed {
+      background: rgba(255,215,0,0.1);
+      color: #ffd700;
+    }
+    .task-signature-section .sign-canvas-wrapper {
+      border: 2px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      position: relative;
+      margin: 0.3rem 0;
+    }
+    .task-signature-section .sign-canvas-wrapper canvas {
+      display: block;
+      width: 100%;
+      height: 180px;
+      cursor: crosshair;
+      touch-action: none;
+      background: rgba(255,255,255,0.02);
+    }
+    .task-signature-section .sign-canvas-wrapper .placeholder-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #4a5a7a;
+      font-size: 0.7rem;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .task-signature-section .sign-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .task-signature-section .sign-actions button {
+      padding: 0.2rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.05);
+      color: #d3def5;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .task-signature-section .sign-actions .btn-sign-task {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border: none;
+      color: white;
+    }
+    .task-signature-section .sign-actions .btn-sign-task:hover { opacity: 0.8; }
+    .task-signature-section .sign-actions .btn-sign-task:disabled { opacity: 0.4; cursor: not-allowed; }
+    .task-signature-section .sign-actions .btn-clear-task:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+    .task-signature-section .sign-actions .btn-clear-task:disabled { opacity: 0.3; cursor: not-allowed; }
+    .task-signature-section .sign-list {
+      margin-top: 0.4rem;
+    }
+    .task-signature-section .sign-list .sign-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .task-signature-section .sign-list .sign-item:last-child { border-bottom: none; }
+    .task-signature-section .sign-list .sign-item .sign-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(108,92,231,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a29bfe;
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .task-signature-section .sign-list .sign-item .sign-info {
+      flex: 1;
+    }
+    .task-signature-section .sign-list .sign-item .sign-info .sign-name {
+      color: #f0f4ff;
+      font-size: 0.7rem;
+    }
+    .task-signature-section .sign-list .sign-item .sign-info .sign-time {
+      color: #8b9fc9;
+      font-size: 0.55rem;
+    }
+    .task-signature-section .sign-list .sign-item .sign-status-text {
+      font-size: 0.5rem;
+      padding: 0.05rem 0.4rem;
+      border-radius: 30px;
+      background: rgba(0,206,209,0.12);
+      color: #00ced1;
+    }
+    .task-signature-section .sign-list .sign-item .btn-unsign-task {
+      background: rgba(255,70,70,0.1);
+      border: 1px solid rgba(255,70,70,0.15);
+      color: #ff6b6b;
+      padding: 0.05rem 0.3rem;
+      border-radius: 4px;
+      font-size: 0.45rem;
+      cursor: pointer;
+    }
+    .task-signature-section .sign-list .sign-item .btn-unsign-task:hover {
+      background: rgba(255,70,70,0.2);
+    }
+    .task-signature-section .sign-empty {
+      color: #68769e;
+      font-size: 0.65rem;
+      padding: 0.2rem 0;
+      text-align: center;
+    }
+
+    /* ===== SIGNATURE PREVIEW ===== */
+    .signature-preview {
+      margin-top: 0.3rem;
+      padding: 0.3rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .signature-preview img {
+      max-height: 40px;
+      border-radius: 4px;
+      background: white;
+    }
+    .signature-preview .signature-label {
+      font-size: 0.6rem;
+      color: #8b9fc9;
+    }
+
+    /* ===== SIGNATURE PERMISSION TOGGLE ===== */
+    .signature-permission {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .signature-permission .permission-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .signature-permission .permission-header label {
+      color: #a29bfe;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .signature-permission .permission-header input[type="checkbox"] {
+      accent-color: #6c5ce7;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .signature-permission .permission-desc {
+      color: #8b9fc9;
+      font-size: 0.55rem;
+      margin-top: 0.2rem;
+    }
+    .signature-permission .allowed-users {
+      margin-top: 0.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .signature-permission .allowed-users .user-tag {
+      background: rgba(108,92,231,0.15);
+      color: #a29bfe;
+      font-size: 0.5rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 30px;
+      border: 1px solid rgba(108,92,231,0.15);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .signature-permission .allowed-users .user-tag .remove-user {
+      cursor: pointer;
+      color: #ff6b6b;
+      font-size: 0.45rem;
+    }
+    .signature-permission .allowed-users .user-tag .remove-user:hover { opacity: 0.7; }
+    .signature-permission .add-user-form {
+      display: flex;
+      gap: 4px;
+      margin-top: 0.3rem;
+    }
+    .signature-permission .add-user-form select {
+      flex: 1;
+      padding: 0.15rem 0.4rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      font-size: 0.6rem;
+      color: #d3def5;
+      outline: none;
+    }
+    .signature-permission .add-user-form select:focus { border-color: #6c5ce7; }
+    .signature-permission .add-user-form button {
+      padding: 0.1rem 0.5rem;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border: none;
+      border-radius: 6px;
+      font-size: 0.55rem;
+      color: white;
+      cursor: pointer;
+    }
+    .signature-permission .add-user-form button:hover { opacity: 0.8; }
+
+    .report-list { margin: 0.5rem 0; }
+    .report-item {
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: 0.2s;
+    }
+    .report-item:hover { background: rgba(255,255,255,0.06); }
+    .report-item .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .report-item .report-title {
+      color: #f0f4ff;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+    .report-item .report-meta {
+      color: #8b9fc9;
+      font-size: 0.65rem;
+      margin-top: 0.2rem;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .report-item .report-meta i { margin-right: 3px; }
+    .report-item .report-actions {
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .report-item .report-actions button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #d3def5;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .report-item .report-actions .view-btn:hover { background: rgba(0,206,209,0.15); border-color: #00ced1; color: #00ced1; }
+    .report-item .report-actions .download-btn:hover { background: rgba(253,203,110,0.15); border-color: #ffd700; color: #ffd700; }
+    .report-item .report-actions .delete-btn:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+    .report-item .report-desc {
+      color: #b0c4e8;
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      padding-top: 0.3rem;
+      border-top: 1px solid rgba(255,255,255,0.03);
+    }
+    .report-type-badge {
+      display: inline-block;
+      font-size: 0.5rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 30px;
+      margin-left: 4px;
+    }
+    .report-type-badge.rajal { background: rgba(0,206,209,0.15); color: #00ced1; }
+    .report-type-badge.ranap { background: rgba(108,92,231,0.15); color: #a29bfe; }
+
+    .report-preview {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 1rem;
+      max-height: 450px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: #d3def5;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .report-preview::-webkit-scrollbar { width: 4px; }
+    .report-preview::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+    .report-preview::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.3); border-radius: 10px; }
+
+    .report-upload-form {
+      background: rgba(255,255,255,0.03);
+      padding: 0.8rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.04);
+      margin-bottom: 1rem;
+    }
+    .report-upload-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .report-upload-form .form-row .input-group { margin-bottom: 0; }
+    .report-upload-form .file-input-wrapper {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .report-upload-form .file-input-wrapper input[type="file"] {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      font-size: 0.65rem;
+      color: #d3def5;
+      cursor: pointer;
+    }
+    .report-upload-form .file-input-wrapper input[type="file"]::-webkit-file-upload-button {
+      background: rgba(108,92,231,0.2);
+      border: none;
+      border-radius: 6px;
+      color: #a29bfe;
+      padding: 0.1rem 0.5rem;
+      font-size: 0.55rem;
+      cursor: pointer;
+    }
+
+    .task-list { margin: 0.5rem 0; }
+    .task-item {
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: 0.2s;
+    }
+    .task-item:hover { background: rgba(255,255,255,0.06); }
+    .task-item .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .task-item .task-title {
+      color: #f0f4ff;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+    .task-item .task-meta {
+      color: #8b9fc9;
+      font-size: 0.65rem;
+      margin-top: 0.2rem;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .task-item .task-meta i { margin-right: 3px; }
+    .task-item .task-actions {
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .task-item .task-actions button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #d3def5;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .task-item .task-actions .edit-btn:hover { background: rgba(255,215,0,0.15); border-color: #ffd700; color: #ffd700; }
+    .task-item .task-actions .delete-btn:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+    .task-item .task-actions .sign-task-btn:hover { background: rgba(108,92,231,0.15); border-color: #a29bfe; color: #a29bfe; }
+    .task-item .task-desc {
+      color: #b0c4e8;
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      padding-top: 0.3rem;
+      border-top: 1px solid rgba(255,255,255,0.03);
+    }
+    .task-item .task-status {
+      display: inline-block;
+      font-size: 0.55rem;
+      padding: 0.05rem 0.4rem;
+      border-radius: 30px;
+      margin-left: 4px;
+    }
+    .task-status.pending { background: rgba(255,215,0,0.15); color: #ffd700; }
+    .task-status.done { background: rgba(0,206,209,0.15); color: #00ced1; }
+
+    .task-comments {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .task-comments .comment-list {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 0.3rem;
+    }
+    .task-comments .comment-list::-webkit-scrollbar { width: 3px; }
+    .task-comments .comment-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+    .task-comments .comment-list::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.3); border-radius: 10px; }
+    .task-comments .comment-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .task-comments .comment-item:last-child { border-bottom: none; }
+    .task-comments .comment-user {
+      font-size: 0.6rem;
+      color: #a29bfe;
+      font-weight: 600;
+    }
+    .task-comments .comment-text {
+      font-size: 0.75rem;
+      color: #d3def5;
+      padding-left: 0.5rem;
+      border-left: 2px solid rgba(108,92,231,0.3);
+      word-wrap: break-word;
+    }
+    .task-comments .comment-time {
+      font-size: 0.5rem;
+      color: #68769e;
+      margin-left: 0.5rem;
+    }
+    .task-comments .comment-form {
+      display: flex;
+      gap: 6px;
+      margin-top: 0.3rem;
+    }
+    .task-comments .comment-form input {
+      flex: 1;
+      padding: 0.3rem 0.6rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      font-size: 0.7rem;
+      color: #f0f4ff;
+      outline: none;
+    }
+    .task-comments .comment-form input:focus { border-color: #6c5ce7; }
+    .task-comments .comment-form input::placeholder { color: #4a5a7a; }
+    .task-comments .comment-form button {
+      padding: 0.3rem 0.7rem;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border: none;
+      border-radius: 10px;
+      font-size: 0.6rem;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .task-comments .comment-form button:hover { opacity: 0.8; }
+    .task-comments .comment-form button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .task-comments .comment-empty { color: #68769e; font-size: 0.6rem; padding: 0.2rem 0; font-style: italic; }
+    .task-comments .comment-delete-btn {
+      background: none; border: none; color: #ff6b6b;
+      cursor: pointer; font-size: 0.5rem; margin-left: 4px; opacity: 0.6; transition: 0.2s;
+    }
+    .task-comments .comment-delete-btn:hover { opacity: 1; }
+
+    .empty-tasks { text-align: center; padding: 1.5rem 0.5rem; color: #68769e; }
+    .empty-tasks i { font-size: 2rem; margin-bottom: 0.5rem; color: #4a5a7a; }
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 1000; padding: 1.2rem;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: #1a2332;
+      max-width: 500px; width: 100%;
+      max-height: 90vh;
+      border-radius: 24px;
+      padding: 1.5rem 1.2rem;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: #f0f4ff;
+      position: relative;
+      animation: fadeUp 0.3s ease;
+      overflow-y: auto;
+    }
+    .modal-box h3 {
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 0.6rem;
+    }
+    .modal-box h3 i { color: #a29bfe; }
+    .modal-close {
+      position: absolute; top: 12px; right: 16px;
+      background: none; border: none;
+      color: #9aa9c9; font-size: 1.4rem;
+      cursor: pointer; transition: 0.2s;
+    }
+    .modal-close:hover { color: #ffbaba; transform: rotate(90deg); }
+    .modal-content { font-size: 0.9rem; line-height: 1.6; color: #d3def5; }
+    .modal-content .item { padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .modal-content .item:last-child { border-bottom: none; }
+    .modal-content .badge {
+      background: rgba(108,92,231,0.2);
+      padding: 0.05rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.6rem;
+      color: #b8aaff;
+      display: inline-block;
+      margin-left: auto;
+    }
+
+    .stat-title {
+      color: #f0f4ff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stat-title i { color: #00ced1; }
+
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .filter-bar button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #8b9fc9;
+      padding: 0.25rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.65rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .filter-bar button.active {
+      background: rgba(108,92,231,0.2);
+      border-color: #6c5ce7;
+      color: #a29bfe;
+    }
+    .filter-bar button:hover { background: rgba(255,255,255,0.08); }
+
+    .home-activity {
+      margin-top: 1.2rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 18px;
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .home-activity h4 {
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .home-activity h4 i { color: #a29bfe; }
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.8rem;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item i { color: #a29bfe; width: 20px; font-size: 0.85rem; }
+    .activity-item span { color: #ffffff; }
+    .activity-item small { color: #aab8d4; font-size: 0.6rem; white-space: nowrap; margin-left: auto; }
+
+    .db-status {
+      font-size: 0.65rem;
+      color: #5f7197;
+      text-align: center;
+      margin-top: 0.5rem;
+      padding: 0.2rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+    }
+    .db-status.online { color: #46d47c; }
+    .db-status.offline { color: #ff6b6b; }
+    .db-status.sync { color: #ffd93d; animation: pulse 1.5s ease-in-out infinite; }
+
+    .home-footer {
+      text-align: center;
+      margin-top: 1rem;
+      color: #4a5a7a;
+      font-size: 0.6rem;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      padding-top: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-table-wrap {
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .stat-table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      min-width: 280px;
+    }
+    .stat-table-wrap th {
+      color: #a29bfe;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.5rem 0.4rem;
+      border-bottom: 2px solid rgba(255,255,255,0.06);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-table-wrap td {
+      color: #d3def5;
+      padding: 0.5rem 0.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .stat-table-wrap tr:last-child td { border-bottom: none; }
+    .stat-table-wrap .label-cell { color: #8b9fc9; font-weight: 500; }
+    .stat-table-wrap .value-cell { color: #f0f4ff; font-weight: 500; }
+    .stat-table-wrap .highlight-cell { color: #00ced1; font-weight: 600; }
+    .stat-table-wrap .note-cell {
+      color: #68769e;
+      font-size: 0.65rem;
+      font-style: italic;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .user-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .user-list-item:last-child { border-bottom: none; }
+    .user-list-item .user-info { display: flex; flex-direction: column; gap: 2px; }
+    .user-list-item .user-name { color: #f0f4ff; font-weight: 500; font-size: 0.85rem; }
+    .user-list-item .user-detail { color: #8b9fc9; font-size: 0.65rem; }
+    .user-list-item .user-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+    .user-list-item .user-actions button {
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .user-list-item .user-actions .edit-user-btn { background: rgba(253, 203, 110, 0.15); color: #fdcb6e; border: 1px solid rgba(253, 203, 110, 0.15); }
+    .user-list-item .user-actions .edit-user-btn:hover { background: rgba(253, 203, 110, 0.25); }
+    .user-list-item .user-actions .delete-user-btn { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.15); }
+    .user-list-item .user-actions .delete-user-btn:hover { background: rgba(255, 107, 107, 0.25); }
+    .user-list-item .user-actions .reset-pass-btn { background: rgba(0, 206, 209, 0.15); color: #00ced1; border: 1px solid rgba(0, 206, 209, 0.15); }
+    .user-list-item .user-actions .reset-pass-btn:hover { background: rgba(0, 206, 209, 0.25); }
+    .user-list-item .user-actions .make-admin-btn { background: rgba(255, 215, 0, 0.15); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.15); }
+    .user-list-item .user-actions .make-admin-btn:hover { background: rgba(255, 215, 0, 0.25); }
+    .user-role-badge {
+      font-size: 0.5rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 30px;
+      display: inline-block;
+    }
+    .user-role-badge.admin { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+    .user-role-badge.user { background: rgba(108,92,231,0.2); color: #a29bfe; }
+
+    .access-denied { text-align: center; padding: 1.5rem 0.5rem; }
+    .access-denied i { font-size: 3rem; color: #ff6b6b; margin-bottom: 0.8rem; }
+    .access-denied h4 { color: #ffbaba; font-size: 1rem; margin-bottom: 0.3rem; }
+    .access-denied p { color: #8b9fc9; font-size: 0.8rem; }
+
+    @media (max-width: 400px) {
+      .container { padding: 1rem 0.8rem; }
+      .home-grid { gap: 0.5rem; }
+      .home-card { padding: 0.8rem 0.2rem; }
+      .home-card .icon-wrap { width: 40px; height: 40px; }
+      .home-card .icon-wrap i { font-size: 1.1rem; }
+      .home-card h4 { font-size: 0.75rem; }
+      .task-item .task-header { flex-direction: column; }
+      .task-item .task-actions { align-self: flex-end; }
+      .activity-item { font-size: 0.7rem; }
+      .activity-item small { font-size: 0.55rem; }
+      .user-list-item { flex-wrap: wrap; gap: 0.3rem; }
+      .user-list-item .user-actions { flex-wrap: wrap; }
+      .report-upload-form .form-row { grid-template-columns: 1fr; }
+      .task-signature-section .sign-canvas-wrapper canvas { height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       LOADING PAGE
+       ============================================================ -->
+  <div class="loading-wrapper" id="loadingWrapper">
+    <div class="logo-container">
+      <div class="logo-ring"></div>
+      <div class="logo-ring"></div>
+      <div class="logo-ring"></div>
+      <div class="logo-icon" id="restartLoading">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="loading-title">Daily Work Web</h1>
+    <div class="loading-sub">
+      <i class="fas fa-cloud" style="margin-right:6px; color:#6c5ce7;"></i>
+      Menyiapkan data dari cloud ...
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="progress-stats">
+      <span class="progress-percent" id="progressPercent">0%</span>
+      <span class="progress-status">
+        <span class="dot"></span>
+        <span id="statusText">Menyambungkan...</span>
+      </span>
+    </div>
+
+    <div class="task-list-loading">
+      <div class="task-label">
+        <i class="fas fa-spinner fa-pulse"></i>
+        Sedang diproses
+      </div>
+
+      <div class="loading-task-item">
+        <div class="task-icon-small"><i class="fas fa-database"></i></div>
+        <div class="task-info">
+          <div class="task-name">Mengambil data user dari cloud</div>
+          <div class="task-meta">jsonbin.io · <span id="task1Status">Connecting...</span></div>
+        </div>
+        <span class="task-status-badge" id="task1Badge">⏳</span>
+      </div>
+
+      <div class="loading-task-item">
+        <div class="task-icon-small"><i class="fas fa-users"></i></div>
+        <div class="task-info">
+          <div class="task-name">Memuat daftar anggota & laporan</div>
+          <div class="task-meta">total user · <span id="task2Status">Loading...</span></div>
+        </div>
+        <span class="task-status-badge" id="task2Badge">⏳</span>
+      </div>
+
+      <div class="loading-task-item">
+        <div class="task-icon-small"><i class="fas fa-check-circle"></i></div>
+        <div class="task-info">
+          <div class="task-name">Sinkronisasi data selesai</div>
+          <div class="task-meta">ready · <span id="task3Status">Waiting...</span></div>
+        </div>
+        <span class="task-status-badge" id="task3Badge">⏳</span>
+      </div>
+    </div>
+
+    <div class="spinner-dots">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="loading-footer">
+      <span><i class="fas fa-circle" style="color:#6c5ce7; font-size:0.3rem; vertical-align:middle;"></i>  Cloud Sync</span>
+      <span class="badge"><i class="fas fa-shield-alt"></i>  Secure</span>
+      <span id="timerEl"><i class="far fa-clock"></i>  0s</span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MAIN APP CONTAINER
+       ============================================================ -->
+  <div id="appContainer">
+    <!-- LOGIN -->
+    <div id="loginPage" class="page active">
+      <div class="auth-header">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          <div class="ring"></div>
+        </div>
+        <h2>Selamat Datang</h2>
+        <p>Cloud Database · Akses dari mana saja</p>
+      </div>
+      <div id="loginError" class="error-msg"><i class="fas fa-exclamation-circle"></i><span id="loginErrorText">Username atau password salah</span></div>
+      <div id="loginSuccess" class="success-msg"><i class="fas fa-check-circle"></i><span id="loginSuccessText">Login berhasil!</span></div>
+      <div id="loginInfo" class="info-msg"><i class="fas fa-info-circle"></i><span id="loginInfoText">Mengambil data dari cloud...</span></div>
+      <form id="loginForm" autocomplete="off">
+        <div class="input-group"><label>Username</label><div class="input-icon"><i class="fas fa-user"></i><input type="text" id="loginUsername" placeholder="Masukkan username" required></div></div>
+        <div class="input-group"><label>Password</label><div class="input-icon"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Masukkan password" required></div></div>
+        <button type="submit" class="btn-primary" id="loginBtn"><i class="fas fa-arrow-right-to-bracket"></i> Masuk</button>
+      </form>
+      <div class="auth-footer">Belum punya akun? <a id="goToRegister">Daftar di sini</a></div>
+      <div class="db-status" id="dbStatus">□ Menghubungkan ke cloud...</div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="registerPage" class="page">
+      <div class="auth-header">
+        <div class="logo-icon" style="background:linear-gradient(135deg,#00b894,#55efc4);">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <div class="ring"></div>
+        </div>
+        <h2>Daftar Akun</h2>
+        <p>Buat akun baru · Tersimpan di cloud</p>
+      </div>
+      <div id="registerError" class="error-msg"><i class="fas fa-exclamation-circle"></i><span id="registerErrorText">Terjadi kesalahan</span></div>
+      <div id="registerSuccess" class="success-msg"><i class="fas fa-check-circle"></i><span id="registerSuccessText">Akun berhasil dibuat!</span></div>
+      <div id="registerInfo" class="info-msg"><i class="fas fa-info-circle"></i><span id="registerInfoText">Menyimpan ke cloud...</span></div>
+      <form id="registerForm" autocomplete="off">
+        <div class="input-group"><label>Username</label><div class="input-icon"><i class="fas fa-user"></i><input type="text" id="regUsername" placeholder="Pilih username (min 3)" required></div></div>
+        <div class="input-group"><label>Nama Lengkap</label><div class="input-icon"><i class="fas fa-user-tie"></i><input type="text" id="regFullname" placeholder="Nama lengkap Anda" required></div></div>
+        <div class="input-group"><label>Password</label><div class="input-icon"><i class="fas fa-lock"></i><input type="password" id="regPassword" placeholder="Buat password (min 4)" required></div></div>
+        <div class="input-group"><label>Konfirmasi Password</label><div class="input-icon"><i class="fas fa-check-circle"></i><input type="password" id="regConfirmPassword" placeholder="Ulangi password" required></div></div>
+        <button type="submit" class="btn-primary" id="registerBtn"><i class="fas fa-user-plus"></i> Daftar</button>
+      </form>
+      <div class="auth-footer">Sudah punya akun? <a id="goToLogin">Masuk di sini</a></div>
+    </div>
+
+    <!-- HOME -->
+    <div id="homePage" class="page">
+      <div class="home-header">
+        <div class="user-info">
+          <div class="avatar" id="userAvatar">M</div>
+          <div class="greeting">
+            <h2 id="greetingUser">Halo, User <span class="role-badge user" id="roleBadge">User</span></h2>
+            <p><i class="fas fa-circle" style="color:#46d47c; font-size:0.4rem; vertical-align:middle;"></i> online · cloud sync</p>
+          </div>
+        </div>
+        <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+      </div>
+
+      <div class="home-grid">
+        <div class="home-card" data-modal="tasks" style="grid-column: span 2;">
+          <div class="icon-wrap task-icon"><i class="fas fa-tasks"></i></div>
+          <h4>Task Manager</h4>
+          <p id="taskPreview">Kelola pekerjaan harian</p>
+          <span class="task-count" id="taskCount">0 tugas</span>
+        </div>
+
+        <div class="home-card" data-modal="reports" style="grid-column: span 2;">
+          <div class="icon-wrap report-icon"><i class="fas fa-file-alt"></i></div>
+          <h4>Laporan Bulanan</h4>
+          <p id="reportPreview">Upload & Lihat Laporan</p>
+          <span class="task-count" id="reportCount">0 laporan</span>
+        </div>
+
+        <div class="home-card" data-modal="pesan">
+          <div class="icon-wrap"><i class="fas fa-envelope"></i></div>
+          <h4>Pesan</h4>
+          <p id="pesanPreview">Notifikasi</p>
+        </div>
+        
+        <div class="home-card" data-modal="anggota">
+          <div class="icon-wrap"><i class="fas fa-users"></i></div>
+          <h4>Anggota</h4>
+          <p>Tim Unit</p>
+        </div>
+        
+        <div class="home-card" data-modal="jadwal">
+          <div class="icon-wrap jadwal-icon"><i class="fas fa-calendar"></i></div>
+          <h4>Jadwal</h4>
+          <p>Hari ini</p>
+        </div>
+        
+        <div class="home-card" id="statistikCard" data-modal="statistik">
+          <div class="icon-wrap admin-icon"><i class="fas fa-chart-line"></i></div>
+          <h4>Statistik Karir</h4>
+          <p>Kinerja Karir</p>
+          <span class="admin-lock"><i class="fas fa-lock"></i> Admin</span>
+        </div>
+
+        <div class="home-card" data-modal="kunjungan" style="grid-column: span 2;">
+          <div class="icon-wrap stat-icon"><i class="fas fa-hospital-user"></i></div>
+          <h4>Statistik Kunjungan</h4>
+          <p>Data RS 2023-2025</p>
+        </div>
+
+        <div class="home-card" id="manageUsersCard" data-modal="manageUsers" style="grid-column: span 2; display: none;">
+          <div class="icon-wrap user-icon"><i class="fas fa-user-cog"></i></div>
+          <h4>Manajemen User</h4>
+          <p>Kelola akun pengguna</p>
+          <span class="admin-lock"><i class="fas fa-shield-alt"></i> Admin</span>
+        </div>
+      </div>
+
+      <div class="home-activity" id="activitySection">
+        <h4><i class="fas fa-clock" style="margin-right:6px;"></i> Aktivitas & Notifikasi</h4>
+        <div id="activityList"></div>
+      </div>
+      <div class="home-footer"><i class="fas fa-circle" style="color:#6c5ce7; font-size:0.3rem; vertical-align:middle;"></i>  Daily Work · Cloud Sync</div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <h3 id="modalTitle"><i class="fas fa-info-circle"></i> <span id="modalTitleText">Detail</span></h3>
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // LOADING PAGE CONTROLLER - DURASI 2 DETIK
+    // ============================================================
+    (function() {
+      const progressFill = document.getElementById('progressFill');
+      const progressPercent = document.getElementById('progressPercent');
+      const statusText = document.getElementById('statusText');
+      const timerEl = document.getElementById('timerEl');
+      const loadingWrapper = document.getElementById('loadingWrapper');
+      const appContainer = document.getElementById('appContainer');
+
+      const task1Status = document.getElementById('task1Status');
+      const task2Status = document.getElementById('task2Status');
+      const task3Status = document.getElementById('task3Status');
+      const task1Badge = document.getElementById('task1Badge');
+      const task2Badge = document.getElementById('task2Badge');
+      const task3Badge = document.getElementById('task3Badge');
+
+      let progress = 0;
+      let seconds = 0;
+      let timerInterval = null;
+      let progressInterval = null;
+      let loadingComplete = false;
+
+      const statusList = [
+        'Menghubungkan ke cloud ...',
+        'Mengambil data user ...',
+        'Memproses data ...',
+        'Menyiapkan laporan ...',
+        'Sinkronisasi selesai!',
+        'Siap digunakan □'
+      ];
+
+      function updateProgress(value) {
+        progress = Math.min(value, 100);
+        progressFill.style.width = progress + '%';
+        progressPercent.textContent = Math.round(progress) + '%';
+
+        const idx = Math.min(Math.floor(progress / 20), statusList.length - 1);
+        statusText.textContent = statusList[idx];
+
+        if (progress >= 30 && task1Status.textContent !== 'Connected ✓') {
+          task1Status.textContent = 'Connected ✓';
+          task1Status.style.color = '#00ced1';
+          task1Badge.textContent = '✅';
+          task1Badge.className = 'task-status-badge done';
+        }
+
+        if (progress >= 60 && task2Status.textContent !== 'Loaded ✓') {
+          task2Status.textContent = 'Loaded ✓';
+          task2Status.style.color = '#00ced1';
+          task2Badge.textContent = '✅';
+          task2Badge.className = 'task-status-badge done';
+        }
+
+        if (progress >= 90 && task3Status.textContent !== 'Ready ✓') {
+          task3Status.textContent = 'Ready ✓';
+          task3Status.style.color = '#00ced1';
+          task3Badge.textContent = '✅';
+          task3Badge.className = 'task-status-badge done';
+        }
+      }
+
+      function updateTimer() {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerEl.innerHTML = `<i class="far fa-clock"></i>  ${mins > 0 ? mins + 'm ' : ''}${secs}s`;
+      }
+
+      function startLoading() {
+        progress = 0;
+        seconds = 0;
+        updateProgress(0);
+
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimer, 1000);
+
+        if (progressInterval) clearInterval(progressInterval);
+
+        // ===== DURASI LOADING 2 DETIK =====
+        const startTime = Date.now();
+        const duration = 2000; // 2 detik
+
+        progressInterval = setInterval(() => {
+          const elapsed = Date.now() - startTime;
+          const newProgress = Math.min((elapsed / duration) * 100, 100);
+
+          updateProgress(newProgress);
+
+          if (newProgress >= 100) {
+            clearInterval(progressInterval);
+            clearInterval(timerInterval);
+            statusText.textContent = '✅ Siap digunakan!';
+            loadingComplete = true;
+            
+            loadingWrapper.classList.add('hidden');
+            appContainer.classList.add('show');
+            
+            if (typeof initApp === 'function') {
+              initApp();
+            }
+            
+            console.log('✅ Loading selesai dalam 2 detik!');
+          }
+        }, 16); // update setiap 16ms untuk animasi 60fps
+      }
+
+      document.getElementById('restartLoading').addEventListener('dblclick', function() {
+        if (progressInterval) clearInterval(progressInterval);
+        if (timerInterval) clearInterval(timerInterval);
+        
+        task1Status.textContent = 'Connecting...';
+        task1Status.style.color = '';
+        task1Badge.textContent = '⏳';
+        task1Badge.className = 'task-status-badge';
+        task2Status.textContent = 'Loading...';
+        task2Status.style.color = '';
+        task2Badge.textContent = '⏳';
+        task2Badge.className = 'task-status-badge';
+        task3Status.textContent = 'Waiting...';
+        task3Status.style.color = '';
+        task3Badge.textContent = '⏳';
+        task3Badge.className = 'task-status-badge';
+        
+        loadingWrapper.classList.remove('hidden');
+        appContainer.classList.remove('show');
+        
+        startLoading();
+        console.log('□ Loading di-restart (double click logo)');
+      });
+
+      startLoading();
+    })();
+
+    // ============================================================
+    // MAIN APP - DENGAN FITUR TANDA TANGAN DI TASK MANAGER
+    // ============================================================
+    (function() {
+      // ============================================================
+      //  KONFIGURASI CLOUD DATABASE
+      // ============================================================
+      const CONFIG = {
+        API_KEY: '$2a$10$zEthnwkqxFq83mRg0IsnD./ERQwOb/0GamLcnH4/q2Y41cEf9722a',
+        BIN_ID: '6a3f5e86da38895dfe0610b9',
+        BASE_URL: 'https://api.jsonbin.io/v3'
+      };
+
+      const ADMIN_USERNAME = 'marco';
+
+      // ============ DATA STATISTIK KUNJUNGAN ============
+      const DATA_KUNJUNGAN = {
+        data: [
+          { uraian: 'KELAS RS', satuan: 'KELAS C', '2023': '', '2024': '', '2025': '' },
+          { uraian: 'JUMLAH BED', satuan: '100 TT', '2023': '', '2024': '', '2025': '' },
+          { uraian: 'JUMLAH PASIEN RAWAT JALAN', satuan: 'ORANG', '2023': '27.189', '2024': '24.924', '2025': '31.916' },
+          { uraian: 'JUMLAH PASIEN RAWAT INAP', satuan: 'ORANG', '2023': '3.654', '2024': '3.768', '2025': '4.337' },
+          { uraian: 'BOR', satuan: '%', '2023': '28,05%', '2024': '40,40%', '2025': '47,64%' },
+          { uraian: 'LOS', satuan: 'HARI', '2023': '2,98', '2024': '2,48', '2025': '2,46' },
+          { uraian: 'TOI', satuan: 'HARI', '2023': '7,08', '2024': '5,97', '2025': '4,66' },
+          { uraian: 'BTO', satuan: 'KALI', '2023': '36,54', '2024': '37,68', '2025': '43,47' }
+        ],
+        note: 'BTO TIDAK DALAM AVERAGE TAPI DALAM JUMLAH SETAHUN'
+      };
+
+      // ============ CLOUD DATABASE FUNCTIONS ============
+      async function getUsersFromCloud() {
+        try {
+          const response = await fetch(`${CONFIG.BASE_URL}/b/${CONFIG.BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': CONFIG.API_KEY }
+          });
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const data = await response.json();
+          return data.record || {};
+        } catch (error) {
+          console.error('❌ Gagal mengambil data dari cloud:', error);
+          return getUsersFromLocal();
+        }
+      }
+
+      async function saveUsersToCloud(users) {
+        try {
+          const response = await fetch(`${CONFIG.BASE_URL}/b/${CONFIG.BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Master-Key': CONFIG.API_KEY
+            },
+            body: JSON.stringify(users)
+          });
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          console.log('✅ Data berhasil disimpan ke cloud');
+          saveUsersToLocal(users);
+          return true;
+        } catch (error) {
+          console.error('❌ Gagal menyimpan ke cloud:', error);
+          saveUsersToLocal(users);
+          return false;
+        }
+      }
+
+      const DB_KEY = 'dailywork_users_cloud';
+
+      function getUsersFromLocal() {
+        try {
+          const data = localStorage.getItem(DB_KEY);
+          return data ? JSON.parse(data) : {};
+        } catch { return {}; }
+      }
+
+      function saveUsersToLocal(users) {
+        try {
+          localStorage.setItem(DB_KEY, JSON.stringify(users));
+          return true;
+        } catch { return false; }
+      }
+
+      let currentUsers = {};
+      let currentUserRole = 'user';
+      let currentUsername = '';
+
+      async function loadUsers() {
+        try {
+          updateDbStatus('□ Menghubungkan ke cloud...', 'sync');
+          currentUsers = await getUsersFromCloud();
+          const count = Object.keys(currentUsers).length;
+          updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
+          return currentUsers;
+        } catch (error) {
+          currentUsers = getUsersFromLocal();
+          const count = Object.keys(currentUsers).length;
+          updateDbStatus(`⚠️ ${count} akun (mode offline)`, 'offline');
+          return currentUsers;
+        }
+      }
+
+      async function saveUsers(users) {
+        currentUsers = users;
+        const cloudSuccess = await saveUsersToCloud(users);
+        const count = Object.keys(users).length;
+        if (cloudSuccess) {
+          updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
+        } else {
+          updateDbStatus(`⚠️ ${count} akun (disimpan lokal)`, 'offline');
+        }
+        return cloudSuccess;
+      }
+
+      function updateDbStatus(message, status = 'online') {
+        const statusEl = document.getElementById('dbStatus');
+        if (statusEl) {
+          statusEl.textContent = message;
+          statusEl.className = `db-status ${status}`;
+        }
+      }
+
+      // ============ TASK SIGNATURE FUNCTIONS ============
+      function getTaskSignatures(taskUsername, taskId) {
+        if (!currentUsers[taskUsername]) return [];
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return [];
+        return task.signatures || [];
+      }
+
+      function saveTaskSignatures(taskUsername, taskId, signatures) {
+        if (!currentUsers[taskUsername]) return false;
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+        if (taskIndex === -1) return false;
+        tasks[taskIndex].signatures = signatures;
+        currentUsers[taskUsername].tasks = tasks;
+        return true;
+      }
+
+      // ============ SIGNATURE PERMISSION FUNCTIONS ============
+      function getTaskSignaturePermission(taskUsername, taskId) {
+        if (!currentUsers[taskUsername]) return { allowedUsers: [], allowAll: false };
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return { allowedUsers: [], allowAll: false };
+        if (!task.signaturePermission) {
+          task.signaturePermission = { allowedUsers: [], allowAll: false };
+        }
+        return task.signaturePermission;
+      }
+
+      function saveTaskSignaturePermission(taskUsername, taskId, permission) {
+        if (!currentUsers[taskUsername]) return false;
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+        if (taskIndex === -1) return false;
+        tasks[taskIndex].signaturePermission = permission;
+        currentUsers[taskUsername].tasks = tasks;
+        return true;
+      }
+
+      function canUserSign(taskUsername, taskId, signerUsername) {
+        const permission = getTaskSignaturePermission(taskUsername, taskId);
+        if (permission.allowAll) return true;
+        return permission.allowedUsers && permission.allowedUsers.includes(signerUsername);
+      }
+
+      async function updateSignaturePermission(taskUsername, taskId, permission) {
+        const saved = saveTaskSignaturePermission(taskUsername, taskId, permission);
+        if (saved) {
+          await saveUsers(currentUsers);
+          return true;
+        }
+        return false;
+      }
+
+      // ============ SIGN TASK ============
+      async function signTask(taskUsername, taskId, signatureData) {
+        const signatures = getTaskSignatures(taskUsername, taskId);
+        const alreadySigned = signatures.some(s => s.signer === currentUsername);
+        if (alreadySigned) {
+          return { success: false, message: 'Anda sudah menandatangani tugas ini!' };
+        }
+
+        const newSignature = {
+          signer: currentUsername,
+          signerFullname: currentUsers[currentUsername]?.fullname || currentUsername,
+          signatureData: signatureData,
+          signedAt: new Date().toISOString()
+        };
+
+        signatures.push(newSignature);
+        saveTaskSignatures(taskUsername, taskId, signatures);
+        await saveUsers(currentUsers);
+        
+        return { success: true, message: '✅ Tugas berhasil ditandatangani!' };
+      }
+
+      // ============ UNSIGN TASK YANG DIPERBAIKI ============
+      async function unsignTask(taskUsername, taskId) {
+        const isAdmin = currentUserRole === 'admin';
+        
+        if (!isAdmin) {
+          return { success: false, message: '❌ Hanya Admin yang dapat menghapus tanda tangan!' };
+        }
+        
+        // Cari task
+        if (!currentUsers[taskUsername]) {
+          return { success: false, message: 'User tidak ditemukan!' };
+        }
+        
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+        
+        if (taskIndex === -1) {
+          return { success: false, message: 'Tugas tidak ditemukan!' };
+        }
+        
+        const task = tasks[taskIndex];
+        const signatures = task.signatures || [];
+        
+        // Cari tanda tangan milik user saat ini
+        const signIndex = signatures.findIndex(s => s.signer === currentUsername);
+        
+        if (signIndex === -1) {
+          return { success: false, message: 'Anda belum menandatangani tugas ini!' };
+        }
+
+        // Hapus tanda tangan
+        signatures.splice(signIndex, 1);
+        task.signatures = signatures;
+        tasks[taskIndex] = task;
+        currentUsers[taskUsername].tasks = tasks;
+        
+        // Simpan ke cloud
+        const saved = await saveUsers(currentUsers);
+        
+        if (saved) {
+          console.log('✅ Tanda tangan berhasil dihapus dari cloud');
+          return { success: true, message: '✅ Tanda tangan berhasil dihapus!' };
+        } else {
+          // Meskipun gagal ke cloud, data sudah tersimpan di lokal
+          console.warn('⚠️ Tanda tangan tersimpan di lokal tapi gagal ke cloud');
+          return { success: true, message: '✅ Tanda tangan berhasil dihapus (lokal)!' };
+        }
+      }
+
+      // ============ REPORT FUNCTIONS ============
+      function getReports(username) {
+        if (!currentUsers[username]) return [];
+        return currentUsers[username].reports || [];
+      }
+
+      function saveReports(username, reports) {
+        if (!currentUsers[username]) return false;
+        currentUsers[username].reports = reports;
+        return true;
+      }
+
+      async function uploadReport(username, reportData) {
+        const reports = getReports(username);
+        const newReport = {
+          id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+          ...reportData,
+          uploadedAt: new Date().toISOString(),
+          uploadedBy: currentUsername,
+          uploadedByFullname: currentUsers[currentUsername]?.fullname || currentUsername
+        };
+        reports.push(newReport);
+        saveReports(username, reports);
+        await saveUsers(currentUsers);
+        return newReport;
+      }
+
+      async function deleteReport(username, reportId) {
+        const reports = getReports(username);
+        const filtered = reports.filter(r => r.id !== reportId);
+        saveReports(username, filtered);
+        await saveUsers(currentUsers);
+        return true;
+      }
+
+      function getAllReports() {
+        let allReports = [];
+        Object.keys(currentUsers).forEach(username => {
+          const userReports = currentUsers[username].reports || [];
+          userReports.forEach(report => {
+            allReports.push({
+              ...report,
+              _username: username,
+              _fullname: currentUsers[username].fullname || username
+            });
+          });
+        });
+        allReports.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+        return allReports;
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+        return (bytes / 1073741824).toFixed(1) + ' GB';
+      }
+
+      function getFileIcon(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        const icons = {
+          'pdf': 'fa-file-pdf',
+          'doc': 'fa-file-word',
+          'docx': 'fa-file-word',
+          'xls': 'fa-file-excel',
+          'xlsx': 'fa-file-excel',
+          'ppt': 'fa-file-powerpoint',
+          'pptx': 'fa-file-powerpoint',
+          'jpg': 'fa-file-image',
+          'jpeg': 'fa-file-image',
+          'png': 'fa-file-image',
+          'gif': 'fa-file-image',
+          'svg': 'fa-file-image',
+          'webp': 'fa-file-image',
+          'mp4': 'fa-file-video',
+          'avi': 'fa-file-video',
+          'mov': 'fa-file-video',
+          'mp3': 'fa-file-audio',
+          'wav': 'fa-file-audio',
+          'zip': 'fa-file-archive',
+          'rar': 'fa-file-archive',
+          '7z': 'fa-file-archive',
+          'txt': 'fa-file-alt',
+          'csv': 'fa-file-csv',
+          'json': 'fa-file-code',
+          'xml': 'fa-file-code',
+          'html': 'fa-file-code',
+          'css': 'fa-file-code',
+          'js': 'fa-file-code',
+          'md': 'fa-file-alt',
+          '': 'fa-file'
+        };
+        return icons[ext] || 'fa-file';
+      }
+
+      function downloadFile(fileData, filename) {
+        try {
+          let base64Data = fileData.data;
+          if (base64Data.includes(',')) {
+            base64Data = base64Data.split(',')[1];
+          }
+          
+          const byteCharacters = atob(base64Data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: fileData.type || 'application/octet-stream' });
+          
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename || fileData.filename || fileData.name || 'download';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error('❌ Error downloading file:', error);
+          alert('Gagal mendownload file. Silakan coba lagi.');
+        }
+      }
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // ============ FUNGSI REGISTER & LOGIN ============
+      async function registerUser(username, fullname, password) {
+        await loadUsers();
+        if (currentUsers[username]) {
+          return { success: false, message: 'Username sudah digunakan. Silakan pilih yang lain.' };
+        }
+        currentUsers[username] = {
+          fullname: fullname,
+          password: password,
+          role: 'user',
+          tasks: [],
+          reports: [],
+          files: [],
+          createdAt: new Date().toISOString()
+        };
+        const saved = await saveUsers(currentUsers);
+        if (saved) {
+          return { success: true, message: '✅ Akun berhasil dibuat dan tersimpan di cloud!' };
+        } else {
+          return { success: true, message: '⚠️ Akun tersimpan di lokal (cloud offline)' };
+        }
+      }
+
+      async function loginUser(username, password) {
+        await loadUsers();
+        if (!currentUsers[username]) {
+          return { success: false, message: '❌ Username tidak ditemukan.' };
+        }
+        if (currentUsers[username].password !== password) {
+          return { success: false, message: '❌ Password salah.' };
+        }
+        const role = currentUsers[username].role || 'user';
+        return { success: true, user: currentUsers[username], role: role };
+      }
+
+      // ============ FUNGSI MANAJEMEN USER ============
+      async function updateUser(oldUsername, newUsername, newFullname, newPassword, newRole) {
+        await loadUsers();
+        
+        if (!currentUsers[oldUsername]) {
+          return { success: false, message: 'User tidak ditemukan.' };
+        }
+
+        if (oldUsername !== newUsername && currentUsers[newUsername]) {
+          return { success: false, message: 'Username baru sudah digunakan.' };
+        }
+
+        const userData = currentUsers[oldUsername];
+        const updatedData = {
+          fullname: newFullname || userData.fullname,
+          password: newPassword || userData.password,
+          role: newRole || userData.role,
+          tasks: userData.tasks || [],
+          reports: userData.reports || [],
+          files: userData.files || [],
+          createdAt: userData.createdAt
+        };
+
+        delete currentUsers[oldUsername];
+        currentUsers[newUsername] = updatedData;
+
+        const saved = await saveUsers(currentUsers);
+        if (saved) {
+          return { success: true, message: '✅ User berhasil diupdate!' };
+        }
+        return { success: false, message: '❌ Gagal menyimpan ke cloud.' };
+      }
+
+      async function deleteUser(username) {
+        await loadUsers();
+        
+        if (!currentUsers[username]) {
+          return { success: false, message: 'User tidak ditemukan.' };
+        }
+
+        if (username === ADMIN_USERNAME) {
+          return { success: false, message: '❌ Tidak bisa menghapus admin utama!' };
+        }
+
+        delete currentUsers[username];
+        const saved = await saveUsers(currentUsers);
+        if (saved) {
+          return { success: true, message: '✅ User berhasil dihapus!' };
+        }
+        return { success: false, message: '❌ Gagal menyimpan ke cloud.' };
+      }
+
+      async function resetPassword(username, newPassword) {
+        await loadUsers();
+        
+        if (!currentUsers[username]) {
+          return { success: false, message: 'User tidak ditemukan.' };
+        }
+
+        currentUsers[username].password = newPassword;
+        const saved = await saveUsers(currentUsers);
+        if (saved) {
+          return { success: true, message: '✅ Password berhasil direset!' };
+        }
+        return { success: false, message: '❌ Gagal menyimpan ke cloud.' };
+      }
+
+      // ============ TASK FUNCTIONS ============
+      function getTasks(username) {
+        if (!currentUsers[username]) return [];
+        return currentUsers[username].tasks || [];
+      }
+
+      function saveTasks(username, tasks) {
+        if (!currentUsers[username]) return false;
+        currentUsers[username].tasks = tasks;
+        return true;
+      }
+
+      async function addTask(username, taskData) {
+        const tasks = getTasks(username);
+        const newTask = {
+          id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+          ...taskData,
+          username: username,
+          comments: [],
+          signatures: [],
+          signaturePermission: { allowedUsers: [], allowAll: false },
+          files: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        tasks.push(newTask);
+        saveTasks(username, tasks);
+        await saveUsers(currentUsers);
+        return newTask;
+      }
+
+      async function updateTask(username, taskId, updatedData) {
+        const tasks = getTasks(username);
+        const index = tasks.findIndex(t => t.id === taskId);
+        if (index === -1) return null;
+        tasks[index] = { ...tasks[index], ...updatedData, updatedAt: new Date().toISOString() };
+        saveTasks(username, tasks);
+        await saveUsers(currentUsers);
+        return tasks[index];
+      }
+
+      async function deleteTask(username, taskId) {
+        const tasks = getTasks(username);
+        const filtered = tasks.filter(t => t.id !== taskId);
+        saveTasks(username, filtered);
+        await saveUsers(currentUsers);
+        return true;
+      }
+
+      // ============ FUNGSI KOMENTAR YANG DIPERBAIKI ============
+      async function addComment(taskUsername, taskId, commentText) {
+        try {
+          await loadUsers();
+          
+          if (!currentUsers[taskUsername]) {
+            console.error('User tidak ditemukan:', taskUsername);
+            return false;
+          }
+          
+          const tasks = getTasks(taskUsername);
+          const taskIndex = tasks.findIndex(t => t.id === taskId);
+          
+          if (taskIndex === -1) {
+            console.error('Task tidak ditemukan:', taskId);
+            return false;
+          }
+          
+          const task = tasks[taskIndex];
+          
+          if (!task.comments) {
+            task.comments = [];
+          }
+          
+          const newComment = {
+            user: currentUsername,
+            userFullname: currentUsers[currentUsername]?.fullname || currentUsername,
+            text: commentText.trim(),
+            time: new Date().toISOString()
+          };
+          
+          task.comments.push(newComment);
+          tasks[taskIndex] = task;
+          currentUsers[taskUsername].tasks = tasks;
+          
+          const saved = await saveUsers(currentUsers);
+          
+          if (saved) {
+            console.log('✅ Komentar berhasil disimpan ke cloud');
+            await loadUsers();
+            return true;
+          } else {
+            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
+            return true;
+          }
+        } catch (error) {
+          console.error('❌ Error di addComment:', error);
+          try {
+            saveUsersToLocal(currentUsers);
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
+      }
+
+      // ============ FUNGSI DELETE KOMENTAR YANG DIPERBAIKI ============
+      async function deleteComment(taskUsername, taskId, commentIndex) {
+        try {
+          await loadUsers();
+          
+          if (!currentUsers[taskUsername]) {
+            console.error('User tidak ditemukan:', taskUsername);
+            return { success: false, message: 'User tidak ditemukan!' };
+          }
+          
+          const tasks = getTasks(taskUsername);
+          const taskIndex = tasks.findIndex(t => t.id === taskId);
+          
+          if (taskIndex === -1) {
+            console.error('Task tidak ditemukan:', taskId);
+            return { success: false, message: 'Tugas tidak ditemukan!' };
+          }
+          
+          const task = tasks[taskIndex];
+          
+          if (!task.comments || commentIndex >= task.comments.length) {
+            return { success: false, message: 'Komentar tidak ditemukan!' };
+          }
+          
+          const comment = task.comments[commentIndex];
+          
+          // Cek hak akses
+          if (comment.user !== currentUsername && currentUserRole !== 'admin') {
+            return { success: false, message: 'Anda tidak berhak menghapus komentar ini!' };
+          }
+          
+          // Hapus komentar
+          task.comments.splice(commentIndex, 1);
+          tasks[taskIndex] = task;
+          currentUsers[taskUsername].tasks = tasks;
+          
+          // Simpan ke cloud
+          const saved = await saveUsers(currentUsers);
+          
+          if (saved) {
+            console.log('✅ Komentar berhasil dihapus dari cloud');
+            await loadUsers();
+            return { success: true, message: '✅ Komentar berhasil dihapus!' };
+          } else {
+            // Meskipun gagal ke cloud, data sudah tersimpan di lokal
+            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
+            return { success: true, message: '✅ Komentar berhasil dihapus (lokal)!' };
+          }
+        } catch (error) {
+          console.error('❌ Error di deleteComment:', error);
+          return { success: false, message: 'Terjadi kesalahan saat menghapus komentar.' };
+        }
+      }
+
+      // ============ GET ALL TASKS ============
+      function getAllTasks() {
+        let allTasks = [];
+        Object.keys(currentUsers).forEach(username => {
+          const userTasks = currentUsers[username].tasks || [];
+          userTasks.forEach(task => {
+            allTasks.push({
+              ...task,
+              _username: username,
+              _fullname: currentUsers[username].fullname || username
+            });
+          });
+        });
+        allTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return allTasks;
+      }
+
+      // ============ DATA STATIS ============
+      const now = new Date();
+      const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+      const dayName = days[now.getDay()];
+      const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+      function getPesanByDay(day) {
+        const map = {
+          'Senin': '□ SKDR: persiapan data awal minggu',
+          'Selasa': '□ Weekly Report: kumpulkan data mingguan',
+          'Rabu': '□ All Data Report: rekonsiliasi seluruh data',
+          'Kamis': '□ Detail Report: analisis mendalam',
+          'Jumat': '□ Request Report: proses permintaan laporan',
+          'Sabtu': '□ Request Report (lanjutan) & koordinasi'
+        };
+        return map[day] || '□ Tidak ada notifikasi khusus';
+      }
+
+      // ============ DATA KONTEN ============
+      const dataStatistikAdmin = `
+        <div class="item"><i class="fas fa-briefcase"></i> <span class="highlight">Marco Fajar Setiawan, S.K.M, CAHSE</span> <span class="badge">Admin</span></div>
+        <div class="item"><span>□ 2020 · Medical Record Menteng</span> <span class="badge">90%</span></div>
+        <div class="item"><span>□ 2021 · System Support Kebayoran</span> <span class="badge">93%</span></div>
+        <div class="item"><span>□ 2022 – Now · Medical Record Bekasi</span> <span class="badge">96%</span></div>
+        <div class="item small-note" style="margin-top:6px; color:#68769e; font-size:0.8rem;"><i class="fas fa-arrow-up" style="color:#46d47c;"></i> Performa meningkat konsisten</div>
+      `;
+
+      const accessDenied = `
+        <div class="access-denied">
+          <i class="fas fa-lock"></i>
+          <h4>Akses Ditolak</h4>
+          <p>Menu ini hanya dapat diakses oleh <strong>Admin</strong>.</p>
+          <p style="margin-top:0.5rem; font-size:0.75rem; color:#68769e;">Hubungi admin untuk mendapatkan akses.</p>
+        </div>
+      `;
+
+      const dataAnggota = `
+        <div class="item"><i class="fas fa-user-tie"></i> <span class="highlight">Marco Fajar Setiawan</span> <span class="badge">Head Unit</span></div>
+        <div class="item"><i class="fas fa-user"></i> Adit <span class="badge">Staff</span></div>
+        <div class="item"><i class="fas fa-user"></i> Tika <span class="badge">Staff</span></div>
+        <div class="item"><i class="fas fa-user"></i> Tiara <span class="badge">Staff</span></div>
+        <div class="item"><i class="fas fa-user"></i> Putri <span class="badge">Staff</span></div>
+        <div class="item small-note" style="margin-top:6px; color:#68769e; font-size:0.8rem;">□ 5 anggota aktif</div>
+      `;
+
+      const dataJadwal = `
+        <div class="item"><i class="fas fa-calendar-day"></i> Senin · SKDR</div>
+        <div class="item"><i class="fas fa-calendar-day"></i> Selasa · Weekly Report</div>
+        <div class="item"><i class="fas fa-calendar-day"></i> Rabu · All Data Report</div>
+        <div class="item"><i class="fas fa-calendar-day"></i> Kamis · Detail Report</div>
+        <div class="item"><i class="fas fa-calendar-day"></i> Jumat · Request Report</div>
+        <div class="item"><i class="fas fa-calendar-day"></i> Sabtu · Request Report</div>
+        <div class="item small-note" style="margin-top:6px; color:#68769e; font-size:0.8rem;"><i class="fas fa-clock"></i> Minggu libur</div>
+      `;
+
+      // ============ RENDER SIGNATURE PERMISSION ============
+      function renderSignaturePermission(taskId, taskUsername) {
+        const isAdmin = currentUserRole === 'admin';
+        if (!isAdmin) return '';
+
+        const permission = getTaskSignaturePermission(taskUsername, taskId);
+        const allUsers = Object.keys(currentUsers).filter(u => u !== taskUsername);
+        const allowedUsers = permission.allowedUsers || [];
+        const allowAll = permission.allowAll || false;
+
+        let html = `
+          <div class="signature-permission">
+            <div class="permission-header">
+              <label>
+                <input type="checkbox" id="allowAllSign_${taskId}" ${allowAll ? 'checked' : ''}>
+                <i class="fas fa-globe"></i> Izinkan semua user menandatangani
+              </label>
+              <span style="font-size:0.55rem; color:#68769e;">
+                ${allowAll ? '✅ Semua user diizinkan' : `✅ ${allowedUsers.length} user diizinkan`}
+              </span>
+            </div>
+            <div class="permission-desc">
+              <i class="fas fa-info-circle"></i> Admin dapat mengatur siapa saja yang dapat menandatangani tugas ini
+            </div>
+            ${!allowAll ? `
+              <div class="allowed-users" id="allowedUsers_${taskId}">
+                ${allowedUsers.map(u => `
+                  <span class="user-tag">
+                    <i class="fas fa-user"></i> ${escapeHtml(currentUsers[u]?.fullname || u)}
+                    <span class="remove-user" onclick="window.removeAllowedUser('${taskId}', '${taskUsername}', '${u}')">×</span>
+                  </span>
+                `).join('')}
+              </div>
+              <div class="add-user-form">
+                <select id="addUserSelect_${taskId}">
+                  ${allUsers.filter(u => !allowedUsers.includes(u)).map(u => `
+                    <option value="${u}">${escapeHtml(currentUsers[u]?.fullname || u)} (@${u})</option>
+                  `).join('')}
+                </select>
+                <button onclick="window.addAllowedUser('${taskId}', '${taskUsername}')">
+                  <i class="fas fa-plus"></i> Tambah
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        return html;
+      }
+
+      // ============ RENDER TASK SIGNATURE ============
+      function renderTaskSignature(taskId, taskUsername) {
+        const signatures = getTaskSignatures(taskUsername, taskId);
+        const hasSigned = signatures.some(s => s.signer === currentUsername);
+        const isAdmin = currentUserRole === 'admin';
+        
+        const canSign = !hasSigned;
+
+        let html = `
+          <div class="task-signature-section">
+            <div class="sign-header">
+              <h5><i class="fas fa-pen-fancy"></i> Tanda Tangan Bukti Terima</h5>
+              <span class="sign-badge ${hasSigned ? 'signed' : 'not-signed'}">
+                ${hasSigned ? '✅ Sudah ditandatangani' : '⏳ Belum ditandatangani'}
+              </span>
+            </div>
+
+            ${renderSignaturePermission(taskId, taskUsername)}
+
+            <div class="sign-list">
+              ${signatures.length > 0 ? signatures.map((s, index) => {
+                let signaturePreview = '';
+                if (s.signatureData) {
+                  signaturePreview = `
+                    <div class="signature-preview">
+                      <img src="${s.signatureData}" alt="Tanda tangan ${s.signer}" title="Tanda tangan ${s.signerFullname || s.signer}">
+                      <span class="signature-label">Tanda tangan</span>
+                    </div>
+                  `;
+                }
+                return `
+                  <div class="sign-item">
+                    <div class="sign-avatar">${s.signer.charAt(0).toUpperCase()}</div>
+                    <div class="sign-info">
+                      <div class="sign-name">${escapeHtml(s.signerFullname || s.signer)}</div>
+                      <div class="sign-time"><i class="fas fa-clock"></i> ${new Date(s.signedAt).toLocaleString('id-ID')}</div>
+                      ${signaturePreview}
+                    </div>
+                    <span class="sign-status-text"><i class="fas fa-check-circle"></i></span>
+                    ${s.signer === currentUsername && isAdmin ? `
+                      <button class="btn-unsign-task" onclick="window.unsignTask('${taskId}', '${taskUsername}')">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('') : `
+                <div class="sign-empty">Belum ada tanda tangan</div>
+              `}
+            </div>
+
+            ${canSign ? `
+              <div class="sign-canvas-wrapper">
+                <canvas id="signCanvas_${taskId}" width="600" height="200"></canvas>
+                <div class="placeholder-text">Tanda tangan di sini</div>
+              </div>
+              <div class="sign-actions">
+                <button class="btn-sign-task" id="signBtn_${taskId}" data-taskid="${taskId}" data-username="${taskUsername}">
+                  <i class="fas fa-pen"></i> Tandatangani
+                </button>
+                <button class="btn-clear-task" id="clearBtn_${taskId}" disabled>
+                  <i class="fas fa-eraser"></i> Hapus
+                </button>
+              </div>
+            ` : `
+              ${hasSigned ? `
+                <div style="margin-top:0.4rem; padding:0.4rem; background:rgba(0,206,209,0.05); border-radius:8px; border:1px solid rgba(0,206,209,0.1);">
+                  <p style="color:#00ced1; font-size:0.7rem; display:flex; align-items:center; gap:6px;">
+                    <i class="fas fa-check-circle"></i> Anda telah menandatangani tugas ini
+                  </p>
+                </div>
+              ` : ''}
+            `}
+          </div>
+        `;
+
+        return html;
+      }
+
+      // ============ RENDER REPORTS ============
+      function renderReports() {
+        const allReports = getAllReports();
+        const isAdmin = currentUserRole === 'admin';
+        
+        let html = `
+          <div class="stat-title"><i class="fas fa-file-alt"></i> Laporan Bulanan</div>
+          <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
+            <i class="fas fa-users"></i> Semua user · ${allReports.length} total laporan
+          </p>
+        `;
+
+        html += `
+          <div class="report-upload-form">
+            <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
+              <i class="fas fa-upload"></i> Upload Laporan Bulanan
+            </h4>
+            <form id="reportUploadForm">
+              <div class="form-row">
+                <div class="input-group">
+                  <label>Bulan & Tahun</label>
+                  <div class="input-icon"><i class="fas fa-calendar"></i>
+                    <input type="month" id="reportMonth" required style="padding-left:3rem;">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>Tipe Laporan</label>
+                  <div class="input-icon"><i class="fas fa-tag"></i>
+                    <select id="reportType" style="padding-left:3rem;">
+                      <option value="rajal">RAJAL (Rawat Jalan)</option>
+                      <option value="ranap">RANAP (Rawat Inap)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Keterangan (opsional)</label>
+                <textarea id="reportDesc" placeholder="Deskripsi laporan..." style="padding-left:1rem; min-height:50px;"></textarea>
+              </div>
+              <div class="file-input-wrapper">
+                <input type="file" id="reportFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.jpg,.jpeg,.png,.gif,.json,.xml,.html,.css,.js" required>
+                <button type="submit" class="btn-primary btn-upload" style="width:auto; padding:0.5rem 1rem; font-size:0.75rem; background:linear-gradient(135deg,#fdcb6e,#f39c12); color:#2d3436;">
+                  <i class="fas fa-upload"></i> Upload
+                </button>
+              </div>
+            </form>
+          </div>
+        `;
+
+        html += `
+          <div class="filter-bar">
+            <button class="active" data-filter="all">Semua</button>
+            <button data-filter="rajal"><i class="fas fa-clinic-medical"></i> RAJAL</button>
+            <button data-filter="ranap"><i class="fas fa-hospital"></i> RANAP</button>
+            <button data-filter="my-reports" style="border-color:#6c5ce7;">□ Laporanku</button>
+          </div>
+        `;
+
+        html += `<div class="report-list" id="reportListContainer">`;
+
+        if (allReports.length === 0) {
+          html += `
+            <div class="empty-tasks">
+              <i class="fas fa-file-alt"></i>
+              <p>Belum ada laporan. Upload laporan bulanan!</p>
+            </div>
+          `;
+        } else {
+          allReports.forEach((report) => {
+            const typeLabel = report.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
+            const typeClass = report.type === 'rajal' ? 'rajal' : 'ranap';
+            const typeIcon = report.type === 'rajal' ? 'fa-clinic-medical' : 'fa-hospital';
+            const isOwnReport = report._username === currentUsername;
+            const canDelete = isOwnReport || isAdmin;
+            const monthYear = report.month || 'Bulan tidak tersedia';
+            const fileIcon = getFileIcon(report.filename || 'file.pdf');
+            
+            html += `
+              <div class="report-item" data-report-id="${report.id}" data-username="${report._username}">
+                <div class="report-header">
+                  <div>
+                    <div class="report-title">
+                      <i class="fas ${typeIcon}" style="color:${report.type === 'rajal' ? '#00ced1' : '#a29bfe'};"></i>
+                      ${escapeHtml(report.filename || 'Laporan')}
+                      <span class="report-type-badge ${typeClass}">${typeLabel}</span>
+                    </div>
+                    <div class="report-meta">
+                      <span><i class="fas fa-user"></i> ${escapeHtml(report._fullname || report._username)}</span>
+                      <span><i class="fas fa-calendar"></i> ${escapeHtml(monthYear)}</span>
+                      <span><i class="fas fa-file"></i> ${formatFileSize(report.size || 0)}</span>
+                      ${isOwnReport ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
+                    </div>
+                  </div>
+                  <div class="report-actions">
+                    <button class="view-btn" onclick="window.viewReport('${report.id}', '${report._username}')">
+                      <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="download-btn" onclick="window.downloadReport('${report.id}', '${report._username}')">
+                      <i class="fas fa-download"></i>
+                    </button>
+                    ${canDelete ? `
+                      <button class="delete-btn" onclick="window.deleteReportById('${report.id}', '${report._username}')">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    ` : ''}
+                  </div>
+                </div>
+                ${report.description ? `<div class="report-desc">${escapeHtml(report.description)}</div>` : ''}
+                <div class="report-desc" style="font-size:0.65rem; color:#68769e; border-top:1px solid rgba(255,255,255,0.03); padding-top:0.3rem; margin-top:0.3rem;">
+                  <i class="fas fa-clock"></i> Upload: ${new Date(report.uploadedAt).toLocaleString('id-ID')}
+                  ${report.uploadedBy ? ` · oleh ${escapeHtml(report.uploadedByFullname || report.uploadedBy)}` : ''}
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        html += `</div>`;
+
+        return html;
+      }
+
+      // ============ RENDER TASK MANAGER ============
+      function renderTaskManager() {
+        const allTasks = getAllTasks();
+        const isAdmin = currentUserRole === 'admin';
+        
+        let html = `
+          <div class="stat-title"><i class="fas fa-tasks"></i> Semua Tugas</div>
+          <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
+            <i class="fas fa-users"></i> Semua user · ${allTasks.length} total tugas
+          </p>
+        `;
+
+        html += `
+          <div style="margin-bottom:1rem; background:rgba(255,255,255,0.03); padding:0.8rem; border-radius:14px; border:1px solid rgba(255,255,255,0.04);">
+            <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
+              <i class="fas fa-plus-circle"></i> Tambah Tugas Baru
+            </h4>
+            <form id="taskForm">
+              <div class="input-group" style="margin-bottom:0.5rem;">
+                <label>Judul Pekerjaan</label>
+                <div class="input-icon"><i class="fas fa-tag"></i>
+                  <input type="text" id="taskTitle" placeholder="Masukkan judul pekerjaan" required>
+                </div>
+              </div>
+              <div class="input-group" style="margin-bottom:0.5rem;">
+                <label>Deskripsi (opsional)</label>
+                <textarea id="taskDesc" placeholder="Detail pekerjaan..." style="padding-left:1rem;"></textarea>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+                <div class="input-group" style="margin-bottom:0;">
+                  <label>Tanggal</label>
+                  <div class="input-icon"><i class="fas fa-calendar"></i>
+                    <input type="date" id="taskDate" style="padding-left:3rem;" required>
+                  </div>
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                  <label>Status</label>
+                  <div class="input-icon"><i class="fas fa-flag"></i>
+                    <select id="taskStatus" style="padding-left:3rem;">
+                      <option value="pending">⏳ Pending</option>
+                      <option value="done">✅ Selesai</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary btn-success" style="margin-top:0.5rem; font-size:0.85rem; padding:0.6rem;">
+                <i class="fas fa-plus"></i> Tambah Tugas
+              </button>
+            </form>
+          </div>
+        `;
+
+        html += `
+          <div class="filter-bar">
+            <button class="active" data-filter="all">Semua</button>
+            <button data-filter="pending">⏳ Pending</button>
+            <button data-filter="done">✅ Selesai</button>
+            <button data-filter="my-tasks" style="border-color:#6c5ce7;">□ Tugasku</button>
+          </div>
+        `;
+
+        html += `<div class="task-list" id="taskListContainer">`;
+
+        if (allTasks.length === 0) {
+          html += `
+            <div class="empty-tasks">
+              <i class="fas fa-clipboard-list"></i>
+              <p>Belum ada tugas. Tambahkan tugas baru!</p>
+            </div>
+          `;
+        } else {
+          allTasks.forEach((task) => {
+            const taskDate = task.date ? new Date(task.date).toLocaleDateString('id-ID') : '-';
+            const statusLabel = task.status === 'done' ? '✅ Selesai' : '⏳ Pending';
+            const statusClass = task.status === 'done' ? 'done' : 'pending';
+            const username = task._username;
+            const fullname = task._fullname || username;
+            const isOwnTask = username === currentUsername;
+            const canEdit = isOwnTask || isAdmin;
+            const comments = task.comments || [];
+            const signatures = task.signatures || [];
+            const hasSignatures = signatures.length > 0;
+            const permission = task.signaturePermission || { allowedUsers: [], allowAll: false };
+            
+            html += `
+              <div class="task-item" data-task-id="${task.id}" data-username="${username}">
+                <div class="task-header">
+                  <div>
+                    <div class="task-title">${escapeHtml(task.title)}</div>
+                    <div class="task-meta">
+                      <span><i class="fas fa-user"></i> ${escapeHtml(fullname)}</span>
+                      <span><i class="fas fa-calendar"></i> ${escapeHtml(taskDate)}</span>
+                      <span class="task-status ${statusClass}">${statusLabel}</span>
+                      ${isOwnTask ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
+                      ${hasSignatures ? `<span style="color:#00ced1; font-size:0.55rem;"><i class="fas fa-check-circle"></i> ${signatures.length} tanda tangan</span>` : ''}
+                      ${comments.length > 0 ? `<span style="color:#a29bfe; font-size:0.55rem;"><i class="fas fa-comment"></i> ${comments.length}</span>` : ''}
+                      ${isAdmin ? `<span style="color:#ffd700; font-size:0.55rem;"><i class="fas fa-crown"></i> ${permission.allowAll ? 'Semua user' : permission.allowedUsers?.length || 0} user</span>` : ''}
+                    </div>
+                  </div>
+                  <div class="task-actions">
+                    ${canEdit ? `
+                      <button class="edit-btn" onclick="window.editTask('${task.id}', '${username}')">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="delete-btn" onclick="window.deleteTask('${task.id}', '${username}')">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    ` : ''}
+                    <button class="sign-task-btn" onclick="window.showTaskSignature('${task.id}', '${username}')" title="Tanda Tangan">
+                      <i class="fas fa-pen-fancy"></i>
+                    </button>
+                  </div>
+                </div>
+                ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
+                
+                <div class="task-comments">
+                  <div class="comment-list" id="commentList_${task.id}">
+                    ${comments.length > 0 ? comments.map((c, idx) => `
+                      <div class="comment-item">
+                        <div>
+                          <span class="comment-user">${escapeHtml(c.userFullname || c.user)}</span>
+                          <span class="comment-time">${new Date(c.time).toLocaleString('id-ID')}</span>
+                          ${(c.user === currentUsername || isAdmin) ? `
+                            <button onclick="window.deleteComment('${task.id}', '${username}', ${idx})" 
+                                    class="comment-delete-btn">
+                              <i class="fas fa-times"></i>
+                            </button>
+                          ` : ''}
+                        </div>
+                        <div class="comment-text">${escapeHtml(c.text)}</div>
+                      </div>
+                    `).join('') : `
+                      <div class="comment-empty">Belum ada komentar</div>
+                    `}
+                  </div>
+                  <form class="comment-form" id="commentForm_${task.id}" data-taskid="${task.id}" data-username="${username}">
+                    <input type="text" placeholder="Tulis komentar..." required>
+                    <button type="submit"><i class="fas fa-reply"></i> Kirim</button>
+                  </form>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        html += `</div>`;
+
+        return html;
+      }
+
+      // ============ ELEMEN ============
+      const loginPage = document.getElementById('loginPage');
+      const registerPage = document.getElementById('registerPage');
+      const homePage = document.getElementById('homePage');
+
+      const loginForm = document.getElementById('loginForm');
+      const loginUsername = document.getElementById('loginUsername');
+      const loginPassword = document.getElementById('loginPassword');
+      const loginError = document.getElementById('loginError');
+      const loginErrorText = document.getElementById('loginErrorText');
+      const loginSuccess = document.getElementById('loginSuccess');
+      const loginSuccessText = document.getElementById('loginSuccessText');
+      const loginInfo = document.getElementById('loginInfo');
+      const loginInfoText = document.getElementById('loginInfoText');
+      const loginBtn = document.getElementById('loginBtn');
+
+      const registerForm = document.getElementById('registerForm');
+      const regUsername = document.getElementById('regUsername');
+      const regFullname = document.getElementById('regFullname');
+      const regPassword = document.getElementById('regPassword');
+      const regConfirmPassword = document.getElementById('regConfirmPassword');
+      const registerError = document.getElementById('registerError');
+      const registerErrorText = document.getElementById('registerErrorText');
+      const registerSuccess = document.getElementById('registerSuccess');
+      const registerSuccessText = document.getElementById('registerSuccessText');
+      const registerInfo = document.getElementById('registerInfo');
+      const registerInfoText = document.getElementById('registerInfoText');
+      const registerBtn = document.getElementById('registerBtn');
+
+      const greetingUser = document.getElementById('greetingUser');
+      const userAvatar = document.getElementById('userAvatar');
+      const roleBadge = document.getElementById('roleBadge');
+      const pesanPreview = document.getElementById('pesanPreview');
+      const activityList = document.getElementById('activityList');
+      const statistikCard = document.getElementById('statistikCard');
+      const manageUsersCard = document.getElementById('manageUsersCard');
+      const taskCount = document.getElementById('taskCount');
+      const taskPreview = document.getElementById('taskPreview');
+      const reportCount = document.getElementById('reportCount');
+      const reportPreview = document.getElementById('reportPreview');
+
+      const goToRegister = document.getElementById('goToRegister');
+      const goToLogin = document.getElementById('goToLogin');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      // ============ FUNGSI NAVIGASI ============
+      function showPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        page.classList.add('active');
+        loginError.classList.remove('show');
+        loginSuccess.classList.remove('show');
+        loginInfo.classList.remove('show');
+        registerError.classList.remove('show');
+        registerSuccess.classList.remove('show');
+        registerInfo.classList.remove('show');
+      }
+
+      // ============ UPDATE COUNTS ============
+      function updateCounts() {
+        const allTasks = getAllTasks();
+        const allReports = getAllReports();
+        const pending = allTasks.filter(t => t.status === 'pending').length;
+        const totalComments = allTasks.reduce((sum, t) => sum + (t.comments?.length || 0), 0);
+        const totalSignatures = allTasks.reduce((sum, t) => sum + (t.signatures?.length || 0), 0);
+        
+        taskCount.textContent = `${allTasks.length} total (${pending} pending)`;
+        taskPreview.textContent = allTasks.length > 0 ? `${allTasks.length} tugas · ${totalComments} komentar · ${totalSignatures} tanda tangan` : 'Kelola pekerjaan harian';
+        
+        reportCount.textContent = `${allReports.length} laporan`;
+        reportPreview.textContent = allReports.length > 0 ? `${allReports.length} laporan tersimpan` : 'Upload & Lihat Laporan';
+      }
+
+      // ============ UPDATE UI BERDASARKAN ROLE ============
+      function updateUIForRole(role, username) {
+        const isAdmin = role === 'admin';
+        currentUserRole = role;
+        currentUsername = username;
+        
+        userAvatar.className = 'avatar' + (isAdmin ? ' admin-avatar' : '');
+        userAvatar.textContent = isAdmin ? 'A' : username.charAt(0).toUpperCase();
+        
+        roleBadge.textContent = isAdmin ? 'Admin' : 'User';
+        roleBadge.className = 'role-badge ' + (isAdmin ? 'admin' : 'user');
+        
+        if (isAdmin) {
+          manageUsersCard.style.display = 'block';
+          statistikCard.classList.remove('disabled');
+          statistikCard.style.opacity = '1';
+          statistikCard.style.cursor = 'pointer';
+          statistikCard.querySelector('.admin-lock').innerHTML = '<i class="fas fa-shield-alt"></i> Admin';
+          statistikCard.querySelector('.admin-lock').style.color = '#ffd93d';
+        } else {
+          manageUsersCard.style.display = 'none';
+          statistikCard.classList.add('disabled');
+          statistikCard.style.opacity = '0.5';
+          statistikCard.style.cursor = 'not-allowed';
+          statistikCard.querySelector('.admin-lock').innerHTML = '<i class="fas fa-lock"></i> Admin';
+          statistikCard.querySelector('.admin-lock').style.color = '#ff6b6b';
+        }
+        
+        updateCounts();
+      }
+
+      // ============ RENDER AKTIVITAS ============
+      function renderActivity() {
+        const pesanHari = getPesanByDay(dayName);
+        let notifText = dayName === 'Minggu' ? '☕ Hari Minggu · tidak ada jadwal kerja' : `□ ${dayName} · ${pesanHari}`;
+        const roleText = currentUserRole === 'admin' ? '□ Admin' : '□ User';
+        const allTasks = getAllTasks();
+        const allReports = getAllReports();
+        const pendingTasks = allTasks.filter(t => t.status === 'pending').length;
+        const totalComments = allTasks.reduce((sum, t) => sum + (t.comments?.length || 0), 0);
+        const totalUsers = Object.keys(currentUsers).length;
+        const totalSignatures = allTasks.reduce((sum, t) => sum + (t.signatures?.length || 0), 0);
+        
+        activityList.innerHTML = `
+          <div class="activity-item"><i class="fas fa-bell"></i><span>${escapeHtml(notifText)}</span><small>${timeStr}</small></div>
+          <div class="activity-item"><i class="fas fa-calendar-alt"></i><span>Hari ini: ${dateStr}</span><small>${timeStr}</small></div>
+          <div class="activity-item"><i class="fas fa-user-check"></i><span>Status: Aktif · ${roleText}</span><small>online</small></div>
+          <div class="activity-item"><i class="fas fa-tasks"></i><span>Total: ${allTasks.length} tugas (${pendingTasks} pending) · ${totalComments} komentar · ${totalSignatures} tanda tangan</span><small>${timeStr}</small></div>
+          <div class="activity-item"><i class="fas fa-file-alt"></i><span>Laporan: ${allReports.length} laporan</span><small>${timeStr}</small></div>
+          <div class="activity-item"><i class="fas fa-users"></i><span>User terdaftar: ${totalUsers} akun</span><small>${timeStr}</small></div>
+          <div class="activity-item"><i class="fas fa-cloud"></i><span>Database: Cloud Sync</span><small>✅</small></div>
+        `;
+        pesanPreview.textContent = dayName;
+      }
+
+      // ============ LOGIN ============
+      async function handleLogin(e) {
+        e.preventDefault();
+        const username = loginUsername.value.trim().toLowerCase();
+        const password = loginPassword.value.trim();
+
+        loginError.classList.remove('show');
+        loginSuccess.classList.remove('show');
+        loginInfo.classList.remove('show');
+
+        if (!username || !password) {
+          loginErrorText.textContent = 'Harap isi username dan password.';
+          loginError.classList.add('show');
+          return;
+        }
+
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<span class="loading-spinner"></span> Memeriksa...';
+
+        try {
+          const result = await loginUser(username, password);
+          if (result.success) {
+            const fullname = result.user.fullname || username;
+            const role = result.role || 'user';
+            
+            greetingUser.innerHTML = `Halo, ${escapeHtml(fullname)} <span class="role-badge ${role === 'admin' ? 'admin' : 'user'}">${role === 'admin' ? 'Admin' : 'User'}</span>`;
+            
+            updateUIForRole(role, username);
+            
+            showPage(homePage);
+            renderActivity();
+            sessionStorage.setItem('currentUser', username);
+            sessionStorage.setItem('userRole', role);
+            console.log('✅ Login berhasil untuk user:', username, 'Role:', role);
+          } else {
+            loginErrorText.textContent = result.message;
+            loginError.classList.add('show');
+          }
+        } catch (error) {
+          loginErrorText.textContent = 'Terjadi kesalahan. Coba lagi.';
+          loginError.classList.add('show');
+          console.error('❌ Login error:', error);
+        } finally {
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Masuk';
+        }
+      }
+
+      // ============ REGISTER ============
+      async function handleRegister(e) {
+        e.preventDefault();
+        const username = regUsername.value.trim().toLowerCase();
+        const fullname = regFullname.value.trim();
+        const password = regPassword.value.trim();
+        const confirm = regConfirmPassword.value.trim();
+
+        registerError.classList.remove('show');
+        registerSuccess.classList.remove('show');
+        registerInfo.classList.remove('show');
+
+        if (!username || !fullname || !password || !confirm) {
+          registerErrorText.textContent = 'Semua field harus diisi.';
+          registerError.classList.add('show');
+          return;
+        }
+
+        if (username.length < 3) {
+          registerErrorText.textContent = 'Username minimal 3 karakter.';
+          registerError.classList.add('show');
+          return;
+        }
+
+        if (password.length < 4) {
+          registerErrorText.textContent = 'Password minimal 4 karakter.';
+          registerError.classList.add('show');
+          return;
+        }
+
+        if (password !== confirm) {
+          registerErrorText.textContent = 'Password dan konfirmasi tidak cocok.';
+          registerError.classList.add('show');
+          return;
+        }
+
+        registerBtn.disabled = true;
+        registerBtn.innerHTML = '<span class="loading-spinner"></span> Menyimpan...';
+        registerInfoText.textContent = '☁️ Menyimpan ke cloud...';
+        registerInfo.classList.add('show');
+
+        try {
+          const result = await registerUser(username, fullname, password);
+          registerInfo.classList.remove('show');
+          
+          if (result.success) {
+            registerSuccessText.textContent = result.message;
+            registerSuccess.classList.add('show');
+            
+            regUsername.value = '';
+            regFullname.value = '';
+            regPassword.value = '';
+            regConfirmPassword.value = '';
+            
+            setTimeout(() => {
+              showPage(loginPage);
+              loginUsername.value = username;
+              loginPassword.value = '';
+              loginSuccessText.textContent = '✅ Akun berhasil dibuat dan tersimpan di cloud!';
+              loginSuccess.classList.add('show');
+              setTimeout(() => {
+                loginSuccess.classList.remove('show');
+              }, 4000);
+            }, 1500);
+          } else {
+            registerErrorText.textContent = result.message;
+            registerError.classList.add('show');
+          }
+        } catch (error) {
+          registerErrorText.textContent = 'Gagal menyimpan ke cloud. Coba lagi.';
+          registerError.classList.add('show');
+          console.error('❌ Register error:', error);
+        } finally {
+          registerBtn.disabled = false;
+          registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Daftar';
+        }
+      }
+
+      // ============ LOGOUT ============
+      function handleLogout() {
+        sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('userRole');
+        showPage(loginPage);
+        loginUsername.value = '';
+        loginPassword.value = '';
+        greetingUser.innerHTML = 'Halo, User <span class="role-badge user">User</span>';
+        userAvatar.className = 'avatar';
+        userAvatar.textContent = 'U';
+        loginError.classList.remove('show');
+        loginSuccess.classList.remove('show');
+        loadUsers();
+      }
+
+      // ============ CEK SESSION ============
+      async function checkSession() {
+        const currentUser = sessionStorage.getItem('currentUser');
+        const userRole = sessionStorage.getItem('userRole') || 'user';
+        
+        if (currentUser) {
+          await loadUsers();
+          if (currentUsers[currentUser]) {
+            const fullname = currentUsers[currentUser].fullname || currentUser;
+            const role = currentUsers[currentUser].role || 'user';
+            
+            greetingUser.innerHTML = `Halo, ${escapeHtml(fullname)} <span class="role-badge ${role === 'admin' ? 'admin' : 'user'}">${role === 'admin' ? 'Admin' : 'User'}</span>`;
+            
+            updateUIForRole(role, currentUser);
+            
+            showPage(homePage);
+            renderActivity();
+            return true;
+          } else {
+            sessionStorage.removeItem('currentUser');
+            sessionStorage.removeItem('userRole');
+          }
+        }
+        return false;
+      }
+
+      // ============ MODAL ============
+      const modalOverlay = document.getElementById('modalOverlay');
+      const modalTitleText = document.getElementById('modalTitleText');
+      const modalContent = document.getElementById('modalContent');
+      const modalClose = document.getElementById('modalClose');
+
+      function openModal(title, contentHTML) {
+        modalTitleText.textContent = title;
+        modalContent.innerHTML = contentHTML;
+        modalOverlay.classList.add('show');
+        
+        if (title.includes('Laporan Bulanan') || title.includes('Laporan')) {
+          setTimeout(() => {
+            attachReportEvents();
+          }, 100);
+        }
+        
+        if (title.includes('Task Manager') || title.includes('Semua Tugas')) {
+          setTimeout(() => {
+            attachTaskEvents();
+            attachCommentEvents();
+            attachTaskSignatureEvents();
+          }, 100);
+        }
+        
+        if (title.includes('Manajemen User')) {
+          setTimeout(() => {
+            attachUserManagementEvents();
+          }, 100);
+        }
+
+        if (title.includes('Tanda Tangan Tugas')) {
+          setTimeout(() => {
+            const taskId = title.split(' - ')[1] || '';
+            const username = document.querySelector('[data-username]')?.dataset?.username || currentUsername;
+            initTaskSignatureCanvas(taskId, username);
+            attachSignaturePermissionEvents(taskId, username);
+          }, 300);
+        }
+      }
+      
+      function closeModal() {
+        modalOverlay.classList.remove('show');
+      }
+      
+      modalClose.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+
+      // ============ ATTACH REPORT EVENTS ============
+      function attachReportEvents() {
+        const form = document.getElementById('reportUploadForm');
+        if (form) {
+          form.onsubmit = async function(e) {
+            e.preventDefault();
+            
+            const month = document.getElementById('reportMonth').value;
+            const type = document.getElementById('reportType').value;
+            const description = document.getElementById('reportDesc').value.trim();
+            const fileInput = document.getElementById('reportFile');
+            const file = fileInput.files[0];
+            const btn = this.querySelector('button[type="submit"]');
+            
+            if (!file) {
+              alert('Pilih file terlebih dahulu!');
+              return;
+            }
+
+            if (!month) {
+              alert('Pilih bulan laporan!');
+              return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+              alert('Ukuran file maksimal 10MB!');
+              return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            
+            try {
+              const reader = new FileReader();
+              reader.onload = async function(e) {
+                const fileData = {
+                  name: file.name,
+                  filename: file.name,
+                  size: file.size,
+                  type: file.type,
+                  data: e.target.result,
+                  month: month,
+                  reportType: type,
+                  type: type,
+                  description: description
+                };
+                
+                const result = await uploadReport(currentUsername, fileData);
+                if (result) {
+                  fileInput.value = '';
+                  document.getElementById('reportDesc').value = '';
+                  refreshReportModal();
+                  updateCounts();
+                  renderActivity();
+                  alert('✅ Laporan berhasil diupload!');
+                } else {
+                  alert('❌ Gagal upload laporan. Silakan coba lagi.');
+                }
+              };
+              reader.readAsDataURL(file);
+            } catch (error) {
+              console.error('Error:', error);
+              alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+            } finally {
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fas fa-upload"></i> Upload';
+            }
+          };
+        }
+
+        document.querySelectorAll('#reportListContainer .filter-bar button, .filter-bar button').forEach(btn => {
+          btn.onclick = function() {
+            const container = this.closest('.modal-content') || document;
+            container.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+            filterReports(filter);
+          };
+        });
+      }
+
+      function filterReports(filter) {
+        const allReports = getAllReports();
+        const container = document.getElementById('reportListContainer');
+        if (!container) return;
+
+        let filtered = allReports;
+        if (filter === 'rajal') {
+          filtered = allReports.filter(r => r.type === 'rajal');
+        } else if (filter === 'ranap') {
+          filtered = allReports.filter(r => r.type === 'ranap');
+        } else if (filter === 'my-reports') {
+          filtered = allReports.filter(r => r._username === currentUsername);
+        }
+
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="empty-tasks">
+              <i class="fas fa-file-alt"></i>
+              <p>Tidak ada laporan dengan filter ini.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+        const isAdmin = currentUserRole === 'admin';
+        
+        filtered.forEach((report) => {
+          const typeLabel = report.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
+          const typeClass = report.type === 'rajal' ? 'rajal' : 'ranap';
+          const typeIcon = report.type === 'rajal' ? 'fa-clinic-medical' : 'fa-hospital';
+          const isOwnReport = report._username === currentUsername;
+          const canDelete = isOwnReport || isAdmin;
+          const monthYear = report.month || 'Bulan tidak tersedia';
+          
+          html += `
+            <div class="report-item" data-report-id="${report.id}" data-username="${report._username}">
+              <div class="report-header">
+                <div>
+                  <div class="report-title">
+                    <i class="fas ${typeIcon}" style="color:${report.type === 'rajal' ? '#00ced1' : '#a29bfe'};"></i>
+                    ${escapeHtml(report.filename || 'Laporan')}
+                    <span class="report-type-badge ${typeClass}">${typeLabel}</span>
+                  </div>
+                  <div class="report-meta">
+                    <span><i class="fas fa-user"></i> ${escapeHtml(report._fullname || report._username)}</span>
+                    <span><i class="fas fa-calendar"></i> ${escapeHtml(monthYear)}</span>
+                    <span><i class="fas fa-file"></i> ${formatFileSize(report.size || 0)}</span>
+                    ${isOwnReport ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
+                  </div>
+                </div>
+                <div class="report-actions">
+                  <button class="view-btn" onclick="window.viewReport('${report.id}', '${report._username}')">
+                    <i class="fas fa-eye"></i> View
+                  </button>
+                  <button class="download-btn" onclick="window.downloadReport('${report.id}', '${report._username}')">
+                    <i class="fas fa-download"></i>
+                  </button>
+                  ${canDelete ? `
+                    <button class="delete-btn" onclick="window.deleteReportById('${report.id}', '${report._username}')">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+              ${report.description ? `<div class="report-desc">${escapeHtml(report.description)}</div>` : ''}
+              <div class="report-desc" style="font-size:0.65rem; color:#68769e; border-top:1px solid rgba(255,255,255,0.03); padding-top:0.3rem; margin-top:0.3rem;">
+                <i class="fas fa-clock"></i> Upload: ${new Date(report.uploadedAt).toLocaleString('id-ID')}
+                ${report.uploadedBy ? ` · oleh ${escapeHtml(report.uploadedByFullname || report.uploadedBy)}` : ''}
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      }
+
+      function refreshReportModal() {
+        const content = renderReports();
+        const container = document.getElementById('modalContent');
+        if (container) {
+          container.innerHTML = content;
+          attachReportEvents();
+        }
+      }
+
+      // ============ ATTACH USER MANAGEMENT EVENTS ============
+      function attachUserManagementEvents() {
+        const form = document.getElementById('addUserForm');
+        if (form) {
+          form.onsubmit = async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('newUserUsername').value.trim().toLowerCase();
+            const fullname = document.getElementById('newUserFullname').value.trim();
+            const password = document.getElementById('newUserPassword').value.trim();
+            const role = document.getElementById('newUserRole').value;
+
+            if (!username || !fullname || !password) {
+              alert('Semua field harus diisi!');
+              return;
+            }
+
+            if (username.length < 3) {
+              alert('Username minimal 3 karakter!');
+              return;
+            }
+
+            if (password.length < 4) {
+              alert('Password minimal 4 karakter!');
+              return;
+            }
+
+            const result = await registerUser(username, fullname, password);
+            if (result.success) {
+              if (role === 'admin') {
+                await loadUsers();
+                currentUsers[username].role = 'admin';
+                await saveUsers(currentUsers);
+              }
+              alert('✅ User berhasil ditambahkan!');
+              refreshUserManagementModal();
+              renderActivity();
+              form.reset();
+              document.getElementById('newUserPassword').value = '123456';
+            } else {
+              alert(result.message);
+            }
+          };
+        }
+      }
+
+      // ============ ATTACH COMMENT EVENTS YANG DIPERBAIKI ============
+      function attachCommentEvents() {
+        document.querySelectorAll('.comment-form').forEach(form => {
+          const newForm = form.cloneNode(true);
+          form.parentNode.replaceChild(newForm, form);
+          
+          newForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const taskId = this.dataset.taskid;
+            const username = this.dataset.username;
+            const input = this.querySelector('input');
+            const text = input.value.trim();
+            const btn = this.querySelector('button');
+            
+            if (!text) {
+              alert('Tulis komentar terlebih dahulu!');
+              return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            try {
+              const success = await addComment(username, taskId, text);
+              if (success) {
+                input.value = '';
+                await refreshTaskModal();
+                updateCounts();
+                renderActivity();
+                // Tampilkan pesan sukses
+                const successMsg = document.createElement('div');
+                successMsg.className = 'success-msg show';
+                successMsg.style.marginTop = '0.5rem';
+                successMsg.style.padding = '0.4rem 0.8rem';
+                successMsg.style.fontSize = '0.75rem';
+                successMsg.innerHTML = '<i class="fas fa-check-circle"></i> Komentar berhasil ditambahkan!';
+                const container = this.closest('.task-item');
+                if (container) {
+                  container.appendChild(successMsg);
+                  setTimeout(() => {
+                    successMsg.remove();
+                  }, 3000);
+                }
+              } else {
+                alert('❌ Gagal menambah komentar. Silakan coba lagi.');
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+            } finally {
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fas fa-reply"></i> Kirim';
+            }
+          });
+        });
+      }
+
+      // ============ ATTACH TASK EVENTS ============
+      function attachTaskEvents() {
+        const form = document.getElementById('taskForm');
+        if (form) {
+          form.onsubmit = async function(e) {
+            e.preventDefault();
+            const title = document.getElementById('taskTitle').value.trim();
+            const description = document.getElementById('taskDesc').value.trim();
+            const date = document.getElementById('taskDate').value;
+            const status = document.getElementById('taskStatus').value;
+
+            if (!title) {
+              alert('Judul pekerjaan harus diisi!');
+              return;
+            }
+
+            await addTask(currentUsername, { title, description, date, status });
+            await loadUsers();
+            refreshTaskModal();
+            updateCounts();
+            renderActivity();
+            form.reset();
+            document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
+          };
+        }
+
+        document.querySelectorAll('.filter-bar button').forEach(btn => {
+          btn.onclick = function() {
+            document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+            filterTasks(filter);
+          };
+        });
+
+        const dateInput = document.getElementById('taskDate');
+        if (dateInput) {
+          dateInput.value = new Date().toISOString().split('T')[0];
+        }
+      }
+
+      function filterTasks(filter) {
+        const allTasks = getAllTasks();
+        const container = document.getElementById('taskListContainer');
+        if (!container) return;
+
+        let filtered = allTasks;
+        if (filter === 'pending') {
+          filtered = allTasks.filter(t => t.status === 'pending');
+        } else if (filter === 'done') {
+          filtered = allTasks.filter(t => t.status === 'done');
+        } else if (filter === 'my-tasks') {
+          filtered = allTasks.filter(t => t._username === currentUsername);
+        }
+
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="empty-tasks">
+              <i class="fas fa-clipboard-list"></i>
+              <p>Tidak ada tugas dengan filter ini.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+        const isAdmin = currentUserRole === 'admin';
+        
+        filtered.forEach((task) => {
+          const taskDate = task.date ? new Date(task.date).toLocaleDateString('id-ID') : '-';
+          const statusLabel = task.status === 'done' ? '✅ Selesai' : '⏳ Pending';
+          const statusClass = task.status === 'done' ? 'done' : 'pending';
+          const username = task._username;
+          const fullname = task._fullname || username;
+          const isOwnTask = username === currentUsername;
+          const canEdit = isOwnTask || isAdmin;
+          const comments = task.comments || [];
+          const signatures = task.signatures || [];
+          const hasSignatures = signatures.length > 0;
+          const permission = task.signaturePermission || { allowedUsers: [], allowAll: false };
+          
+          html += `
+            <div class="task-item" data-task-id="${task.id}" data-username="${username}">
+              <div class="task-header">
+                <div>
+                  <div class="task-title">${escapeHtml(task.title)}</div>
+                  <div class="task-meta">
+                    <span><i class="fas fa-user"></i> ${escapeHtml(fullname)}</span>
+                    <span><i class="fas fa-calendar"></i> ${escapeHtml(taskDate)}</span>
+                    <span class="task-status ${statusClass}">${statusLabel}</span>
+                    ${isOwnTask ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
+                    ${hasSignatures ? `<span style="color:#00ced1; font-size:0.55rem;"><i class="fas fa-check-circle"></i> ${signatures.length} tanda tangan</span>` : ''}
+                    ${comments.length > 0 ? `<span style="color:#a29bfe; font-size:0.55rem;"><i class="fas fa-comment"></i> ${comments.length}</span>` : ''}
+                    ${isAdmin ? `<span style="color:#ffd700; font-size:0.55rem;"><i class="fas fa-crown"></i> ${permission.allowAll ? 'Semua user' : permission.allowedUsers?.length || 0} user</span>` : ''}
+                  </div>
+                </div>
+                <div class="task-actions">
+                  ${canEdit ? `
+                    <button class="edit-btn" onclick="window.editTask('${task.id}', '${username}')">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="window.deleteTask('${task.id}', '${username}')">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  ` : ''}
+                  <button class="sign-task-btn" onclick="window.showTaskSignature('${task.id}', '${username}')" title="Tanda Tangan">
+                    <i class="fas fa-pen-fancy"></i>
+                  </button>
+                </div>
+              </div>
+              ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
+              
+              <div class="task-comments">
+                <div class="comment-list" id="commentList_${task.id}">
+                  ${comments.length > 0 ? comments.map((c, idx) => `
+                    <div class="comment-item">
+                      <div>
+                        <span class="comment-user">${escapeHtml(c.userFullname || c.user)}</span>
+                        <span class="comment-time">${new Date(c.time).toLocaleString('id-ID')}</span>
+                        ${(c.user === currentUsername || isAdmin) ? `
+                          <button onclick="window.deleteComment('${task.id}', '${username}', ${idx})" 
+                                  class="comment-delete-btn">
+                            <i class="fas fa-times"></i>
+                          </button>
+                        ` : ''}
+                      </div>
+                      <div class="comment-text">${escapeHtml(c.text)}</div>
+                    </div>
+                  `).join('') : `
+                    <div class="comment-empty">Belum ada komentar</div>
+                  `}
+                </div>
+                <form class="comment-form" id="commentForm_${task.id}" data-taskid="${task.id}" data-username="${username}">
+                  <input type="text" placeholder="Tulis komentar..." required>
+                  <button type="submit"><i class="fas fa-reply"></i> Kirim</button>
+                </form>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+        attachCommentEvents();
+        attachTaskSignatureEvents();
+      }
+
+      async function refreshTaskModal() {
+        await loadUsers();
+        const content = renderTaskManager();
+        const container = document.getElementById('modalContent');
+        if (container) {
+          container.innerHTML = content;
+          attachTaskEvents();
+          attachCommentEvents();
+          attachTaskSignatureEvents();
+        }
+      }
+
+      function refreshUserManagementModal() {
+        const content = renderManageUsers();
+        const container = document.getElementById('modalContent');
+        if (container) {
+          container.innerHTML = content;
+          attachUserManagementEvents();
+        }
+      }
+
+      // ============ SIGNATURE PERMISSION GLOBAL FUNCTIONS ============
+      window.addAllowedUser = async function(taskId, taskUsername) {
+        const select = document.getElementById(`addUserSelect_${taskId}`);
+        if (!select) return;
+        const username = select.value;
+        if (!username) return;
+
+        const permission = getTaskSignaturePermission(taskUsername, taskId);
+        if (!permission.allowedUsers) permission.allowedUsers = [];
+        if (permission.allowedUsers.includes(username)) return;
+
+        permission.allowedUsers.push(username);
+        const success = await updateSignaturePermission(taskUsername, taskId, permission);
+        if (success) {
+          window.showTaskSignature(taskId, taskUsername);
+        }
+      };
+
+      window.removeAllowedUser = async function(taskId, taskUsername, username) {
+        const permission = getTaskSignaturePermission(taskUsername, taskId);
+        if (!permission.allowedUsers) return;
+        permission.allowedUsers = permission.allowedUsers.filter(u => u !== username);
+        const success = await updateSignaturePermission(taskUsername, taskId, permission);
+        if (success) {
+          window.showTaskSignature(taskId, taskUsername);
+        }
+      };
+
+      function attachSignaturePermissionEvents(taskId, taskUsername) {
+        const allowAllCheckbox = document.getElementById(`allowAllSign_${taskId}`);
+        if (allowAllCheckbox) {
+          allowAllCheckbox.onchange = async function() {
+            const permission = getTaskSignaturePermission(taskUsername, taskId);
+            permission.allowAll = this.checked;
+            if (this.checked) {
+              permission.allowedUsers = [];
+            }
+            const success = await updateSignaturePermission(taskUsername, taskId, permission);
+            if (success) {
+              window.showTaskSignature(taskId, taskUsername);
+            }
+          };
+        }
+      }
+
+      // ============ TASK SIGNATURE GLOBAL FUNCTIONS ============
+      window.showTaskSignature = async function(taskId, username) {
+        try {
+          await loadUsers();
+          
+          let foundTask = null;
+          let foundUsername = null;
+          
+          for (const user of Object.keys(currentUsers)) {
+            const tasks = currentUsers[user].tasks || [];
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+              foundTask = task;
+              foundUsername = user;
+              break;
+            }
+          }
+          
+          if (!foundTask) {
+            alert('❌ Tugas tidak ditemukan!');
+            return;
+          }
+          
+          const signatureHtml = renderTaskSignature(taskId, foundUsername);
+          
+          openModal(`□ Tanda Tangan Tugas - ${foundTask.title || 'Tugas'}`, `
+            <div style="margin-bottom:0.5rem; display:flex; align-items:center; gap:8px; color:#8b9fc9; font-size:0.75rem;">
+              <i class="fas fa-tasks"></i>
+              <span>${escapeHtml(foundTask.title || 'Tugas')}</span>
+              <span style="color:#68769e;">·</span>
+              <span>${foundTask.status === 'done' ? '✅ Selesai' : '⏳ Pending'}</span>
+              <span style="color:#68769e;">·</span>
+              <span><i class="fas fa-user"></i> ${escapeHtml(currentUsers[foundUsername]?.fullname || foundUsername)}</span>
+            </div>
+            ${signatureHtml}
+          `);
+
+          setTimeout(() => {
+            initTaskSignatureCanvas(taskId, foundUsername);
+            attachSignaturePermissionEvents(taskId, foundUsername);
+          }, 300);
+
+        } catch (error) {
+          console.error('❌ Error showing task signature:', error);
+          alert('❌ Gagal menampilkan tanda tangan. Silakan coba lagi.');
+        }
+      };
+
+      window.signTaskAction = async function(taskId, taskUsername, signatureData) {
+        try {
+          const result = await signTask(taskUsername, taskId, signatureData);
+          if (result.success) {
+            alert('✅ Tanda tangan berhasil disimpan!');
+            window.showTaskSignature(taskId, taskUsername);
+            updateCounts();
+            renderActivity();
+          } else {
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('❌ Error signing task:', error);
+          alert('❌ Gagal menandatangani. Silakan coba lagi.');
+        }
+      };
+
+      // ============ UNSIGN TASK GLOBAL YANG DIPERBAIKI ============
+      window.unsignTask = async function(taskId, taskUsername) {
+        try {
+          const result = await unsignTask(taskUsername, taskId);
+          if (result.success) {
+            alert('✅ Tanda tangan berhasil dihapus!');
+            window.showTaskSignature(taskId, taskUsername);
+            updateCounts();
+            renderActivity();
+          } else {
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('❌ Error unsigning task:', error);
+          alert('❌ Gagal menghapus tanda tangan. Silakan coba lagi.');
+        }
+      };
+
+      // ============ TASK SIGNATURE CANVAS ============
+      let taskSignatureCanvas = null;
+      let taskSignatureCtx = null;
+      let taskIsDrawing = false;
+      let taskLastX = 0;
+      let taskLastY = 0;
+      let currentTaskId = '';
+      let currentTaskUsername = '';
+
+      function initTaskSignatureCanvas(taskId, username) {
+        const canvas = document.getElementById(`signCanvas_${taskId}`);
+        if (!canvas) return;
+
+        currentTaskId = taskId;
+        currentTaskUsername = username;
+
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+
+        taskSignatureCanvas = canvas;
+        taskSignatureCtx = canvas.getContext('2d');
+        taskSignatureCtx.scale(dpr, dpr);
+        taskSignatureCtx.lineWidth = 3;
+        taskSignatureCtx.lineCap = 'round';
+        taskSignatureCtx.lineJoin = 'round';
+        taskSignatureCtx.strokeStyle = '#c8d6f0';
+
+        const placeholder = canvas.parentElement.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'block';
+
+        const clearBtn = document.getElementById(`clearBtn_${taskId}`);
+        if (clearBtn) {
+          clearBtn.disabled = true;
+          clearBtn.onclick = function() {
+            clearTaskCanvas();
+            this.disabled = true;
+          };
+        }
+
+        const signBtn = document.getElementById(`signBtn_${taskId}`);
+        if (signBtn) {
+          signBtn.onclick = function() {
+            const dataUrl = canvas.toDataURL('image/png');
+            if (dataUrl === canvas.getAttribute('data-empty')) {
+              alert('Silakan buat tanda tangan terlebih dahulu!');
+              return;
+            }
+            window.signTaskAction(taskId, username, dataUrl);
+          };
+        }
+
+        canvas.removeEventListener('mousedown', startTaskDrawing);
+        canvas.removeEventListener('mousemove', taskDraw);
+        canvas.removeEventListener('mouseup', stopTaskDrawing);
+        canvas.removeEventListener('mouseleave', stopTaskDrawing);
+        canvas.removeEventListener('touchstart', startTaskDrawingTouch);
+        canvas.removeEventListener('touchmove', taskDrawTouch);
+        canvas.removeEventListener('touchend', stopTaskDrawing);
+
+        canvas.addEventListener('mousedown', startTaskDrawing);
+        canvas.addEventListener('mousemove', taskDraw);
+        canvas.addEventListener('mouseup', stopTaskDrawing);
+        canvas.addEventListener('mouseleave', stopTaskDrawing);
+
+        canvas.addEventListener('touchstart', startTaskDrawingTouch, { passive: false });
+        canvas.addEventListener('touchmove', taskDrawTouch, { passive: false });
+        canvas.addEventListener('touchend', stopTaskDrawing, { passive: false });
+
+        canvas.setAttribute('data-empty', canvas.toDataURL('image/png'));
+      }
+
+      function getTaskPosition(e) {
+        const rect = taskSignatureCanvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+
+      function startTaskDrawing(e) {
+        if (document.getElementById(`signBtn_${currentTaskId}`)?.disabled) return;
+        taskIsDrawing = true;
+        const pos = getTaskPosition(e);
+        taskLastX = pos.x;
+        taskLastY = pos.y;
+        
+        const placeholder = taskSignatureCanvas.parentElement.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'none';
+        
+        const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
+        if (clearBtn) clearBtn.disabled = false;
+      }
+
+      function taskDraw(e) {
+        if (!taskIsDrawing) return;
+        const pos = getTaskPosition(e);
+        taskSignatureCtx.beginPath();
+        taskSignatureCtx.moveTo(taskLastX, taskLastY);
+        taskSignatureCtx.lineTo(pos.x, pos.y);
+        taskSignatureCtx.stroke();
+        taskLastX = pos.x;
+        taskLastY = pos.y;
+      }
+
+      function startTaskDrawingTouch(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousedown', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        taskSignatureCanvas.dispatchEvent(mouseEvent);
+      }
+
+      function taskDrawTouch(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousemove', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        taskSignatureCanvas.dispatchEvent(mouseEvent);
+      }
+
+      function stopTaskDrawing(e) {
+        taskIsDrawing = false;
+      }
+
+      function clearTaskCanvas() {
+        if (!taskSignatureCtx || !taskSignatureCanvas) return;
+        const rect = taskSignatureCanvas.getBoundingClientRect();
+        taskSignatureCtx.clearRect(0, 0, rect.width, rect.height);
+        
+        const placeholder = taskSignatureCanvas.parentElement.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'block';
+        
+        const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
+        if (clearBtn) clearBtn.disabled = true;
+      }
+
+      function attachTaskSignatureEvents() {
+        document.querySelectorAll('.task-item .sign-task-btn').forEach(btn => {
+          btn.onclick = function() {
+            const taskId = this.closest('.task-item').dataset.taskId;
+            const username = this.closest('.task-item').dataset.username;
+            window.showTaskSignature(taskId, username);
+          };
+        });
+      }
+
+      // ============ GLOBAL FUNCTIONS ============
+      window.editTask = async function(taskId, username) {
+        await loadUsers();
+        const tasks = getTasks(username);
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return;
+
+        const newTitle = prompt('Edit Judul:', task.title);
+        if (newTitle === null) return;
+        const newDesc = prompt('Edit Deskripsi:', task.description || '');
+        if (newDesc === null) return;
+        const newStatus = confirm('Tandai sebagai Selesai? Klik OK untuk Selesai, Cancel untuk Pending') ? 'done' : 'pending';
+
+        await updateTask(username, taskId, { 
+          title: newTitle.trim() || task.title, 
+          description: newDesc.trim(),
+          status: newStatus
+        });
+        
+        await loadUsers();
+        refreshTaskModal();
+        updateCounts();
+        renderActivity();
+      };
+
+      window.deleteTask = async function(taskId, username) {
+        if (!confirm('Yakin ingin menghapus tugas ini?')) return;
+        await deleteTask(username, taskId);
+        await loadUsers();
+        refreshTaskModal();
+        updateCounts();
+        renderActivity();
+      };
+
+      // ============ DELETE COMMENT GLOBAL YANG DIPERBAIKI ============
+      window.deleteComment = async function(taskId, username, index) {
+        if (!confirm('Hapus komentar ini?')) return;
+        try {
+          const result = await deleteComment(username, taskId, index);
+          if (result.success) {
+            alert(result.message);
+            await refreshTaskModal();
+            updateCounts();
+            renderActivity();
+          } else {
+            alert(result.message || '❌ Gagal menghapus komentar. Silakan coba lagi.');
+          }
+        } catch (e) {
+          console.error('❌ Error deleteComment:', e);
+          alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+        }
+      };
+
+      // ============ REPORT GLOBAL FUNCTIONS ============
+      window.viewReport = async function(reportId, username) {
+        try {
+          await loadUsers();
+          
+          let foundReport = null;
+          let foundUsername = null;
+          
+          for (const user of Object.keys(currentUsers)) {
+            const reports = currentUsers[user].reports || [];
+            const report = reports.find(r => r.id === reportId);
+            if (report) {
+              foundReport = report;
+              foundUsername = user;
+              break;
+            }
+          }
+          
+          if (!foundReport) {
+            alert('❌ Laporan tidak ditemukan!');
+            return;
+          }
+
+          const isOwnReport = foundUsername === currentUsername;
+          const isAdmin = currentUserRole === 'admin';
+          if (!isOwnReport && !isAdmin) {
+            alert('❌ Anda tidak memiliki akses ke laporan ini!');
+            return;
+          }
+
+          let previewContent = '';
+          const fileExt = foundReport.filename ? foundReport.filename.split('.').pop().toLowerCase() : '';
+          const isTextFile = ['txt', 'csv', 'json', 'xml', 'html', 'css', 'js', 'md', 'log'].includes(fileExt);
+          const isImageFile = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'].includes(fileExt);
+          
+          if (foundReport.data) {
+            let base64Data = foundReport.data;
+            if (base64Data.includes(',')) {
+              base64Data = base64Data.split(',')[1];
+            }
+            
+            if (isTextFile) {
+              try {
+                const decoded = atob(base64Data);
+                previewContent = `<pre style="white-space:pre-wrap; word-wrap:break-word; font-family:monospace; font-size:0.75rem; color:#d3def5;">${escapeHtml(decoded)}</pre>`;
+              } catch (e) {
+                previewContent = '❌ Tidak dapat menampilkan konten file ini.';
+              }
+            } else if (isImageFile) {
+              previewContent = `<img src="${foundReport.data}" style="max-width:100%; border-radius:8px; margin-top:0.5rem; max-height:400px; object-fit:contain;">`;
+            } else {
+              const fileIcon = getFileIcon(foundReport.filename || 'file');
+              previewContent = `
+                <div style="text-align:center; padding:2rem 0; color:#68769e;">
+                  <i class="fas ${fileIcon}" style="font-size:4rem; color:#ffd700;"></i>
+                  <p style="margin-top:1rem; font-size:0.9rem; color:#d3def5;">${escapeHtml(foundReport.filename || 'Laporan')}</p>
+                  <p style="font-size:0.7rem; color:#68769e;">File ini tidak dapat ditampilkan langsung di browser.</p>
+                  <div style="margin-top:0.5rem; display:flex; gap:0.5rem; justify-content:center;">
+                    <button onclick="window.downloadReport('${reportId}', '${foundUsername}')" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem;">
+                      <i class="fas fa-download"></i> Download
+                    </button>
+                  </div>
+                </div>
+              `;
+            }
+          } else {
+            previewContent = `
+              <div style="text-align:center; padding:2rem 0; color:#68769e;">
+                <i class="fas fa-file-alt" style="font-size:4rem; color:#ff6b6b;"></i>
+                <p style="margin-top:1rem;">Data file tidak tersedia.</p>
+              </div>
+            `;
+          }
+
+          const typeLabel = foundReport.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
+          const typeIcon = foundReport.type === 'rajal' ? 'fa-clinic-medical' : 'fa-hospital';
+          const typeColor = foundReport.type === 'rajal' ? '#00ced1' : '#a29bfe';
+          
+          openModal(`□ Preview - ${foundReport.filename || 'Laporan'}`, `
+            <div class="stat-title" style="font-size:1rem;">
+              <i class="fas ${typeIcon}" style="color:${typeColor};"></i> 
+              ${escapeHtml(foundReport.filename || 'Laporan')}
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.8rem; font-size:0.75rem; color:#8b9fc9; padding:0.5rem; background:rgba(255,255,255,0.03); border-radius:10px;">
+              <span><i class="fas fa-tag"></i> ${typeLabel}</span>
+              <span><i class="fas fa-calendar"></i> ${escapeHtml(foundReport.month || 'Bulan tidak tersedia')}</span>
+              <span><i class="fas fa-user"></i> ${escapeHtml(foundReport.uploadedByFullname || foundReport.uploadedBy || foundUsername)}</span>
+              <span><i class="fas fa-file"></i> ${formatFileSize(foundReport.size || 0)}</span>
+              <span><i class="fas fa-clock"></i> ${new Date(foundReport.uploadedAt).toLocaleString('id-ID')}</span>
+            </div>
+            ${foundReport.description ? `<div style="color:#d3def5; margin-bottom:0.5rem; padding:0.5rem; background:rgba(255,255,255,0.02); border-radius:8px; border-left:3px solid ${typeColor};">${escapeHtml(foundReport.description)}</div>` : ''}
+            <div class="report-preview">
+              ${previewContent}
+            </div>
+            <div style="display:flex; gap:0.5rem; margin-top:0.8rem; flex-wrap:wrap;">
+              <button onclick="window.downloadReport('${reportId}', '${foundUsername}')" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem;">
+                <i class="fas fa-download"></i> Download
+              </button>
+              <button onclick="closeModal()" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem; background:rgba(255,255,255,0.1); box-shadow:none;">
+                <i class="fas fa-times"></i> Tutup
+              </button>
+            </div>
+          `);
+        } catch (error) {
+          console.error('❌ Error viewing report:', error);
+          alert('❌ Gagal menampilkan laporan. Silakan coba lagi.');
+        }
+      };
+
+      window.downloadReport = async function(reportId, username) {
+        try {
+          await loadUsers();
+          
+          let foundReport = null;
+          let foundUsername = null;
+          
+          for (const user of Object.keys(currentUsers)) {
+            const reports = currentUsers[user].reports || [];
+            const report = reports.find(r => r.id === reportId);
+            if (report) {
+              foundReport = report;
+              foundUsername = user;
+              break;
+            }
+          }
+          
+          if (!foundReport) {
+            alert('❌ Laporan tidak ditemukan!');
+            return;
+          }
+          
+          const isOwnReport = foundUsername === currentUsername;
+          const isAdmin = currentUserRole === 'admin';
+          if (!isOwnReport && !isAdmin) {
+            alert('❌ Anda tidak memiliki akses ke laporan ini!');
+            return;
+          }
+          
+          downloadFile(foundReport, foundReport.filename || 'laporan.pdf');
+        } catch (error) {
+          console.error('❌ Error downloading report:', error);
+          alert('❌ Gagal mendownload laporan. Silakan coba lagi.');
+        }
+      };
+
+      window.deleteReportById = async function(reportId, username) {
+        if (!confirm('⚠️ Yakin ingin menghapus laporan ini?')) return;
+        
+        try {
+          await loadUsers();
+          
+          let foundReport = null;
+          let foundUsername = null;
+          
+          for (const user of Object.keys(currentUsers)) {
+            const reports = currentUsers[user].reports || [];
+            const report = reports.find(r => r.id === reportId);
+            if (report) {
+              foundReport = report;
+              foundUsername = user;
+              break;
+            }
+          }
+          
+          if (!foundReport) {
+            alert('❌ Laporan tidak ditemukan!');
+            return;
+          }
+          
+          const isOwnReport = foundUsername === currentUsername;
+          const isAdmin = currentUserRole === 'admin';
+          if (!isOwnReport && !isAdmin) {
+            alert('❌ Anda tidak memiliki akses untuk menghapus laporan ini!');
+            return;
+          }
+          
+          const success = await deleteReport(foundUsername, reportId);
+          if (success) {
+            refreshReportModal();
+            updateCounts();
+            renderActivity();
+            alert('✅ Laporan berhasil dihapus!');
+          } else {
+            alert('❌ Gagal menghapus laporan. Silakan coba lagi.');
+          }
+        } catch (error) {
+          console.error('❌ Error deleting report:', error);
+          alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+        }
+      };
+
+      // ============ USER MANAGEMENT GLOBAL FUNCTIONS ============
+      window.editUser = async function(username) {
+        const user = currentUsers[username];
+        if (!user) return;
+
+        const newUsername = prompt('Username baru:', username);
+        if (newUsername === null) return;
+        const newFullname = prompt('Nama lengkap baru:', user.fullname);
+        if (newFullname === null) return;
+        const newPassword = prompt('Password baru (kosongkan untuk tetap):', '');
+        
+        const result = await updateUser(
+          username, 
+          newUsername.trim().toLowerCase(), 
+          newFullname.trim(), 
+          newPassword.trim() || user.password,
+          user.role
+        );
+        
+        if (result.success) {
+          alert('✅ User berhasil diupdate!');
+          if (username === currentUsername) {
+            sessionStorage.setItem('currentUser', newUsername.trim().toLowerCase());
+            currentUsername = newUsername.trim().toLowerCase();
+          }
+          await loadUsers();
+          refreshUserManagementModal();
+          renderActivity();
+          updateUIForRole(currentUserRole, currentUsername);
+        } else {
+          alert(result.message);
+        }
+      };
+
+      window.deleteUser = async function(username) {
+        if (!confirm(`Yakin ingin menghapus user "${username}"?`)) return;
+        const result = await deleteUser(username);
+        if (result.success) {
+          alert('✅ User berhasil dihapus!');
+          await loadUsers();
+          refreshUserManagementModal();
+          renderActivity();
+          updateUIForRole(currentUserRole, currentUsername);
+        } else {
+          alert(result.message);
+        }
+      };
+
+      window.resetUserPass = async function(username) {
+        const newPass = prompt(`Reset password untuk "${username}" :`, '123456');
+        if (newPass === null) return;
+        if (newPass.trim().length < 4) {
+          alert('Password minimal 4 karakter!');
+          return;
+        }
+        const result = await resetPassword(username, newPass.trim());
+        if (result.success) {
+          alert('✅ Password berhasil direset!');
+          await loadUsers();
+          refreshUserManagementModal();
+        } else {
+          alert(result.message);
+        }
+      };
+
+      window.makeAdmin = async function(username) {
+        if (!confirm(`Jadikan "${username}" sebagai Admin?`)) return;
+        const result = await updateUser(username, username, null, null, 'admin');
+        if (result.success) {
+          alert('✅ User sekarang menjadi Admin!');
+          await loadUsers();
+          refreshUserManagementModal();
+          renderActivity();
+        } else {
+          alert(result.message);
+        }
+      };
+
+      window.removeAdmin = async function(username) {
+        if (!confirm(`Hapus status Admin dari "${username}"?`)) return;
+        if (username === ADMIN_USERNAME) {
+          alert('❌ Tidak bisa menghapus admin utama!');
+          return;
+        }
+        const result = await updateUser(username, username, null, null, 'user');
+        if (result.success) {
+          alert('✅ Status Admin berhasil dihapus!');
+          await loadUsers();
+          refreshUserManagementModal();
+          renderActivity();
+        } else {
+          alert(result.message);
+        }
+      };
+
+      // ============ EVENT LISTENER KARTU ============
+      document.querySelectorAll('.home-card[data-modal]').forEach(card => {
+        card.addEventListener('click', function() {
+          const type = this.dataset.modal;
+          
+          if (type === 'statistik') {
+            const isAdmin = currentUserRole === 'admin';
+            if (!isAdmin) {
+              openModal('⛔ Akses Ditolak', accessDenied);
+              return;
+            }
+            openModal('□ Statistik Karir - Admin', dataStatistikAdmin);
+            return;
+          }
+          
+          if (type === 'manageUsers') {
+            const isAdmin = currentUserRole === 'admin';
+            if (!isAdmin) {
+              openModal('⛔ Akses Ditolak', accessDenied);
+              return;
+            }
+            openModal('□ Manajemen User', renderManageUsers());
+            return;
+          }
+          
+          if (type === 'tasks') {
+            openModal('□ Semua Tugas', renderTaskManager());
+            return;
+          }
+
+          if (type === 'reports') {
+            openModal('□ Laporan Bulanan', renderReports());
+            return;
+          }
+          
+          if (type === 'anggota') {
+            openModal('□ Anggota Unit', dataAnggota);
+          } else if (type === 'jadwal') {
+            openModal('□ Jadwal Mingguan', dataJadwal);
+          } else if (type === 'kunjungan') {
+            openModal('□ Statistik Kunjungan RS', renderStatistikKunjungan());
+          } else if (type === 'pesan') {
+            const pesanHari = getPesanByDay(dayName);
+            const pesanDetail = `
+              <div class="item"><i class="fas fa-envelope-open-text"></i> <span class="highlight">Notifikasi hari ini (${escapeHtml(dayName)})</span></div>
+              <div class="item"><i class="fas fa-clock"></i> ${dateStr} · ${timeStr}</div>
+              <div class="item"><i class="fas fa-briefcase"></i> ${escapeHtml(pesanHari)}</div>
+              <div class="item small-note" style="margin-top:8px; color:#68769e; font-size:0.8rem;">□ Info pekerjaan sesuai jadwal harian</div>
+            `;
+            openModal(`□ Pesan · ${dayName}`, pesanDetail);
+          }
+        });
+      });
+
+      // ============ EVENT LISTENER ============
+      loginForm.addEventListener('submit', handleLogin);
+      registerForm.addEventListener('submit', handleRegister);
+      logoutBtn.addEventListener('click', handleLogout);
+
+      goToRegister.addEventListener('click', () => {
+        showPage(registerPage);
+        registerError.classList.remove('show');
+        registerSuccess.classList.remove('show');
+        registerInfo.classList.remove('show');
+      });
+
+      goToLogin.addEventListener('click', () => {
+        showPage(loginPage);
+        loginError.classList.remove('show');
+        loginSuccess.classList.remove('show');
+        loginInfo.classList.remove('show');
+        loadUsers();
+      });
+
+      loginUsername.addEventListener('input', () => { loginError.classList.remove('show'); loginSuccess.classList.remove('show'); });
+      loginPassword.addEventListener('input', () => { loginError.classList.remove('show'); loginSuccess.classList.remove('show'); });
+      regUsername.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+      regFullname.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+      regPassword.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+      regConfirmPassword.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+
+      // ============ RENDER MANAJEMEN USER ============
+      function renderManageUsers() {
+        const isAdmin = currentUserRole === 'admin';
+        if (!isAdmin) {
+          return accessDenied;
+        }
+
+        let html = `
+          <div class="stat-title"><i class="fas fa-users-cog"></i> Manajemen User</div>
+          <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
+            <i class="fas fa-user"></i> Total user: ${Object.keys(currentUsers).length}
+          </p>
+        `;
+
+        html += `
+          <div style="margin-bottom:1rem; background:rgba(255,255,255,0.03); padding:0.8rem; border-radius:14px; border:1px solid rgba(255,255,255,0.04);">
+            <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
+              <i class="fas fa-plus-circle"></i> Tambah User Baru
+            </h4>
+            <form id="addUserForm">
+              <div class="input-group" style="margin-bottom:0.5rem;">
+                <label>Username</label>
+                <div class="input-icon"><i class="fas fa-user"></i>
+                  <input type="text" id="newUserUsername" placeholder="Username" required>
+                </div>
+              </div>
+              <div class="input-group" style="margin-bottom:0.5rem;">
+                <label>Nama Lengkap</label>
+                <div class="input-icon"><i class="fas fa-user-tie"></i>
+                  <input type="text" id="newUserFullname" placeholder="Nama lengkap" required>
+                </div>
+              </div>
+              <div class="input-group" style="margin-bottom:0.5rem;">
+                <label>Password</label>
+                <div class="input-icon"><i class="fas fa-lock"></i>
+                  <input type="text" id="newUserPassword" placeholder="Password" required value="123456">
+                </div>
+              </div>
+              <div class="input-group" style="margin-bottom:0.5rem;">
+                <label>Role</label>
+                <div class="input-icon"><i class="fas fa-user-tag"></i>
+                  <select id="newUserRole" style="padding-left:3rem;">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary btn-success" style="font-size:0.85rem; padding:0.6rem;">
+                <i class="fas fa-user-plus"></i> Tambah User
+              </button>
+            </form>
+          </div>
+        `;
+
+        html += `<div style="margin-top:0.5rem;">`;
+        const sortedUsers = Object.keys(currentUsers).sort();
+        sortedUsers.forEach(username => {
+          const user = currentUsers[username];
+          const isAdminUser = user.role === 'admin';
+          const isCurrentUser = username === currentUsername;
+          const isMainAdmin = username === ADMIN_USERNAME;
+          
+          html += `
+            <div class="user-list-item" data-username="${username}">
+              <div class="user-info">
+                <div class="user-name">
+                  ${user.fullname || username}
+                  ${isCurrentUser ? ' <span style="color:#a29bfe; font-size:0.6rem;">(Anda)</span>' : ''}
+                  ${isMainAdmin ? ' <span style="color:#ffd93d; font-size:0.6rem;">⭐ Utama</span>' : ''}
+                </div>
+                <div class="user-detail">
+                  @${username} · 
+                  <span class="user-role-badge ${isAdminUser ? 'admin' : 'user'}">${isAdminUser ? 'Admin' : 'User'}</span>
+                  · ${user.tasks?.length || 0} tugas
+                  · ${user.reports?.length || 0} laporan
+                </div>
+              </div>
+              <div class="user-actions">
+                <button class="edit-user-btn" onclick="window.editUser('${username}')" title="Edit User">
+                  <i class="fas fa-edit"></i>
+                </button>
+                ${!isMainAdmin ? `
+                  <button class="reset-pass-btn" onclick="window.resetUserPass('${username}')" title="Reset Password">
+                    <i class="fas fa-key"></i>
+                  </button>
+                  ${!isAdminUser ? `
+                    <button class="make-admin-btn" onclick="window.makeAdmin('${username}')" title="Jadikan Admin">
+                      <i class="fas fa-crown"></i>
+                    </button>
+                  ` : `
+                    <button class="make-admin-btn" onclick="window.removeAdmin('${username}')" title="Hapus Admin" style="background:rgba(255,107,107,0.15); color:#ff6b6b; border-color:rgba(255,107,107,0.15);">
+                      <i class="fas fa-user"></i>
+                    </button>
+                  `}
+                  <button class="delete-user-btn" onclick="window.deleteUser('${username}')" title="Hapus User">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+
+        return html;
+      }
+
+      // ============ RENDER STATISTIK KUNJUNGAN ============
+      function renderStatistikKunjungan() {
+        let tableHtml = `
+          <div class="stat-title"><i class="fas fa-chart-bar"></i> Statistik Kunjungan RS</div>
+          <div class="stat-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>URAIAN</th>
+                  <th>SATUAN</th>
+                  <th>2023</th>
+                  <th>2024</th>
+                  <th>2025</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+        
+        DATA_KUNJUNGAN.data.forEach(row => {
+          const isHighlight = row.uraian === 'BOR' || row.uraian === 'LOS' || row.uraian === 'TOI' || row.uraian === 'BTO';
+          tableHtml += `
+            <tr>
+              <td class="${isHighlight ? 'highlight-cell' : 'label-cell'}">${row.uraian}</td>
+              <td class="label-cell">${row.satuan}</td>
+              <td class="value-cell">${row['2023'] || '-'}</td>
+              <td class="value-cell">${row['2024'] || '-'}</td>
+              <td class="value-cell">${row['2025'] || '-'}</td>
+            </tr>
+          `;
+        });
+        
+        tableHtml += `
+              </tbody>
+            </table>
+            <div class="note-cell">□ ${DATA_KUNJUNGAN.note}</div>
+          </div>
+        `;
+        
+        return tableHtml;
+      }
+
+      // ============ INISIALISASI ============
+      window.initApp = async function() {
+        await loadUsers();
+        
+        if (!currentUsers['marco']) {
+          currentUsers['marco'] = {
+            fullname: 'Marco Fajar Setiawan, S.K.M, CAHSE',
+            password: 'MARCOFS',
+            role: 'admin',
+            tasks: [],
+            reports: [],
+            files: [],
+            createdAt: new Date().toISOString()
+          };
+          await saveUsers(currentUsers);
+          console.log('✅ User admin "marco" dibuat di cloud');
+        } else if (!currentUsers['marco'].role) {
+          currentUsers['marco'].role = 'admin';
+          if (!currentUsers['marco'].tasks) currentUsers['marco'].tasks = [];
+          if (!currentUsers['marco'].reports) currentUsers['marco'].reports = [];
+          if (!currentUsers['marco'].files) currentUsers['marco'].files = [];
+          await saveUsers(currentUsers);
+          console.log('✅ User "marco" diupdate menjadi admin');
+        }
+
+        let needSave = false;
+        Object.keys(currentUsers).forEach(key => {
+          if (!currentUsers[key].role) {
+            currentUsers[key].role = 'user';
+            needSave = true;
+          }
+          if (!currentUsers[key].tasks) {
+            currentUsers[key].tasks = [];
+            needSave = true;
+          }
+          if (!currentUsers[key].reports) {
+            currentUsers[key].reports = [];
+            needSave = true;
+          }
+          if (!currentUsers[key].files) {
+            currentUsers[key].files = [];
+            needSave = true;
+          }
+        });
+        if (needSave) {
+          await saveUsers(currentUsers);
+        }
+
+        if (!(await checkSession())) {
+          showPage(loginPage);
+        }
+
+        console.log('□ Aplikasi siap dengan Task Manager + Tanda Tangan Drawing!');
+        console.log('□ SEMUA user dapat menandatangani tugas manapun!');
+        console.log('□ HANYA ADMIN yang dapat menghapus tanda tangan!');
+        console.log('□ Total user terdaftar:', Object.keys(currentUsers).length);
+        console.log('□ Admin:', Object.keys(currentUsers).filter(k => currentUsers[k].role === 'admin'));
+      };
+
+      if (document.getElementById('appContainer').classList.contains('show')) {
+        initApp();
+      }
+
+    })();
+  </script>
+</body>
+</html>
