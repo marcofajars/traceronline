@@ -144,7 +144,7 @@
       width: 0%;
       background: linear-gradient(90deg, #6c5ce7, #a29bfe, #fdcb6e);
       border-radius: 20px;
-      transition: width 0.1s ease;
+      transition: width 0.25s ease;
       position: relative;
       box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
     }
@@ -1524,7 +1524,7 @@
 
   <script>
     // ============================================================
-    // LOADING PAGE CONTROLLER - DURASI 2 DETIK
+    // LOADING PAGE CONTROLLER
     // ============================================================
     (function() {
       const progressFill = document.getElementById('progressFill');
@@ -1603,19 +1603,22 @@
 
         if (progressInterval) clearInterval(progressInterval);
 
-        // ===== DURASI LOADING 2 DETIK =====
-        const startTime = Date.now();
-        const duration = 2000; // 2 detik
-
         progressInterval = setInterval(() => {
-          const elapsed = Date.now() - startTime;
-          const newProgress = Math.min((elapsed / duration) * 100, 100);
+          const increment = 2 + Math.random() * 4;
+          let newProgress = progress + increment;
 
-          updateProgress(newProgress);
+          if (newProgress > 45 && newProgress < 50 && Math.random() > 0.6) {
+            newProgress = 46 + Math.random() * 2;
+          }
+          if (newProgress > 72 && newProgress < 76 && Math.random() > 0.5) {
+            newProgress = 73 + Math.random() * 1.5;
+          }
 
           if (newProgress >= 100) {
+            newProgress = 100;
             clearInterval(progressInterval);
             clearInterval(timerInterval);
+            updateProgress(100);
             statusText.textContent = '✅ Siap digunakan!';
             loadingComplete = true;
             
@@ -1626,9 +1629,13 @@
               initApp();
             }
             
-            console.log('✅ Loading selesai dalam 2 detik!');
+            console.log('✅ Loading selesai! Aplikasi siap digunakan.');
+            console.log('□ Total waktu: ' + seconds + ' detik');
+            return;
           }
-        }, 16); // update setiap 16ms untuk animasi 60fps
+
+          updateProgress(newProgress);
+        }, 250 + Math.random() * 200);
       }
 
       document.getElementById('restartLoading').addEventListener('dblclick', function() {
@@ -1666,7 +1673,7 @@
       //  KONFIGURASI CLOUD DATABASE
       // ============================================================
       const CONFIG = {
-        API_KEY: '$2a$10$QiobpYyAdpDYyYVdQD3ki.xIT6gL.kUeKS1XuKZmlGMR/bzDthYnO',
+        API_KEY: '$2a$10$zEthnwkqxFq83mRg0IsnD./ERQwOb/0GamLcnH4/q2Y41cEf9722a',
         BIN_ID: '6a3f5e86da38895dfe0610b9',
         BASE_URL: 'https://api.jsonbin.io/v3'
       };
