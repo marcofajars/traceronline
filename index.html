@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+f<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -25,6 +25,7 @@
       padding: 1.2rem;
     }
 
+    /* ===== LOADING WRAPPER ===== */
     .loading-wrapper {
       width: 100%;
       max-width: 480px;
@@ -49,6 +50,7 @@
       visibility: hidden;
     }
 
+    /* ===== LOGO / ICON ===== */
     .logo-container {
       position: relative;
       display: inline-flex;
@@ -536,34 +538,756 @@
     .home-card.disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.3); }
     .home-card.disabled:active { transform: none; }
 
-    .toast-notification {
-      position: fixed;
-      top: 20px;
+    /* ===== TASK SIGNATURE SECTION ===== */
+    .task-signature-section {
+      margin-top: 0.8rem;
+      padding: 0.8rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .task-signature-section .sign-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+    .task-signature-section .sign-header h5 {
+      color: #a29bfe;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .task-signature-section .sign-header .sign-badge {
+      font-size: 0.5rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 30px;
+    }
+    .task-signature-section .sign-header .sign-badge.signed {
+      background: rgba(0,206,209,0.15);
+      color: #00ced1;
+    }
+    .task-signature-section .sign-header .sign-badge.not-signed {
+      background: rgba(255,215,0,0.1);
+      color: #ffd700;
+    }
+    .task-signature-section .sign-canvas-wrapper {
+      border: 2px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      position: relative;
+      margin: 0.3rem 0;
+    }
+    .task-signature-section .sign-canvas-wrapper canvas {
+      display: block;
+      width: 100%;
+      height: 180px;
+      cursor: crosshair;
+      touch-action: none;
+      background: rgba(255,255,255,0.02);
+    }
+    .task-signature-section .sign-canvas-wrapper .placeholder-text {
+      position: absolute;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(10px);
+      transform: translate(-50%, -50%);
+      color: #4a5a7a;
+      font-size: 0.7rem;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .task-signature-section .sign-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .task-signature-section .sign-actions button {
+      padding: 0.2rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.05);
+      color: #d3def5;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .task-signature-section .sign-actions .btn-sign-task {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border: none;
       color: white;
-      padding: 0.8rem 1.5rem;
-      border-radius: 16px;
+    }
+    .task-signature-section .sign-actions .btn-sign-task:hover { opacity: 0.8; }
+    .task-signature-section .sign-actions .btn-sign-task:disabled { opacity: 0.4; cursor: not-allowed; }
+    .task-signature-section .sign-actions .btn-clear-task:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+    .task-signature-section .sign-actions .btn-clear-task:disabled { opacity: 0.3; cursor: not-allowed; }
+    .task-signature-section .sign-list {
+      margin-top: 0.4rem;
+    }
+    .task-signature-section .sign-list .sign-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .task-signature-section .sign-list .sign-item:last-child { border-bottom: none; }
+    .task-signature-section .sign-list .sign-item .sign-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(108,92,231,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a29bfe;
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .task-signature-section .sign-list .sign-item .sign-info {
+      flex: 1;
+    }
+    .task-signature-section .sign-list .sign-item .sign-info .sign-name {
+      color: #f0f4ff;
+      font-size: 0.7rem;
+    }
+    .task-signature-section .sign-list .sign-item .sign-info .sign-time {
+      color: #8b9fc9;
+      font-size: 0.55rem;
+    }
+    .task-signature-section .sign-list .sign-item .sign-status-text {
+      font-size: 0.5rem;
+      padding: 0.05rem 0.4rem;
+      border-radius: 30px;
+      background: rgba(0,206,209,0.12);
+      color: #00ced1;
+    }
+    .task-signature-section .sign-list .sign-item .btn-unsign-task {
+      background: rgba(255,70,70,0.1);
+      border: 1px solid rgba(255,70,70,0.15);
+      color: #ff6b6b;
+      padding: 0.05rem 0.3rem;
+      border-radius: 4px;
+      font-size: 0.45rem;
+      cursor: pointer;
+    }
+    .task-signature-section .sign-list .sign-item .btn-unsign-task:hover {
+      background: rgba(255,70,70,0.2);
+    }
+    .task-signature-section .sign-empty {
+      color: #68769e;
+      font-size: 0.65rem;
+      padding: 0.2rem 0;
+      text-align: center;
+    }
+
+    /* ===== SIGNATURE PREVIEW ===== */
+    .signature-preview {
+      margin-top: 0.3rem;
+      padding: 0.3rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .signature-preview img {
+      max-height: 40px;
+      border-radius: 4px;
+      background: white;
+    }
+    .signature-preview .signature-label {
+      font-size: 0.6rem;
+      color: #8b9fc9;
+    }
+
+    /* ===== SIGNATURE PERMISSION TOGGLE ===== */
+    .signature-permission {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .signature-permission .permission-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .signature-permission .permission-header label {
+      color: #a29bfe;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .signature-permission .permission-header input[type="checkbox"] {
+      accent-color: #6c5ce7;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .signature-permission .permission-desc {
+      color: #8b9fc9;
+      font-size: 0.55rem;
+      margin-top: 0.2rem;
+    }
+    .signature-permission .allowed-users {
+      margin-top: 0.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .signature-permission .allowed-users .user-tag {
+      background: rgba(108,92,231,0.15);
+      color: #a29bfe;
+      font-size: 0.5rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 30px;
+      border: 1px solid rgba(108,92,231,0.15);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .signature-permission .allowed-users .user-tag .remove-user {
+      cursor: pointer;
+      color: #ff6b6b;
+      font-size: 0.45rem;
+    }
+    .signature-permission .allowed-users .user-tag .remove-user:hover { opacity: 0.7; }
+    .signature-permission .add-user-form {
+      display: flex;
+      gap: 4px;
+      margin-top: 0.3rem;
+    }
+    .signature-permission .add-user-form select {
+      flex: 1;
+      padding: 0.15rem 0.4rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      font-size: 0.6rem;
+      color: #d3def5;
+      outline: none;
+    }
+    .signature-permission .add-user-form select:focus { border-color: #6c5ce7; }
+    .signature-permission .add-user-form button {
+      padding: 0.1rem 0.5rem;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border: none;
+      border-radius: 6px;
+      font-size: 0.55rem;
+      color: white;
+      cursor: pointer;
+    }
+    .signature-permission .add-user-form button:hover { opacity: 0.8; }
+
+    .report-list { margin: 0.5rem 0; }
+    .report-item {
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: 0.2s;
+    }
+    .report-item:hover { background: rgba(255,255,255,0.06); }
+    .report-item .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .report-item .report-title {
+      color: #f0f4ff;
+      font-weight: 500;
       font-size: 0.85rem;
-      z-index: 9999;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      display: none;
+    }
+    .report-item .report-meta {
+      color: #8b9fc9;
+      font-size: 0.65rem;
+      margin-top: 0.2rem;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .report-item .report-meta i { margin-right: 3px; }
+    .report-item .report-actions {
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .report-item .report-actions button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #d3def5;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .report-item .report-actions .view-btn:hover { background: rgba(0,206,209,0.15); border-color: #00ced1; color: #00ced1; }
+    .report-item .report-actions .download-btn:hover { background: rgba(253,203,110,0.15); border-color: #ffd700; color: #ffd700; }
+    .report-item .report-actions .delete-btn:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+    .report-item .report-desc {
+      color: #b0c4e8;
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      padding-top: 0.3rem;
+      border-top: 1px solid rgba(255,255,255,0.03);
+    }
+    .report-type-badge {
+      display: inline-block;
+      font-size: 0.5rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 30px;
+      margin-left: 4px;
+    }
+    .report-type-badge.rajal { background: rgba(0,206,209,0.15); color: #00ced1; }
+    .report-type-badge.ranap { background: rgba(108,92,231,0.15); color: #a29bfe; }
+
+    .report-preview {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 1rem;
+      max-height: 450px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: #d3def5;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .report-preview::-webkit-scrollbar { width: 4px; }
+    .report-preview::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+    .report-preview::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.3); border-radius: 10px; }
+
+    .report-upload-form {
+      background: rgba(255,255,255,0.03);
+      padding: 0.8rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.04);
+      margin-bottom: 1rem;
+    }
+    .report-upload-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .report-upload-form .form-row .input-group { margin-bottom: 0; }
+    .report-upload-form .file-input-wrapper {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .report-upload-form .file-input-wrapper input[type="file"] {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      font-size: 0.65rem;
+      color: #d3def5;
+      cursor: pointer;
+    }
+    .report-upload-form .file-input-wrapper input[type="file"]::-webkit-file-upload-button {
+      background: rgba(108,92,231,0.2);
+      border: none;
+      border-radius: 6px;
+      color: #a29bfe;
+      padding: 0.1rem 0.5rem;
+      font-size: 0.55rem;
+      cursor: pointer;
+    }
+
+    .task-list { margin: 0.5rem 0; }
+    .task-item {
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: 0.2s;
+    }
+    .task-item:hover { background: rgba(255,255,255,0.06); }
+    .task-item .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .task-item .task-title {
+      color: #f0f4ff;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+    .task-item .task-meta {
+      color: #8b9fc9;
+      font-size: 0.65rem;
+      margin-top: 0.2rem;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .task-item .task-meta i { margin-right: 3px; }
+    .task-item .task-actions {
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .task-item .task-actions button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #d3def5;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .task-item .task-actions .edit-btn:hover { background: rgba(255,215,0,0.15); border-color: #ffd700; color: #ffd700; }
+    .task-item .task-actions .delete-btn:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+    .task-item .task-actions .sign-task-btn:hover { background: rgba(108,92,231,0.15); border-color: #a29bfe; color: #a29bfe; }
+    .task-item .task-desc {
+      color: #b0c4e8;
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      padding-top: 0.3rem;
+      border-top: 1px solid rgba(255,255,255,0.03);
+    }
+    .task-item .task-status {
+      display: inline-block;
+      font-size: 0.55rem;
+      padding: 0.05rem 0.4rem;
+      border-radius: 30px;
+      margin-left: 4px;
+    }
+    .task-status.pending { background: rgba(255,215,0,0.15); color: #ffd700; }
+    .task-status.done { background: rgba(0,206,209,0.15); color: #00ced1; }
+
+    .task-comments {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .task-comments .comment-list {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 0.3rem;
+    }
+    .task-comments .comment-list::-webkit-scrollbar { width: 3px; }
+    .task-comments .comment-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+    .task-comments .comment-list::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.3); border-radius: 10px; }
+    .task-comments .comment-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .task-comments .comment-item:last-child { border-bottom: none; }
+    .task-comments .comment-user {
+      font-size: 0.6rem;
+      color: #a29bfe;
+      font-weight: 600;
+    }
+    .task-comments .comment-text {
+      font-size: 0.75rem;
+      color: #d3def5;
+      padding-left: 0.5rem;
+      border-left: 2px solid rgba(108,92,231,0.3);
+      word-wrap: break-word;
+    }
+    .task-comments .comment-time {
+      font-size: 0.5rem;
+      color: #68769e;
+      margin-left: 0.5rem;
+    }
+    .task-comments .comment-form {
+      display: flex;
+      gap: 6px;
+      margin-top: 0.3rem;
+    }
+    .task-comments .comment-form input {
+      flex: 1;
+      padding: 0.3rem 0.6rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      font-size: 0.7rem;
+      color: #f0f4ff;
+      outline: none;
+    }
+    .task-comments .comment-form input:focus { border-color: #6c5ce7; }
+    .task-comments .comment-form input::placeholder { color: #4a5a7a; }
+    .task-comments .comment-form button {
+      padding: 0.3rem 0.7rem;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      border: none;
+      border-radius: 10px;
+      font-size: 0.6rem;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .task-comments .comment-form button:hover { opacity: 0.8; }
+    .task-comments .comment-form button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .task-comments .comment-empty { color: #68769e; font-size: 0.6rem; padding: 0.2rem 0; font-style: italic; }
+    .task-comments .comment-delete-btn {
+      background: none; border: none; color: #ff6b6b;
+      cursor: pointer; font-size: 0.5rem; margin-left: 4px; opacity: 0.6; transition: 0.2s;
+    }
+    .task-comments .comment-delete-btn:hover { opacity: 1; }
+
+    .empty-tasks { text-align: center; padding: 1.5rem 0.5rem; color: #68769e; }
+    .empty-tasks i { font-size: 2rem; margin-bottom: 0.5rem; color: #4a5a7a; }
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 1000; padding: 1.2rem;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: #1a2332;
+      max-width: 500px; width: 100%;
+      max-height: 90vh;
+      border-radius: 24px;
+      padding: 1.5rem 1.2rem;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: #f0f4ff;
+      position: relative;
+      animation: fadeUp 0.3s ease;
+      overflow-y: auto;
+    }
+    .modal-box h3 {
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
       align-items: center;
       gap: 10px;
-      max-width: 90%;
-      animation: slideDown 0.3s ease;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 0.6rem;
     }
-    .toast-notification.show { display: flex; }
-    .toast-notification.success { border-left: 4px solid #46d47c; }
-    .toast-notification.error { border-left: 4px solid #ff6b6b; }
-    .toast-notification.info { border-left: 4px solid #a29bfe; }
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .modal-box h3 i { color: #a29bfe; }
+    .modal-close {
+      position: absolute; top: 12px; right: 16px;
+      background: none; border: none;
+      color: #9aa9c9; font-size: 1.4rem;
+      cursor: pointer; transition: 0.2s;
     }
+    .modal-close:hover { color: #ffbaba; transform: rotate(90deg); }
+    .modal-content { font-size: 0.9rem; line-height: 1.6; color: #d3def5; }
+    .modal-content .item { padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .modal-content .item:last-child { border-bottom: none; }
+    .modal-content .badge {
+      background: rgba(108,92,231,0.2);
+      padding: 0.05rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.6rem;
+      color: #b8aaff;
+      display: inline-block;
+      margin-left: auto;
+    }
+
+    .stat-title {
+      color: #f0f4ff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stat-title i { color: #00ced1; }
+
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .filter-bar button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #8b9fc9;
+      padding: 0.25rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.65rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .filter-bar button.active {
+      background: rgba(108,92,231,0.2);
+      border-color: #6c5ce7;
+      color: #a29bfe;
+    }
+    .filter-bar button:hover { background: rgba(255,255,255,0.08); }
+
+    .home-activity {
+      margin-top: 1.2rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 18px;
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .home-activity h4 {
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .home-activity h4 i { color: #a29bfe; }
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.8rem;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item i { color: #a29bfe; width: 20px; font-size: 0.85rem; }
+    .activity-item span { color: #ffffff; }
+    .activity-item small { color: #aab8d4; font-size: 0.6rem; white-space: nowrap; margin-left: auto; }
+
+    .db-status {
+      font-size: 0.65rem;
+      color: #5f7197;
+      text-align: center;
+      margin-top: 0.5rem;
+      padding: 0.2rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+    }
+    .db-status.online { color: #46d47c; }
+    .db-status.offline { color: #ff6b6b; }
+    .db-status.sync { color: #ffd93d; animation: pulse 1.5s ease-in-out infinite; }
+
+    .home-footer {
+      text-align: center;
+      margin-top: 1rem;
+      color: #4a5a7a;
+      font-size: 0.6rem;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      padding-top: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-table-wrap {
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .stat-table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      min-width: 280px;
+    }
+    .stat-table-wrap th {
+      color: #a29bfe;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.5rem 0.4rem;
+      border-bottom: 2px solid rgba(255,255,255,0.06);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-table-wrap td {
+      color: #d3def5;
+      padding: 0.5rem 0.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .stat-table-wrap tr:last-child td { border-bottom: none; }
+    .stat-table-wrap .label-cell { color: #8b9fc9; font-weight: 500; }
+    .stat-table-wrap .value-cell { color: #f0f4ff; font-weight: 500; }
+    .stat-table-wrap .highlight-cell { color: #00ced1; font-weight: 600; }
+    .stat-table-wrap .note-cell {
+      color: #68769e;
+      font-size: 0.65rem;
+      font-style: italic;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .user-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .user-list-item:last-child { border-bottom: none; }
+    .user-list-item .user-info { display: flex; flex-direction: column; gap: 2px; }
+    .user-list-item .user-name { color: #f0f4ff; font-weight: 500; font-size: 0.85rem; }
+    .user-list-item .user-detail { color: #8b9fc9; font-size: 0.65rem; }
+    .user-list-item .user-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+    .user-list-item .user-actions button {
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .user-list-item .user-actions .edit-user-btn { background: rgba(253, 203, 110, 0.15); color: #fdcb6e; border: 1px solid rgba(253, 203, 110, 0.15); }
+    .user-list-item .user-actions .edit-user-btn:hover { background: rgba(253, 203, 110, 0.25); }
+    .user-list-item .user-actions .delete-user-btn { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.15); }
+    .user-list-item .user-actions .delete-user-btn:hover { background: rgba(255, 107, 107, 0.25); }
+    .user-list-item .user-actions .reset-pass-btn { background: rgba(0, 206, 209, 0.15); color: #00ced1; border: 1px solid rgba(0, 206, 209, 0.15); }
+    .user-list-item .user-actions .reset-pass-btn:hover { background: rgba(0, 206, 209, 0.25); }
+    .user-list-item .user-actions .make-admin-btn { background: rgba(255, 215, 0, 0.15); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.15); }
+    .user-list-item .user-actions .make-admin-btn:hover { background: rgba(255, 215, 0, 0.25); }
+    .user-role-badge {
+      font-size: 0.5rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 30px;
+      display: inline-block;
+    }
+    .user-role-badge.admin { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+    .user-role-badge.user { background: rgba(108,92,231,0.2); color: #a29bfe; }
+
+    .access-denied { text-align: center; padding: 1.5rem 0.5rem; }
+    .access-denied i { font-size: 3rem; color: #ff6b6b; margin-bottom: 0.8rem; }
+    .access-denied h4 { color: #ffbaba; font-size: 1rem; margin-bottom: 0.3rem; }
+    .access-denied p { color: #8b9fc9; font-size: 0.8rem; }
 
     @media (max-width: 400px) {
       .container { padding: 1rem 0.8rem; }
@@ -579,15 +1303,11 @@
       .user-list-item { flex-wrap: wrap; gap: 0.3rem; }
       .user-list-item .user-actions { flex-wrap: wrap; }
       .report-upload-form .form-row { grid-template-columns: 1fr; }
+      .task-signature-section .sign-canvas-wrapper canvas { height: 140px; }
     }
   </style>
 </head>
 <body>
-
-  <div class="toast-notification" id="toastNotification">
-    <i class="fas fa-check-circle" id="toastIcon"></i>
-    <span id="toastMessage">Pesan</span>
-  </div>
 
   <!-- ============================================================
        LOADING PAGE
@@ -883,8 +1603,9 @@
 
         if (progressInterval) clearInterval(progressInterval);
 
+        // ===== DURASI LOADING 2 DETIK =====
         const startTime = Date.now();
-        const duration = 2000;
+        const duration = 2000; // 2 detik
 
         progressInterval = setInterval(() => {
           const elapsed = Date.now() - startTime;
@@ -907,7 +1628,7 @@
             
             console.log('✅ Loading selesai dalam 2 detik!');
           }
-        }, 16);
+        }, 16); // update setiap 16ms untuk animasi 60fps
       }
 
       document.getElementById('restartLoading').addEventListener('dblclick', function() {
@@ -938,20 +1659,19 @@
     })();
 
     // ============================================================
-    // MAIN APP
+    // MAIN APP - DENGAN FITUR TANDA TANGAN DI TASK MANAGER
     // ============================================================
     (function() {
       // ============================================================
-      //  KONFIGURASI CLOUD DATABASE - DIPERBAIKI
+      //  KONFIGURASI CLOUD DATABASE
       // ============================================================
       const CONFIG = {
-        API_KEY: '$2a$10$kD6XifIXmNDRUTfWHL190OQ2aREJlTsG6vWHpGpljdtPYUR5INb8O',
+        API_KEY: '',
         BIN_ID: '6a3f5e86da38895dfe0610b9',
         BASE_URL: 'https://api.jsonbin.io/v3'
       };
 
       const ADMIN_USERNAME = 'marco';
-      const DB_KEY = 'dailywork_users_data';
 
       // ============ DATA STATISTIK KUNJUNGAN ============
       const DATA_KUNJUNGAN = {
@@ -968,49 +1688,23 @@
         note: 'BTO TIDAK DALAM AVERAGE TAPI DALAM JUMLAH SETAHUN'
       };
 
-      // ============ TOAST NOTIFICATION ============
-      function showToast(message, type = 'success') {
-        const toast = document.getElementById('toastNotification');
-        const toastMessage = document.getElementById('toastMessage');
-        const toastIcon = document.getElementById('toastIcon');
-        
-        toast.className = 'toast-notification show ' + type;
-        
-        const icons = {
-          success: 'fa-check-circle',
-          error: 'fa-exclamation-circle',
-          info: 'fa-info-circle'
-        };
-        toastIcon.className = 'fas ' + (icons[type] || icons.info);
-        
-        toastMessage.textContent = message;
-        
-        clearTimeout(toast._timeout);
-        toast._timeout = setTimeout(() => {
-          toast.classList.remove('show');
-        }, 3000);
-      }
-
       // ============ CLOUD DATABASE FUNCTIONS ============
       async function getUsersFromCloud() {
         try {
-          console.log('☁️ Mengambil data dari cloud...');
           const response = await fetch(`${CONFIG.BASE_URL}/b/${CONFIG.BIN_ID}/latest`, {
             headers: { 'X-Master-Key': CONFIG.API_KEY }
           });
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const data = await response.json();
-          console.log('✅ Data dari cloud:', Object.keys(data.record || {}).length, 'user');
           return data.record || {};
         } catch (error) {
-          console.error('❌ Gagal mengambil data dari cloud:', error.message);
+          console.error('❌ Gagal mengambil data dari cloud:', error);
           return getUsersFromLocal();
         }
       }
 
       async function saveUsersToCloud(users) {
         try {
-          console.log('☁️ Menyimpan ke cloud...');
           const response = await fetch(`${CONFIG.BASE_URL}/b/${CONFIG.BIN_ID}`, {
             method: 'PUT',
             headers: {
@@ -1024,11 +1718,13 @@
           saveUsersToLocal(users);
           return true;
         } catch (error) {
-          console.error('❌ Gagal menyimpan ke cloud:', error.message);
+          console.error('❌ Gagal menyimpan ke cloud:', error);
           saveUsersToLocal(users);
           return false;
         }
       }
+
+      const DB_KEY = 'dailywork_users_cloud';
 
       function getUsersFromLocal() {
         try {
@@ -1050,28 +1746,10 @@
 
       async function loadUsers() {
         try {
-          updateDbStatus('☁️ Menghubungkan ke cloud...', 'sync');
-          const cloudData = await getUsersFromCloud();
-          
-          // Jika ada data cloud, gunakan itu sebagai primary
-          if (cloudData && Object.keys(cloudData).length > 0) {
-            currentUsers = cloudData;
-            // Backup ke lokal
-            saveUsersToLocal(currentUsers);
-            const count = Object.keys(currentUsers).length;
-            updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
-            console.log('📦 Data dimuat dari cloud');
-          } else {
-            // Fallback ke lokal
-            currentUsers = getUsersFromLocal();
-            const count = Object.keys(currentUsers).length;
-            if (count > 0) {
-              updateDbStatus(`📂 ${count} akun (lokal)`, 'online');
-            } else {
-              updateDbStatus('📂 Belum ada data', 'offline');
-            }
-            console.log('📦 Data dimuat dari lokal');
-          }
+          updateDbStatus('□ Menghubungkan ke cloud...', 'sync');
+          currentUsers = await getUsersFromCloud();
+          const count = Object.keys(currentUsers).length;
+          updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
           return currentUsers;
         } catch (error) {
           currentUsers = getUsersFromLocal();
@@ -1083,20 +1761,12 @@
 
       async function saveUsers(users) {
         currentUsers = users;
-        
-        // Simpan ke lokal dulu
-        saveUsersToLocal(users);
-        
-        // Coba simpan ke cloud
         const cloudSuccess = await saveUsersToCloud(users);
         const count = Object.keys(users).length;
-        
         if (cloudSuccess) {
           updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
-          showToast('✅ Data berhasil disimpan ke cloud!', 'success');
         } else {
-          updateDbStatus(`📂 ${count} akun (disimpan lokal)`, 'offline');
-          showToast('⚠️ Data tersimpan di lokal (cloud offline)', 'info');
+          updateDbStatus(`⚠️ ${count} akun (disimpan lokal)`, 'offline');
         }
         return cloudSuccess;
       }
@@ -1109,86 +1779,131 @@
         }
       }
 
-      // ============ TASK FUNCTIONS ============
-      function getTasks(username) {
-        if (!currentUsers[username]) return [];
-        return currentUsers[username].tasks || [];
+      // ============ TASK SIGNATURE FUNCTIONS ============
+      function getTaskSignatures(taskUsername, taskId) {
+        if (!currentUsers[taskUsername]) return [];
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return [];
+        return task.signatures || [];
       }
 
-      function saveTasks(username, tasks) {
-        if (!currentUsers[username]) return false;
-        currentUsers[username].tasks = tasks;
+      function saveTaskSignatures(taskUsername, taskId, signatures) {
+        if (!currentUsers[taskUsername]) return false;
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+        if (taskIndex === -1) return false;
+        tasks[taskIndex].signatures = signatures;
+        currentUsers[taskUsername].tasks = tasks;
         return true;
       }
 
-      async function addTask(username, taskData) {
-        try {
-          // Pastikan user ada
-          if (!currentUsers[username]) {
-            console.error('User tidak ditemukan:', username);
-            return null;
-          }
-          
-          const tasks = getTasks(username);
-          const newTask = {
-            id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
-            ...taskData,
-            username: username,
-            comments: [],
-            signatures: [],
-            signaturePermission: { allowedUsers: [], allowAll: false },
-            files: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          };
-          
-          tasks.push(newTask);
-          saveTasks(username, tasks);
-          
-          // Simpan ke cloud
-          await saveUsers(currentUsers);
-          
-          console.log('✅ Task berhasil disimpan:', newTask.id);
-          return newTask;
-        } catch (error) {
-          console.error('❌ Error di addTask:', error);
-          return null;
+      // ============ SIGNATURE PERMISSION FUNCTIONS ============
+      function getTaskSignaturePermission(taskUsername, taskId) {
+        if (!currentUsers[taskUsername]) return { allowedUsers: [], allowAll: false };
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return { allowedUsers: [], allowAll: false };
+        if (!task.signaturePermission) {
+          task.signaturePermission = { allowedUsers: [], allowAll: false };
         }
+        return task.signaturePermission;
       }
 
-      async function updateTask(username, taskId, updatedData) {
-        const tasks = getTasks(username);
-        const index = tasks.findIndex(t => t.id === taskId);
-        if (index === -1) return null;
-        tasks[index] = { ...tasks[index], ...updatedData, updatedAt: new Date().toISOString() };
-        saveTasks(username, tasks);
-        await saveUsers(currentUsers);
-        return tasks[index];
-      }
-
-      async function deleteTask(username, taskId) {
-        const tasks = getTasks(username);
-        const filtered = tasks.filter(t => t.id !== taskId);
-        saveTasks(username, filtered);
-        await saveUsers(currentUsers);
+      function saveTaskSignaturePermission(taskUsername, taskId, permission) {
+        if (!currentUsers[taskUsername]) return false;
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+        if (taskIndex === -1) return false;
+        tasks[taskIndex].signaturePermission = permission;
+        currentUsers[taskUsername].tasks = tasks;
         return true;
       }
 
-      // ============ GET ALL TASKS ============
-      function getAllTasks() {
-        let allTasks = [];
-        Object.keys(currentUsers).forEach(username => {
-          const userTasks = currentUsers[username].tasks || [];
-          userTasks.forEach(task => {
-            allTasks.push({
-              ...task,
-              _username: username,
-              _fullname: currentUsers[username].fullname || username
-            });
-          });
-        });
-        allTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        return allTasks;
+      function canUserSign(taskUsername, taskId, signerUsername) {
+        const permission = getTaskSignaturePermission(taskUsername, taskId);
+        if (permission.allowAll) return true;
+        return permission.allowedUsers && permission.allowedUsers.includes(signerUsername);
+      }
+
+      async function updateSignaturePermission(taskUsername, taskId, permission) {
+        const saved = saveTaskSignaturePermission(taskUsername, taskId, permission);
+        if (saved) {
+          await saveUsers(currentUsers);
+          return true;
+        }
+        return false;
+      }
+
+      // ============ SIGN TASK ============
+      async function signTask(taskUsername, taskId, signatureData) {
+        const signatures = getTaskSignatures(taskUsername, taskId);
+        const alreadySigned = signatures.some(s => s.signer === currentUsername);
+        if (alreadySigned) {
+          return { success: false, message: 'Anda sudah menandatangani tugas ini!' };
+        }
+
+        const newSignature = {
+          signer: currentUsername,
+          signerFullname: currentUsers[currentUsername]?.fullname || currentUsername,
+          signatureData: signatureData,
+          signedAt: new Date().toISOString()
+        };
+
+        signatures.push(newSignature);
+        saveTaskSignatures(taskUsername, taskId, signatures);
+        await saveUsers(currentUsers);
+        
+        return { success: true, message: '✅ Tugas berhasil ditandatangani!' };
+      }
+
+      // ============ UNSIGN TASK YANG DIPERBAIKI ============
+      async function unsignTask(taskUsername, taskId) {
+        const isAdmin = currentUserRole === 'admin';
+        
+        if (!isAdmin) {
+          return { success: false, message: '❌ Hanya Admin yang dapat menghapus tanda tangan!' };
+        }
+        
+        // Cari task
+        if (!currentUsers[taskUsername]) {
+          return { success: false, message: 'User tidak ditemukan!' };
+        }
+        
+        const tasks = currentUsers[taskUsername].tasks || [];
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+        
+        if (taskIndex === -1) {
+          return { success: false, message: 'Tugas tidak ditemukan!' };
+        }
+        
+        const task = tasks[taskIndex];
+        const signatures = task.signatures || [];
+        
+        // Cari tanda tangan milik user saat ini
+        const signIndex = signatures.findIndex(s => s.signer === currentUsername);
+        
+        if (signIndex === -1) {
+          return { success: false, message: 'Anda belum menandatangani tugas ini!' };
+        }
+
+        // Hapus tanda tangan
+        signatures.splice(signIndex, 1);
+        task.signatures = signatures;
+        tasks[taskIndex] = task;
+        currentUsers[taskUsername].tasks = tasks;
+        
+        // Simpan ke cloud
+        const saved = await saveUsers(currentUsers);
+        
+        if (saved) {
+          console.log('✅ Tanda tangan berhasil dihapus dari cloud');
+          return { success: true, message: '✅ Tanda tangan berhasil dihapus!' };
+        } else {
+          // Meskipun gagal ke cloud, data sudah tersimpan di lokal
+          console.warn('⚠️ Tanda tangan tersimpan di lokal tapi gagal ke cloud');
+          return { success: true, message: '✅ Tanda tangan berhasil dihapus (lokal)!' };
+        }
       }
 
       // ============ REPORT FUNCTIONS ============
@@ -1240,6 +1955,86 @@
         });
         allReports.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
         return allReports;
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+        return (bytes / 1073741824).toFixed(1) + ' GB';
+      }
+
+      function getFileIcon(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        const icons = {
+          'pdf': 'fa-file-pdf',
+          'doc': 'fa-file-word',
+          'docx': 'fa-file-word',
+          'xls': 'fa-file-excel',
+          'xlsx': 'fa-file-excel',
+          'ppt': 'fa-file-powerpoint',
+          'pptx': 'fa-file-powerpoint',
+          'jpg': 'fa-file-image',
+          'jpeg': 'fa-file-image',
+          'png': 'fa-file-image',
+          'gif': 'fa-file-image',
+          'svg': 'fa-file-image',
+          'webp': 'fa-file-image',
+          'mp4': 'fa-file-video',
+          'avi': 'fa-file-video',
+          'mov': 'fa-file-video',
+          'mp3': 'fa-file-audio',
+          'wav': 'fa-file-audio',
+          'zip': 'fa-file-archive',
+          'rar': 'fa-file-archive',
+          '7z': 'fa-file-archive',
+          'txt': 'fa-file-alt',
+          'csv': 'fa-file-csv',
+          'json': 'fa-file-code',
+          'xml': 'fa-file-code',
+          'html': 'fa-file-code',
+          'css': 'fa-file-code',
+          'js': 'fa-file-code',
+          'md': 'fa-file-alt',
+          '': 'fa-file'
+        };
+        return icons[ext] || 'fa-file';
+      }
+
+      function downloadFile(fileData, filename) {
+        try {
+          let base64Data = fileData.data;
+          if (base64Data.includes(',')) {
+            base64Data = base64Data.split(',')[1];
+          }
+          
+          const byteCharacters = atob(base64Data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: fileData.type || 'application/octet-stream' });
+          
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename || fileData.filename || fileData.name || 'download';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error('❌ Error downloading file:', error);
+          alert('Gagal mendownload file. Silakan coba lagi.');
+        }
+      }
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
       }
 
       // ============ FUNGSI REGISTER & LOGIN ============
@@ -1344,85 +2139,180 @@
         return { success: false, message: '❌ Gagal menyimpan ke cloud.' };
       }
 
-      // ============ UTILITY FUNCTIONS ============
-      function escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+      // ============ TASK FUNCTIONS ============
+      function getTasks(username) {
+        if (!currentUsers[username]) return [];
+        return currentUsers[username].tasks || [];
       }
 
-      function formatFileSize(bytes) {
-        if (bytes < 1024) return bytes + ' B';
-        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-        if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
-        return (bytes / 1073741824).toFixed(1) + ' GB';
+      function saveTasks(username, tasks) {
+        if (!currentUsers[username]) return false;
+        currentUsers[username].tasks = tasks;
+        return true;
       }
 
-      function getFileIcon(filename) {
-        const ext = filename.split('.').pop().toLowerCase();
-        const icons = {
-          'pdf': 'fa-file-pdf',
-          'doc': 'fa-file-word',
-          'docx': 'fa-file-word',
-          'xls': 'fa-file-excel',
-          'xlsx': 'fa-file-excel',
-          'ppt': 'fa-file-powerpoint',
-          'pptx': 'fa-file-powerpoint',
-          'jpg': 'fa-file-image',
-          'jpeg': 'fa-file-image',
-          'png': 'fa-file-image',
-          'gif': 'fa-file-image',
-          'svg': 'fa-file-image',
-          'webp': 'fa-file-image',
-          'mp4': 'fa-file-video',
-          'avi': 'fa-file-video',
-          'mov': 'fa-file-video',
-          'mp3': 'fa-file-audio',
-          'wav': 'fa-file-audio',
-          'zip': 'fa-file-archive',
-          'rar': 'fa-file-archive',
-          '7z': 'fa-file-archive',
-          'txt': 'fa-file-alt',
-          'csv': 'fa-file-csv',
-          'json': 'fa-file-code',
-          'xml': 'fa-file-code',
-          'html': 'fa-file-code',
-          'css': 'fa-file-code',
-          'js': 'fa-file-code',
-          'md': 'fa-file-alt',
-          '': 'fa-file'
+      async function addTask(username, taskData) {
+        const tasks = getTasks(username);
+        const newTask = {
+          id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+          ...taskData,
+          username: username,
+          comments: [],
+          signatures: [],
+          signaturePermission: { allowedUsers: [], allowAll: false },
+          files: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         };
-        return icons[ext] || 'fa-file';
+        tasks.push(newTask);
+        saveTasks(username, tasks);
+        await saveUsers(currentUsers);
+        return newTask;
       }
 
-      function downloadFile(fileData, filename) {
+      async function updateTask(username, taskId, updatedData) {
+        const tasks = getTasks(username);
+        const index = tasks.findIndex(t => t.id === taskId);
+        if (index === -1) return null;
+        tasks[index] = { ...tasks[index], ...updatedData, updatedAt: new Date().toISOString() };
+        saveTasks(username, tasks);
+        await saveUsers(currentUsers);
+        return tasks[index];
+      }
+
+      async function deleteTask(username, taskId) {
+        const tasks = getTasks(username);
+        const filtered = tasks.filter(t => t.id !== taskId);
+        saveTasks(username, filtered);
+        await saveUsers(currentUsers);
+        return true;
+      }
+
+      // ============ FUNGSI KOMENTAR YANG DIPERBAIKI ============
+      async function addComment(taskUsername, taskId, commentText) {
         try {
-          let base64Data = fileData.data;
-          if (base64Data.includes(',')) {
-            base64Data = base64Data.split(',')[1];
+          await loadUsers();
+          
+          if (!currentUsers[taskUsername]) {
+            console.error('User tidak ditemukan:', taskUsername);
+            return false;
           }
           
-          const byteCharacters = atob(base64Data);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: fileData.type || 'application/octet-stream' });
+          const tasks = getTasks(taskUsername);
+          const taskIndex = tasks.findIndex(t => t.id === taskId);
           
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = filename || fileData.filename || fileData.name || 'download';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
+          if (taskIndex === -1) {
+            console.error('Task tidak ditemukan:', taskId);
+            return false;
+          }
+          
+          const task = tasks[taskIndex];
+          
+          if (!task.comments) {
+            task.comments = [];
+          }
+          
+          const newComment = {
+            user: currentUsername,
+            userFullname: currentUsers[currentUsername]?.fullname || currentUsername,
+            text: commentText.trim(),
+            time: new Date().toISOString()
+          };
+          
+          task.comments.push(newComment);
+          tasks[taskIndex] = task;
+          currentUsers[taskUsername].tasks = tasks;
+          
+          const saved = await saveUsers(currentUsers);
+          
+          if (saved) {
+            console.log('✅ Komentar berhasil disimpan ke cloud');
+            await loadUsers();
+            return true;
+          } else {
+            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
+            return true;
+          }
         } catch (error) {
-          console.error('❌ Error downloading file:', error);
-          showToast('Gagal mendownload file', 'error');
+          console.error('❌ Error di addComment:', error);
+          try {
+            saveUsersToLocal(currentUsers);
+            return true;
+          } catch (e) {
+            return false;
+          }
         }
+      }
+
+      // ============ FUNGSI DELETE KOMENTAR YANG DIPERBAIKI ============
+      async function deleteComment(taskUsername, taskId, commentIndex) {
+        try {
+          await loadUsers();
+          
+          if (!currentUsers[taskUsername]) {
+            console.error('User tidak ditemukan:', taskUsername);
+            return { success: false, message: 'User tidak ditemukan!' };
+          }
+          
+          const tasks = getTasks(taskUsername);
+          const taskIndex = tasks.findIndex(t => t.id === taskId);
+          
+          if (taskIndex === -1) {
+            console.error('Task tidak ditemukan:', taskId);
+            return { success: false, message: 'Tugas tidak ditemukan!' };
+          }
+          
+          const task = tasks[taskIndex];
+          
+          if (!task.comments || commentIndex >= task.comments.length) {
+            return { success: false, message: 'Komentar tidak ditemukan!' };
+          }
+          
+          const comment = task.comments[commentIndex];
+          
+          // Cek hak akses
+          if (comment.user !== currentUsername && currentUserRole !== 'admin') {
+            return { success: false, message: 'Anda tidak berhak menghapus komentar ini!' };
+          }
+          
+          // Hapus komentar
+          task.comments.splice(commentIndex, 1);
+          tasks[taskIndex] = task;
+          currentUsers[taskUsername].tasks = tasks;
+          
+          // Simpan ke cloud
+          const saved = await saveUsers(currentUsers);
+          
+          if (saved) {
+            console.log('✅ Komentar berhasil dihapus dari cloud');
+            await loadUsers();
+            return { success: true, message: '✅ Komentar berhasil dihapus!' };
+          } else {
+            // Meskipun gagal ke cloud, data sudah tersimpan di lokal
+            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
+            return { success: true, message: '✅ Komentar berhasil dihapus (lokal)!' };
+          }
+        } catch (error) {
+          console.error('❌ Error di deleteComment:', error);
+          return { success: false, message: 'Terjadi kesalahan saat menghapus komentar.' };
+        }
+      }
+
+      // ============ GET ALL TASKS ============
+      function getAllTasks() {
+        let allTasks = [];
+        Object.keys(currentUsers).forEach(username => {
+          const userTasks = currentUsers[username].tasks || [];
+          userTasks.forEach(task => {
+            allTasks.push({
+              ...task,
+              _username: username,
+              _fullname: currentUsers[username].fullname || username
+            });
+          });
+        });
+        allTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return allTasks;
       }
 
       // ============ DATA STATIS ============
@@ -1480,6 +2370,407 @@
         <div class="item"><i class="fas fa-calendar-day"></i> Sabtu · Request Report</div>
         <div class="item small-note" style="margin-top:6px; color:#68769e; font-size:0.8rem;"><i class="fas fa-clock"></i> Minggu libur</div>
       `;
+
+      // ============ RENDER SIGNATURE PERMISSION ============
+      function renderSignaturePermission(taskId, taskUsername) {
+        const isAdmin = currentUserRole === 'admin';
+        if (!isAdmin) return '';
+
+        const permission = getTaskSignaturePermission(taskUsername, taskId);
+        const allUsers = Object.keys(currentUsers).filter(u => u !== taskUsername);
+        const allowedUsers = permission.allowedUsers || [];
+        const allowAll = permission.allowAll || false;
+
+        let html = `
+          <div class="signature-permission">
+            <div class="permission-header">
+              <label>
+                <input type="checkbox" id="allowAllSign_${taskId}" ${allowAll ? 'checked' : ''}>
+                <i class="fas fa-globe"></i> Izinkan semua user menandatangani
+              </label>
+              <span style="font-size:0.55rem; color:#68769e;">
+                ${allowAll ? '✅ Semua user diizinkan' : `✅ ${allowedUsers.length} user diizinkan`}
+              </span>
+            </div>
+            <div class="permission-desc">
+              <i class="fas fa-info-circle"></i> Admin dapat mengatur siapa saja yang dapat menandatangani tugas ini
+            </div>
+            ${!allowAll ? `
+              <div class="allowed-users" id="allowedUsers_${taskId}">
+                ${allowedUsers.map(u => `
+                  <span class="user-tag">
+                    <i class="fas fa-user"></i> ${escapeHtml(currentUsers[u]?.fullname || u)}
+                    <span class="remove-user" onclick="window.removeAllowedUser('${taskId}', '${taskUsername}', '${u}')">×</span>
+                  </span>
+                `).join('')}
+              </div>
+              <div class="add-user-form">
+                <select id="addUserSelect_${taskId}">
+                  ${allUsers.filter(u => !allowedUsers.includes(u)).map(u => `
+                    <option value="${u}">${escapeHtml(currentUsers[u]?.fullname || u)} (@${u})</option>
+                  `).join('')}
+                </select>
+                <button onclick="window.addAllowedUser('${taskId}', '${taskUsername}')">
+                  <i class="fas fa-plus"></i> Tambah
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        return html;
+      }
+
+      // ============ RENDER TASK SIGNATURE ============
+      function renderTaskSignature(taskId, taskUsername) {
+        const signatures = getTaskSignatures(taskUsername, taskId);
+        const hasSigned = signatures.some(s => s.signer === currentUsername);
+        const isAdmin = currentUserRole === 'admin';
+        
+        const canSign = !hasSigned;
+
+        let html = `
+          <div class="task-signature-section">
+            <div class="sign-header">
+              <h5><i class="fas fa-pen-fancy"></i> Tanda Tangan Bukti Terima</h5>
+              <span class="sign-badge ${hasSigned ? 'signed' : 'not-signed'}">
+                ${hasSigned ? '✅ Sudah ditandatangani' : '⏳ Belum ditandatangani'}
+              </span>
+            </div>
+
+            ${renderSignaturePermission(taskId, taskUsername)}
+
+            <div class="sign-list">
+              ${signatures.length > 0 ? signatures.map((s, index) => {
+                let signaturePreview = '';
+                if (s.signatureData) {
+                  signaturePreview = `
+                    <div class="signature-preview">
+                      <img src="${s.signatureData}" alt="Tanda tangan ${s.signer}" title="Tanda tangan ${s.signerFullname || s.signer}">
+                      <span class="signature-label">Tanda tangan</span>
+                    </div>
+                  `;
+                }
+                return `
+                  <div class="sign-item">
+                    <div class="sign-avatar">${s.signer.charAt(0).toUpperCase()}</div>
+                    <div class="sign-info">
+                      <div class="sign-name">${escapeHtml(s.signerFullname || s.signer)}</div>
+                      <div class="sign-time"><i class="fas fa-clock"></i> ${new Date(s.signedAt).toLocaleString('id-ID')}</div>
+                      ${signaturePreview}
+                    </div>
+                    <span class="sign-status-text"><i class="fas fa-check-circle"></i></span>
+                    ${s.signer === currentUsername && isAdmin ? `
+                      <button class="btn-unsign-task" onclick="window.unsignTask('${taskId}', '${taskUsername}')">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('') : `
+                <div class="sign-empty">Belum ada tanda tangan</div>
+              `}
+            </div>
+
+            ${canSign ? `
+              <div class="sign-canvas-wrapper">
+                <canvas id="signCanvas_${taskId}" width="600" height="200"></canvas>
+                <div class="placeholder-text">Tanda tangan di sini</div>
+              </div>
+              <div class="sign-actions">
+                <button class="btn-sign-task" id="signBtn_${taskId}" data-taskid="${taskId}" data-username="${taskUsername}">
+                  <i class="fas fa-pen"></i> Tandatangani
+                </button>
+                <button class="btn-clear-task" id="clearBtn_${taskId}" disabled>
+                  <i class="fas fa-eraser"></i> Hapus
+                </button>
+              </div>
+            ` : `
+              ${hasSigned ? `
+                <div style="margin-top:0.4rem; padding:0.4rem; background:rgba(0,206,209,0.05); border-radius:8px; border:1px solid rgba(0,206,209,0.1);">
+                  <p style="color:#00ced1; font-size:0.7rem; display:flex; align-items:center; gap:6px;">
+                    <i class="fas fa-check-circle"></i> Anda telah menandatangani tugas ini
+                  </p>
+                </div>
+              ` : ''}
+            `}
+          </div>
+        `;
+
+        return html;
+      }
+
+      // ============ RENDER REPORTS ============
+      function renderReports() {
+        const allReports = getAllReports();
+        const isAdmin = currentUserRole === 'admin';
+        
+        let html = `
+          <div class="stat-title"><i class="fas fa-file-alt"></i> Laporan Bulanan</div>
+          <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
+            <i class="fas fa-users"></i> Semua user · ${allReports.length} total laporan
+          </p>
+        `;
+
+        html += `
+          <div class="report-upload-form">
+            <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
+              <i class="fas fa-upload"></i> Upload Laporan Bulanan
+            </h4>
+            <form id="reportUploadForm">
+              <div class="form-row">
+                <div class="input-group">
+                  <label>Bulan & Tahun</label>
+                  <div class="input-icon"><i class="fas fa-calendar"></i>
+                    <input type="month" id="reportMonth" required style="padding-left:3rem;">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>Tipe Laporan</label>
+                  <div class="input-icon"><i class="fas fa-tag"></i>
+                    <select id="reportType" style="padding-left:3rem;">
+                      <option value="rajal">RAJAL (Rawat Jalan)</option>
+                      <option value="ranap">RANAP (Rawat Inap)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Keterangan (opsional)</label>
+                <textarea id="reportDesc" placeholder="Deskripsi laporan..." style="padding-left:1rem; min-height:50px;"></textarea>
+              </div>
+              <div class="file-input-wrapper">
+                <input type="file" id="reportFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.jpg,.jpeg,.png,.gif,.json,.xml,.html,.css,.js" required>
+                <button type="submit" class="btn-primary btn-upload" style="width:auto; padding:0.5rem 1rem; font-size:0.75rem; background:linear-gradient(135deg,#fdcb6e,#f39c12); color:#2d3436;">
+                  <i class="fas fa-upload"></i> Upload
+                </button>
+              </div>
+            </form>
+          </div>
+        `;
+
+        html += `
+          <div class="filter-bar">
+            <button class="active" data-filter="all">Semua</button>
+            <button data-filter="rajal"><i class="fas fa-clinic-medical"></i> RAJAL</button>
+            <button data-filter="ranap"><i class="fas fa-hospital"></i> RANAP</button>
+            <button data-filter="my-reports" style="border-color:#6c5ce7;">□ Laporanku</button>
+          </div>
+        `;
+
+        html += `<div class="report-list" id="reportListContainer">`;
+
+        if (allReports.length === 0) {
+          html += `
+            <div class="empty-tasks">
+              <i class="fas fa-file-alt"></i>
+              <p>Belum ada laporan. Upload laporan bulanan!</p>
+            </div>
+          `;
+        } else {
+          allReports.forEach((report) => {
+            const typeLabel = report.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
+            const typeClass = report.type === 'rajal' ? 'rajal' : 'ranap';
+            const typeIcon = report.type === 'rajal' ? 'fa-clinic-medical' : 'fa-hospital';
+            const isOwnReport = report._username === currentUsername;
+            const canDelete = isOwnReport || isAdmin;
+            const monthYear = report.month || 'Bulan tidak tersedia';
+            const fileIcon = getFileIcon(report.filename || 'file.pdf');
+            
+            html += `
+              <div class="report-item" data-report-id="${report.id}" data-username="${report._username}">
+                <div class="report-header">
+                  <div>
+                    <div class="report-title">
+                      <i class="fas ${typeIcon}" style="color:${report.type === 'rajal' ? '#00ced1' : '#a29bfe'};"></i>
+                      ${escapeHtml(report.filename || 'Laporan')}
+                      <span class="report-type-badge ${typeClass}">${typeLabel}</span>
+                    </div>
+                    <div class="report-meta">
+                      <span><i class="fas fa-user"></i> ${escapeHtml(report._fullname || report._username)}</span>
+                      <span><i class="fas fa-calendar"></i> ${escapeHtml(monthYear)}</span>
+                      <span><i class="fas fa-file"></i> ${formatFileSize(report.size || 0)}</span>
+                      ${isOwnReport ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
+                    </div>
+                  </div>
+                  <div class="report-actions">
+                    <button class="view-btn" onclick="window.viewReport('${report.id}', '${report._username}')">
+                      <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="download-btn" onclick="window.downloadReport('${report.id}', '${report._username}')">
+                      <i class="fas fa-download"></i>
+                    </button>
+                    ${canDelete ? `
+                      <button class="delete-btn" onclick="window.deleteReportById('${report.id}', '${report._username}')">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    ` : ''}
+                  </div>
+                </div>
+                ${report.description ? `<div class="report-desc">${escapeHtml(report.description)}</div>` : ''}
+                <div class="report-desc" style="font-size:0.65rem; color:#68769e; border-top:1px solid rgba(255,255,255,0.03); padding-top:0.3rem; margin-top:0.3rem;">
+                  <i class="fas fa-clock"></i> Upload: ${new Date(report.uploadedAt).toLocaleString('id-ID')}
+                  ${report.uploadedBy ? ` · oleh ${escapeHtml(report.uploadedByFullname || report.uploadedBy)}` : ''}
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        html += `</div>`;
+
+        return html;
+      }
+
+      // ============ RENDER TASK MANAGER ============
+      function renderTaskManager() {
+        const allTasks = getAllTasks();
+        const isAdmin = currentUserRole === 'admin';
+        
+        let html = `
+          <div class="stat-title"><i class="fas fa-tasks"></i> Semua Tugas</div>
+          <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
+            <i class="fas fa-users"></i> Semua user · ${allTasks.length} total tugas
+          </p>
+        `;
+
+        html += `
+          <div style="margin-bottom:1rem; background:rgba(255,255,255,0.03); padding:0.8rem; border-radius:14px; border:1px solid rgba(255,255,255,0.04);">
+            <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
+              <i class="fas fa-plus-circle"></i> Tambah Tugas Baru
+            </h4>
+            <form id="taskForm">
+              <div class="input-group" style="margin-bottom:0.5rem;">
+                <label>Judul Pekerjaan</label>
+                <div class="input-icon"><i class="fas fa-tag"></i>
+                  <input type="text" id="taskTitle" placeholder="Masukkan judul pekerjaan" required>
+                </div>
+              </div>
+              <div class="input-group" style="margin-bottom:0.5rem;">
+                <label>Deskripsi (opsional)</label>
+                <textarea id="taskDesc" placeholder="Detail pekerjaan..." style="padding-left:1rem;"></textarea>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+                <div class="input-group" style="margin-bottom:0;">
+                  <label>Tanggal</label>
+                  <div class="input-icon"><i class="fas fa-calendar"></i>
+                    <input type="date" id="taskDate" style="padding-left:3rem;" required>
+                  </div>
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                  <label>Status</label>
+                  <div class="input-icon"><i class="fas fa-flag"></i>
+                    <select id="taskStatus" style="padding-left:3rem;">
+                      <option value="pending">⏳ Pending</option>
+                      <option value="done">✅ Selesai</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary btn-success" style="margin-top:0.5rem; font-size:0.85rem; padding:0.6rem;">
+                <i class="fas fa-plus"></i> Tambah Tugas
+              </button>
+            </form>
+          </div>
+        `;
+
+        html += `
+          <div class="filter-bar">
+            <button class="active" data-filter="all">Semua</button>
+            <button data-filter="pending">⏳ Pending</button>
+            <button data-filter="done">✅ Selesai</button>
+            <button data-filter="my-tasks" style="border-color:#6c5ce7;">□ Tugasku</button>
+          </div>
+        `;
+
+        html += `<div class="task-list" id="taskListContainer">`;
+
+        if (allTasks.length === 0) {
+          html += `
+            <div class="empty-tasks">
+              <i class="fas fa-clipboard-list"></i>
+              <p>Belum ada tugas. Tambahkan tugas baru!</p>
+            </div>
+          `;
+        } else {
+          allTasks.forEach((task) => {
+            const taskDate = task.date ? new Date(task.date).toLocaleDateString('id-ID') : '-';
+            const statusLabel = task.status === 'done' ? '✅ Selesai' : '⏳ Pending';
+            const statusClass = task.status === 'done' ? 'done' : 'pending';
+            const username = task._username;
+            const fullname = task._fullname || username;
+            const isOwnTask = username === currentUsername;
+            const canEdit = isOwnTask || isAdmin;
+            const comments = task.comments || [];
+            const signatures = task.signatures || [];
+            const hasSignatures = signatures.length > 0;
+            const permission = task.signaturePermission || { allowedUsers: [], allowAll: false };
+            
+            html += `
+              <div class="task-item" data-task-id="${task.id}" data-username="${username}">
+                <div class="task-header">
+                  <div>
+                    <div class="task-title">${escapeHtml(task.title)}</div>
+                    <div class="task-meta">
+                      <span><i class="fas fa-user"></i> ${escapeHtml(fullname)}</span>
+                      <span><i class="fas fa-calendar"></i> ${escapeHtml(taskDate)}</span>
+                      <span class="task-status ${statusClass}">${statusLabel}</span>
+                      ${isOwnTask ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
+                      ${hasSignatures ? `<span style="color:#00ced1; font-size:0.55rem;"><i class="fas fa-check-circle"></i> ${signatures.length} tanda tangan</span>` : ''}
+                      ${comments.length > 0 ? `<span style="color:#a29bfe; font-size:0.55rem;"><i class="fas fa-comment"></i> ${comments.length}</span>` : ''}
+                      ${isAdmin ? `<span style="color:#ffd700; font-size:0.55rem;"><i class="fas fa-crown"></i> ${permission.allowAll ? 'Semua user' : permission.allowedUsers?.length || 0} user</span>` : ''}
+                    </div>
+                  </div>
+                  <div class="task-actions">
+                    ${canEdit ? `
+                      <button class="edit-btn" onclick="window.editTask('${task.id}', '${username}')">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="delete-btn" onclick="window.deleteTask('${task.id}', '${username}')">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    ` : ''}
+                    <button class="sign-task-btn" onclick="window.showTaskSignature('${task.id}', '${username}')" title="Tanda Tangan">
+                      <i class="fas fa-pen-fancy"></i>
+                    </button>
+                  </div>
+                </div>
+                ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
+                
+                <div class="task-comments">
+                  <div class="comment-list" id="commentList_${task.id}">
+                    ${comments.length > 0 ? comments.map((c, idx) => `
+                      <div class="comment-item">
+                        <div>
+                          <span class="comment-user">${escapeHtml(c.userFullname || c.user)}</span>
+                          <span class="comment-time">${new Date(c.time).toLocaleString('id-ID')}</span>
+                          ${(c.user === currentUsername || isAdmin) ? `
+                            <button onclick="window.deleteComment('${task.id}', '${username}', ${idx})" 
+                                    class="comment-delete-btn">
+                              <i class="fas fa-times"></i>
+                            </button>
+                          ` : ''}
+                        </div>
+                        <div class="comment-text">${escapeHtml(c.text)}</div>
+                      </div>
+                    `).join('') : `
+                      <div class="comment-empty">Belum ada komentar</div>
+                    `}
+                  </div>
+                  <form class="comment-form" id="commentForm_${task.id}" data-taskid="${task.id}" data-username="${username}">
+                    <input type="text" placeholder="Tulis komentar..." required>
+                    <button type="submit"><i class="fas fa-reply"></i> Kirim</button>
+                  </form>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        html += `</div>`;
+
+        return html;
+      }
 
       // ============ ELEMEN ============
       const loginPage = document.getElementById('loginPage');
@@ -1641,17 +2932,14 @@
             renderActivity();
             sessionStorage.setItem('currentUser', username);
             sessionStorage.setItem('userRole', role);
-            showToast('✅ Login berhasil! Selamat datang ' + fullname, 'success');
             console.log('✅ Login berhasil untuk user:', username, 'Role:', role);
           } else {
             loginErrorText.textContent = result.message;
             loginError.classList.add('show');
-            showToast(result.message, 'error');
           }
         } catch (error) {
           loginErrorText.textContent = 'Terjadi kesalahan. Coba lagi.';
           loginError.classList.add('show');
-          showToast('Terjadi kesalahan. Coba lagi.', 'error');
           console.error('❌ Login error:', error);
         } finally {
           loginBtn.disabled = false;
@@ -1707,7 +2995,6 @@
           if (result.success) {
             registerSuccessText.textContent = result.message;
             registerSuccess.classList.add('show');
-            showToast('✅ Akun berhasil dibuat!', 'success');
             
             regUsername.value = '';
             regFullname.value = '';
@@ -1727,12 +3014,10 @@
           } else {
             registerErrorText.textContent = result.message;
             registerError.classList.add('show');
-            showToast(result.message, 'error');
           }
         } catch (error) {
           registerErrorText.textContent = 'Gagal menyimpan ke cloud. Coba lagi.';
           registerError.classList.add('show');
-          showToast('Gagal menyimpan ke cloud. Coba lagi.', 'error');
           console.error('❌ Register error:', error);
         } finally {
           registerBtn.disabled = false;
@@ -1752,7 +3037,6 @@
         userAvatar.textContent = 'U';
         loginError.classList.remove('show');
         loginSuccess.classList.remove('show');
-        showToast('Anda telah keluar', 'info');
         loadUsers();
       }
 
@@ -1794,7 +3078,9 @@
         modalOverlay.classList.add('show');
         
         if (title.includes('Laporan Bulanan') || title.includes('Laporan')) {
-          setTimeout(() => attachReportEvents(), 100);
+          setTimeout(() => {
+            attachReportEvents();
+          }, 100);
         }
         
         if (title.includes('Task Manager') || title.includes('Semua Tugas')) {
@@ -1806,7 +3092,18 @@
         }
         
         if (title.includes('Manajemen User')) {
-          setTimeout(() => attachUserManagementEvents(), 100);
+          setTimeout(() => {
+            attachUserManagementEvents();
+          }, 100);
+        }
+
+        if (title.includes('Tanda Tangan Tugas')) {
+          setTimeout(() => {
+            const taskId = title.split(' - ')[1] || '';
+            const username = document.querySelector('[data-username]')?.dataset?.username || currentUsername;
+            initTaskSignatureCanvas(taskId, username);
+            attachSignaturePermissionEvents(taskId, username);
+          }, 300);
         }
       }
       
@@ -1817,608 +3114,12 @@
       modalClose.addEventListener('click', closeModal);
       modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
-      // ============ RENDER TASK MANAGER ============
-      function renderTaskManager() {
-        const allTasks = getAllTasks();
-        const isAdmin = currentUserRole === 'admin';
-        
-        let html = `
-          <div class="stat-title"><i class="fas fa-tasks"></i> Semua Tugas</div>
-          <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
-            <i class="fas fa-users"></i> Semua user · ${allTasks.length} total tugas
-          </p>
-        `;
-
-        html += `
-          <div style="margin-bottom:1rem; background:rgba(255,255,255,0.03); padding:0.8rem; border-radius:14px; border:1px solid rgba(255,255,255,0.04);">
-            <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
-              <i class="fas fa-plus-circle"></i> Tambah Tugas Baru
-            </h4>
-            <form id="taskForm">
-              <div class="input-group" style="margin-bottom:0.5rem;">
-                <label>Judul Pekerjaan</label>
-                <div class="input-icon"><i class="fas fa-tag"></i>
-                  <input type="text" id="taskTitle" placeholder="Masukkan judul pekerjaan" required>
-                </div>
-              </div>
-              <div class="input-group" style="margin-bottom:0.5rem;">
-                <label>Deskripsi (opsional)</label>
-                <textarea id="taskDesc" placeholder="Detail pekerjaan..." style="padding-left:1rem;"></textarea>
-              </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
-                <div class="input-group" style="margin-bottom:0;">
-                  <label>Tanggal</label>
-                  <div class="input-icon"><i class="fas fa-calendar"></i>
-                    <input type="date" id="taskDate" style="padding-left:3rem;" required>
-                  </div>
-                </div>
-                <div class="input-group" style="margin-bottom:0;">
-                  <label>Status</label>
-                  <div class="input-icon"><i class="fas fa-flag"></i>
-                    <select id="taskStatus" style="padding-left:3rem;">
-                      <option value="pending">⏳ Pending</option>
-                      <option value="done">✅ Selesai</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn-primary btn-success" style="margin-top:0.5rem; font-size:0.85rem; padding:0.6rem;">
-                <i class="fas fa-plus"></i> Tambah Tugas
-              </button>
-            </form>
-          </div>
-        `;
-
-        html += `
-          <div class="filter-bar">
-            <button class="active" data-filter="all">Semua</button>
-            <button data-filter="pending">⏳ Pending</button>
-            <button data-filter="done">✅ Selesai</button>
-            <button data-filter="my-tasks" style="border-color:#6c5ce7;">□ Tugasku</button>
-          </div>
-        `;
-
-        html += `<div class="task-list" id="taskListContainer">`;
-
-        if (allTasks.length === 0) {
-          html += `
-            <div class="empty-tasks">
-              <i class="fas fa-clipboard-list"></i>
-              <p>Belum ada tugas. Tambahkan tugas baru!</p>
-            </div>
-          `;
-        } else {
-          allTasks.forEach((task) => {
-            const taskDate = task.date ? new Date(task.date).toLocaleDateString('id-ID') : '-';
-            const statusLabel = task.status === 'done' ? '✅ Selesai' : '⏳ Pending';
-            const statusClass = task.status === 'done' ? 'done' : 'pending';
-            const username = task._username;
-            const fullname = task._fullname || username;
-            const isOwnTask = username === currentUsername;
-            const canEdit = isOwnTask || isAdmin;
-            const comments = task.comments || [];
-            const signatures = task.signatures || [];
-            const hasSignatures = signatures.length > 0;
-            
-            html += `
-              <div class="task-item" data-task-id="${task.id}" data-username="${username}">
-                <div class="task-header">
-                  <div>
-                    <div class="task-title">${escapeHtml(task.title)}</div>
-                    <div class="task-meta">
-                      <span><i class="fas fa-user"></i> ${escapeHtml(fullname)}</span>
-                      <span><i class="fas fa-calendar"></i> ${escapeHtml(taskDate)}</span>
-                      <span class="task-status ${statusClass}">${statusLabel}</span>
-                      ${isOwnTask ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
-                      ${hasSignatures ? `<span style="color:#00ced1; font-size:0.55rem;"><i class="fas fa-check-circle"></i> ${signatures.length} tanda tangan</span>` : ''}
-                      ${comments.length > 0 ? `<span style="color:#a29bfe; font-size:0.55rem;"><i class="fas fa-comment"></i> ${comments.length}</span>` : ''}
-                    </div>
-                  </div>
-                  <div class="task-actions">
-                    ${canEdit ? `
-                      <button class="edit-btn" onclick="window.editTask('${task.id}', '${username}')">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button class="delete-btn" onclick="window.deleteTask('${task.id}', '${username}')">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    ` : ''}
-                  </div>
-                </div>
-                ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
-                
-                <div class="task-comments">
-                  <div class="comment-list" id="commentList_${task.id}">
-                    ${comments.length > 0 ? comments.map((c, idx) => `
-                      <div class="comment-item">
-                        <div>
-                          <span class="comment-user">${escapeHtml(c.userFullname || c.user)}</span>
-                          <span class="comment-time">${new Date(c.time).toLocaleString('id-ID')}</span>
-                          ${(c.user === currentUsername || isAdmin) ? `
-                            <button onclick="window.deleteComment('${task.id}', '${username}', ${idx})" 
-                                    class="comment-delete-btn">
-                              <i class="fas fa-times"></i>
-                            </button>
-                          ` : ''}
-                        </div>
-                        <div class="comment-text">${escapeHtml(c.text)}</div>
-                      </div>
-                    `).join('') : `
-                      <div class="comment-empty">Belum ada komentar</div>
-                    `}
-                  </div>
-                  <form class="comment-form" id="commentForm_${task.id}" data-taskid="${task.id}" data-username="${username}">
-                    <input type="text" placeholder="Tulis komentar..." required>
-                    <button type="submit"><i class="fas fa-reply"></i> Kirim</button>
-                  </form>
-                </div>
-              </div>
-            `;
-          });
-        }
-
-        html += `</div>`;
-
-        return html;
-      }
-
-      // ============ ATTACH TASK EVENTS ============
-      function attachTaskEvents() {
-        const form = document.getElementById('taskForm');
-        if (form) {
-          const newForm = form.cloneNode(true);
-          form.parentNode.replaceChild(newForm, form);
-          
-          newForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const title = document.getElementById('taskTitle').value.trim();
-            const description = document.getElementById('taskDesc').value.trim();
-            const date = document.getElementById('taskDate').value;
-            const status = document.getElementById('taskStatus').value;
-            const btn = this.querySelector('button[type="submit"]');
-            
-            if (!title) {
-              showToast('Judul pekerjaan harus diisi!', 'error');
-              return;
-            }
-            
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-            
-            try {
-              const result = await addTask(currentUsername, { title, description, date, status });
-              
-              if (result) {
-                this.reset();
-                document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
-                
-                await refreshTaskModal();
-                updateCounts();
-                renderActivity();
-                
-                showToast('✅ Tugas berhasil ditambahkan dan tersimpan di cloud!', 'success');
-              } else {
-                showToast('❌ Gagal menyimpan tugas. Silakan coba lagi.', 'error');
-              }
-            } catch (error) {
-              console.error('❌ Error adding task:', error);
-              showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
-            } finally {
-              btn.disabled = false;
-              btn.innerHTML = '<i class="fas fa-plus"></i> Tambah Tugas';
-            }
-          });
-        }
-
-        document.querySelectorAll('#modalContent .filter-bar button, .filter-bar button').forEach(btn => {
-          btn.onclick = function() {
-            const container = this.closest('.modal-content') || document;
-            container.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            const filter = this.dataset.filter;
-            filterTasks(filter);
-          };
-        });
-
-        const dateInput = document.getElementById('taskDate');
-        if (dateInput && !dateInput.value) {
-          dateInput.value = new Date().toISOString().split('T')[0];
-        }
-      }
-
-      function filterTasks(filter) {
-        const allTasks = getAllTasks();
-        const container = document.getElementById('taskListContainer');
-        if (!container) return;
-
-        let filtered = allTasks;
-        if (filter === 'pending') {
-          filtered = allTasks.filter(t => t.status === 'pending');
-        } else if (filter === 'done') {
-          filtered = allTasks.filter(t => t.status === 'done');
-        } else if (filter === 'my-tasks') {
-          filtered = allTasks.filter(t => t._username === currentUsername);
-        }
-
-        if (filtered.length === 0) {
-          container.innerHTML = `
-            <div class="empty-tasks">
-              <i class="fas fa-clipboard-list"></i>
-              <p>Tidak ada tugas dengan filter ini.</p>
-            </div>
-          `;
-          return;
-        }
-
-        let html = '';
-        const isAdmin = currentUserRole === 'admin';
-        
-        filtered.forEach((task) => {
-          const taskDate = task.date ? new Date(task.date).toLocaleDateString('id-ID') : '-';
-          const statusLabel = task.status === 'done' ? '✅ Selesai' : '⏳ Pending';
-          const statusClass = task.status === 'done' ? 'done' : 'pending';
-          const username = task._username;
-          const fullname = task._fullname || username;
-          const isOwnTask = username === currentUsername;
-          const canEdit = isOwnTask || isAdmin;
-          const comments = task.comments || [];
-          const signatures = task.signatures || [];
-          const hasSignatures = signatures.length > 0;
-          
-          html += `
-            <div class="task-item" data-task-id="${task.id}" data-username="${username}">
-              <div class="task-header">
-                <div>
-                  <div class="task-title">${escapeHtml(task.title)}</div>
-                  <div class="task-meta">
-                    <span><i class="fas fa-user"></i> ${escapeHtml(fullname)}</span>
-                    <span><i class="fas fa-calendar"></i> ${escapeHtml(taskDate)}</span>
-                    <span class="task-status ${statusClass}">${statusLabel}</span>
-                    ${isOwnTask ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
-                    ${hasSignatures ? `<span style="color:#00ced1; font-size:0.55rem;"><i class="fas fa-check-circle"></i> ${signatures.length} tanda tangan</span>` : ''}
-                    ${comments.length > 0 ? `<span style="color:#a29bfe; font-size:0.55rem;"><i class="fas fa-comment"></i> ${comments.length}</span>` : ''}
-                  </div>
-                </div>
-                <div class="task-actions">
-                  ${canEdit ? `
-                    <button class="edit-btn" onclick="window.editTask('${task.id}', '${username}')">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn" onclick="window.deleteTask('${task.id}', '${username}')">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  ` : ''}
-                </div>
-              </div>
-              ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
-              
-              <div class="task-comments">
-                <div class="comment-list" id="commentList_${task.id}">
-                  ${comments.length > 0 ? comments.map((c, idx) => `
-                    <div class="comment-item">
-                      <div>
-                        <span class="comment-user">${escapeHtml(c.userFullname || c.user)}</span>
-                        <span class="comment-time">${new Date(c.time).toLocaleString('id-ID')}</span>
-                        ${(c.user === currentUsername || isAdmin) ? `
-                          <button onclick="window.deleteComment('${task.id}', '${username}', ${idx})" 
-                                  class="comment-delete-btn">
-                            <i class="fas fa-times"></i>
-                          </button>
-                        ` : ''}
-                      </div>
-                      <div class="comment-text">${escapeHtml(c.text)}</div>
-                    </div>
-                  `).join('') : `
-                    <div class="comment-empty">Belum ada komentar</div>
-                  `}
-                </div>
-                <form class="comment-form" id="commentForm_${task.id}" data-taskid="${task.id}" data-username="${username}">
-                  <input type="text" placeholder="Tulis komentar..." required>
-                  <button type="submit"><i class="fas fa-reply"></i> Kirim</button>
-                </form>
-              </div>
-            </div>
-          `;
-        });
-
-        container.innerHTML = html;
-        attachCommentEvents();
-      }
-
-      async function refreshTaskModal() {
-        await loadUsers();
-        const content = renderTaskManager();
-        const container = document.getElementById('modalContent');
-        if (container) {
-          container.innerHTML = content;
-          setTimeout(() => {
-            attachTaskEvents();
-            attachCommentEvents();
-          }, 50);
-        }
-      }
-
-      // ============ ATTACH COMMENT EVENTS ============
-      function attachCommentEvents() {
-        document.querySelectorAll('.comment-form').forEach(form => {
-          const newForm = form.cloneNode(true);
-          form.parentNode.replaceChild(newForm, form);
-          
-          newForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const taskId = this.dataset.taskid;
-            const username = this.dataset.username;
-            const input = this.querySelector('input');
-            const text = input.value.trim();
-            const btn = this.querySelector('button');
-            
-            if (!text) {
-              showToast('Tulis komentar terlebih dahulu!', 'error');
-              return;
-            }
-            
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            
-            try {
-              const success = await addComment(username, taskId, text);
-              if (success) {
-                input.value = '';
-                await refreshTaskModal();
-                updateCounts();
-                renderActivity();
-                showToast('✅ Komentar berhasil ditambahkan!', 'success');
-              } else {
-                showToast('❌ Gagal menambah komentar. Silakan coba lagi.', 'error');
-              }
-            } catch (error) {
-              console.error('Error:', error);
-              showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
-            } finally {
-              btn.disabled = false;
-              btn.innerHTML = '<i class="fas fa-reply"></i> Kirim';
-            }
-          });
-        });
-      }
-
-      // ============ ADD COMMENT ============
-      async function addComment(taskUsername, taskId, commentText) {
-        try {
-          await loadUsers();
-          
-          if (!currentUsers[taskUsername]) {
-            console.error('User tidak ditemukan:', taskUsername);
-            return false;
-          }
-          
-          const tasks = getTasks(taskUsername);
-          const taskIndex = tasks.findIndex(t => t.id === taskId);
-          
-          if (taskIndex === -1) {
-            console.error('Task tidak ditemukan:', taskId);
-            return false;
-          }
-          
-          const task = tasks[taskIndex];
-          
-          if (!task.comments) {
-            task.comments = [];
-          }
-          
-          const newComment = {
-            user: currentUsername,
-            userFullname: currentUsers[currentUsername]?.fullname || currentUsername,
-            text: commentText.trim(),
-            time: new Date().toISOString()
-          };
-          
-          task.comments.push(newComment);
-          tasks[taskIndex] = task;
-          currentUsers[taskUsername].tasks = tasks;
-          
-          const saved = await saveUsers(currentUsers);
-          
-          if (saved) {
-            console.log('✅ Komentar berhasil disimpan ke cloud');
-            await loadUsers();
-            return true;
-          } else {
-            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
-            return true;
-          }
-        } catch (error) {
-          console.error('❌ Error di addComment:', error);
-          return false;
-        }
-      }
-
-      // ============ DELETE COMMENT ============
-      async function deleteComment(taskUsername, taskId, commentIndex) {
-        try {
-          await loadUsers();
-          
-          if (!currentUsers[taskUsername]) {
-            console.error('User tidak ditemukan:', taskUsername);
-            return { success: false, message: 'User tidak ditemukan!' };
-          }
-          
-          const tasks = getTasks(taskUsername);
-          const taskIndex = tasks.findIndex(t => t.id === taskId);
-          
-          if (taskIndex === -1) {
-            console.error('Task tidak ditemukan:', taskId);
-            return { success: false, message: 'Tugas tidak ditemukan!' };
-          }
-          
-          const task = tasks[taskIndex];
-          
-          if (!task.comments || commentIndex >= task.comments.length) {
-            return { success: false, message: 'Komentar tidak ditemukan!' };
-          }
-          
-          const comment = task.comments[commentIndex];
-          
-          if (comment.user !== currentUsername && currentUserRole !== 'admin') {
-            return { success: false, message: 'Anda tidak berhak menghapus komentar ini!' };
-          }
-          
-          task.comments.splice(commentIndex, 1);
-          tasks[taskIndex] = task;
-          currentUsers[taskUsername].tasks = tasks;
-          
-          const saved = await saveUsers(currentUsers);
-          
-          if (saved) {
-            console.log('✅ Komentar berhasil dihapus dari cloud');
-            await loadUsers();
-            return { success: true, message: '✅ Komentar berhasil dihapus!' };
-          } else {
-            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
-            return { success: true, message: '✅ Komentar berhasil dihapus (lokal)!' };
-          }
-        } catch (error) {
-          console.error('❌ Error di deleteComment:', error);
-          return { success: false, message: 'Terjadi kesalahan saat menghapus komentar.' };
-        }
-      }
-
-      // ============ RENDER REPORTS ============
-      function renderReports() {
-        const allReports = getAllReports();
-        const isAdmin = currentUserRole === 'admin';
-        
-        let html = `
-          <div class="stat-title"><i class="fas fa-file-alt"></i> Laporan Bulanan</div>
-          <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
-            <i class="fas fa-users"></i> Semua user · ${allReports.length} total laporan
-          </p>
-        `;
-
-        html += `
-          <div class="report-upload-form">
-            <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
-              <i class="fas fa-upload"></i> Upload Laporan Bulanan
-            </h4>
-            <form id="reportUploadForm">
-              <div class="form-row">
-                <div class="input-group">
-                  <label>Bulan & Tahun</label>
-                  <div class="input-icon"><i class="fas fa-calendar"></i>
-                    <input type="month" id="reportMonth" required style="padding-left:3rem;">
-                  </div>
-                </div>
-                <div class="input-group">
-                  <label>Tipe Laporan</label>
-                  <div class="input-icon"><i class="fas fa-tag"></i>
-                    <select id="reportType" style="padding-left:3rem;">
-                      <option value="rajal">RAJAL (Rawat Jalan)</option>
-                      <option value="ranap">RANAP (Rawat Inap)</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="input-group">
-                <label>Keterangan (opsional)</label>
-                <textarea id="reportDesc" placeholder="Deskripsi laporan..." style="padding-left:1rem; min-height:50px;"></textarea>
-              </div>
-              <div class="file-input-wrapper">
-                <input type="file" id="reportFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.jpg,.jpeg,.png,.gif,.json,.xml,.html,.css,.js" required>
-                <button type="submit" class="btn-primary btn-upload" style="width:auto; padding:0.5rem 1rem; font-size:0.75rem; background:linear-gradient(135deg,#fdcb6e,#f39c12); color:#2d3436;">
-                  <i class="fas fa-upload"></i> Upload
-                </button>
-              </div>
-            </form>
-          </div>
-        `;
-
-        html += `
-          <div class="filter-bar">
-            <button class="active" data-filter="all">Semua</button>
-            <button data-filter="rajal"><i class="fas fa-clinic-medical"></i> RAJAL</button>
-            <button data-filter="ranap"><i class="fas fa-hospital"></i> RANAP</button>
-            <button data-filter="my-reports" style="border-color:#6c5ce7;">□ Laporanku</button>
-          </div>
-        `;
-
-        html += `<div class="report-list" id="reportListContainer">`;
-
-        if (allReports.length === 0) {
-          html += `
-            <div class="empty-tasks">
-              <i class="fas fa-file-alt"></i>
-              <p>Belum ada laporan. Upload laporan bulanan!</p>
-            </div>
-          `;
-        } else {
-          allReports.forEach((report) => {
-            const typeLabel = report.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
-            const typeClass = report.type === 'rajal' ? 'rajal' : 'ranap';
-            const typeIcon = report.type === 'rajal' ? 'fa-clinic-medical' : 'fa-hospital';
-            const isOwnReport = report._username === currentUsername;
-            const canDelete = isOwnReport || isAdmin;
-            const monthYear = report.month || 'Bulan tidak tersedia';
-            const fileIcon = getFileIcon(report.filename || 'file.pdf');
-            
-            html += `
-              <div class="report-item" data-report-id="${report.id}" data-username="${report._username}">
-                <div class="report-header">
-                  <div>
-                    <div class="report-title">
-                      <i class="fas ${typeIcon}" style="color:${report.type === 'rajal' ? '#00ced1' : '#a29bfe'};"></i>
-                      ${escapeHtml(report.filename || 'Laporan')}
-                      <span class="report-type-badge ${typeClass}">${typeLabel}</span>
-                    </div>
-                    <div class="report-meta">
-                      <span><i class="fas fa-user"></i> ${escapeHtml(report._fullname || report._username)}</span>
-                      <span><i class="fas fa-calendar"></i> ${escapeHtml(monthYear)}</span>
-                      <span><i class="fas fa-file"></i> ${formatFileSize(report.size || 0)}</span>
-                      ${isOwnReport ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
-                    </div>
-                  </div>
-                  <div class="report-actions">
-                    <button class="view-btn" onclick="window.viewReport('${report.id}', '${report._username}')">
-                      <i class="fas fa-eye"></i> View
-                    </button>
-                    <button class="download-btn" onclick="window.downloadReport('${report.id}', '${report._username}')">
-                      <i class="fas fa-download"></i>
-                    </button>
-                    ${canDelete ? `
-                      <button class="delete-btn" onclick="window.deleteReportById('${report.id}', '${report._username}')">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    ` : ''}
-                  </div>
-                </div>
-                ${report.description ? `<div class="report-desc">${escapeHtml(report.description)}</div>` : ''}
-                <div class="report-desc" style="font-size:0.65rem; color:#68769e; border-top:1px solid rgba(255,255,255,0.03); padding-top:0.3rem; margin-top:0.3rem;">
-                  <i class="fas fa-clock"></i> Upload: ${new Date(report.uploadedAt).toLocaleString('id-ID')}
-                  ${report.uploadedBy ? ` · oleh ${escapeHtml(report.uploadedByFullname || report.uploadedBy)}` : ''}
-                </div>
-              </div>
-            `;
-          });
-        }
-
-        html += `</div>`;
-
-        return html;
-      }
-
       // ============ ATTACH REPORT EVENTS ============
       function attachReportEvents() {
         const form = document.getElementById('reportUploadForm');
         if (form) {
-          const newForm = form.cloneNode(true);
-          form.parentNode.replaceChild(newForm, form);
-          
-          newForm.addEventListener('submit', async function(e) {
+          form.onsubmit = async function(e) {
             e.preventDefault();
-            e.stopPropagation();
             
             const month = document.getElementById('reportMonth').value;
             const type = document.getElementById('reportType').value;
@@ -2428,17 +3129,17 @@
             const btn = this.querySelector('button[type="submit"]');
             
             if (!file) {
-              showToast('Pilih file terlebih dahulu!', 'error');
+              alert('Pilih file terlebih dahulu!');
               return;
             }
 
             if (!month) {
-              showToast('Pilih bulan laporan!', 'error');
+              alert('Pilih bulan laporan!');
               return;
             }
 
             if (file.size > 10 * 1024 * 1024) {
-              showToast('Ukuran file maksimal 10MB!', 'error');
+              alert('Ukuran file maksimal 10MB!');
               return;
             }
             
@@ -2467,20 +3168,20 @@
                   refreshReportModal();
                   updateCounts();
                   renderActivity();
-                  showToast('✅ Laporan berhasil diupload dan tersimpan di cloud!', 'success');
+                  alert('✅ Laporan berhasil diupload!');
                 } else {
-                  showToast('❌ Gagal upload laporan. Silakan coba lagi.', 'error');
+                  alert('❌ Gagal upload laporan. Silakan coba lagi.');
                 }
               };
               reader.readAsDataURL(file);
             } catch (error) {
               console.error('Error:', error);
-              showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
+              alert('❌ Terjadi kesalahan. Silakan coba lagi.');
             } finally {
               btn.disabled = false;
               btn.innerHTML = '<i class="fas fa-upload"></i> Upload';
             }
-          });
+          };
         }
 
         document.querySelectorAll('#reportListContainer .filter-bar button, .filter-bar button').forEach(btn => {
@@ -2579,6 +3280,977 @@
           attachReportEvents();
         }
       }
+
+      // ============ ATTACH USER MANAGEMENT EVENTS ============
+      function attachUserManagementEvents() {
+        const form = document.getElementById('addUserForm');
+        if (form) {
+          form.onsubmit = async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('newUserUsername').value.trim().toLowerCase();
+            const fullname = document.getElementById('newUserFullname').value.trim();
+            const password = document.getElementById('newUserPassword').value.trim();
+            const role = document.getElementById('newUserRole').value;
+
+            if (!username || !fullname || !password) {
+              alert('Semua field harus diisi!');
+              return;
+            }
+
+            if (username.length < 3) {
+              alert('Username minimal 3 karakter!');
+              return;
+            }
+
+            if (password.length < 4) {
+              alert('Password minimal 4 karakter!');
+              return;
+            }
+
+            const result = await registerUser(username, fullname, password);
+            if (result.success) {
+              if (role === 'admin') {
+                await loadUsers();
+                currentUsers[username].role = 'admin';
+                await saveUsers(currentUsers);
+              }
+              alert('✅ User berhasil ditambahkan!');
+              refreshUserManagementModal();
+              renderActivity();
+              form.reset();
+              document.getElementById('newUserPassword').value = '123456';
+            } else {
+              alert(result.message);
+            }
+          };
+        }
+      }
+
+      // ============ ATTACH COMMENT EVENTS YANG DIPERBAIKI ============
+      function attachCommentEvents() {
+        document.querySelectorAll('.comment-form').forEach(form => {
+          const newForm = form.cloneNode(true);
+          form.parentNode.replaceChild(newForm, form);
+          
+          newForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const taskId = this.dataset.taskid;
+            const username = this.dataset.username;
+            const input = this.querySelector('input');
+            const text = input.value.trim();
+            const btn = this.querySelector('button');
+            
+            if (!text) {
+              alert('Tulis komentar terlebih dahulu!');
+              return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            try {
+              const success = await addComment(username, taskId, text);
+              if (success) {
+                input.value = '';
+                await refreshTaskModal();
+                updateCounts();
+                renderActivity();
+                // Tampilkan pesan sukses
+                const successMsg = document.createElement('div');
+                successMsg.className = 'success-msg show';
+                successMsg.style.marginTop = '0.5rem';
+                successMsg.style.padding = '0.4rem 0.8rem';
+                successMsg.style.fontSize = '0.75rem';
+                successMsg.innerHTML = '<i class="fas fa-check-circle"></i> Komentar berhasil ditambahkan!';
+                const container = this.closest('.task-item');
+                if (container) {
+                  container.appendChild(successMsg);
+                  setTimeout(() => {
+                    successMsg.remove();
+                  }, 3000);
+                }
+              } else {
+                alert('❌ Gagal menambah komentar. Silakan coba lagi.');
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+            } finally {
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fas fa-reply"></i> Kirim';
+            }
+          });
+        });
+      }
+
+      // ============ ATTACH TASK EVENTS ============
+      function attachTaskEvents() {
+        const form = document.getElementById('taskForm');
+        if (form) {
+          form.onsubmit = async function(e) {
+            e.preventDefault();
+            const title = document.getElementById('taskTitle').value.trim();
+            const description = document.getElementById('taskDesc').value.trim();
+            const date = document.getElementById('taskDate').value;
+            const status = document.getElementById('taskStatus').value;
+
+            if (!title) {
+              alert('Judul pekerjaan harus diisi!');
+              return;
+            }
+
+            await addTask(currentUsername, { title, description, date, status });
+            await loadUsers();
+            refreshTaskModal();
+            updateCounts();
+            renderActivity();
+            form.reset();
+            document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
+          };
+        }
+
+        document.querySelectorAll('.filter-bar button').forEach(btn => {
+          btn.onclick = function() {
+            document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+            filterTasks(filter);
+          };
+        });
+
+        const dateInput = document.getElementById('taskDate');
+        if (dateInput) {
+          dateInput.value = new Date().toISOString().split('T')[0];
+        }
+      }
+
+      function filterTasks(filter) {
+        const allTasks = getAllTasks();
+        const container = document.getElementById('taskListContainer');
+        if (!container) return;
+
+        let filtered = allTasks;
+        if (filter === 'pending') {
+          filtered = allTasks.filter(t => t.status === 'pending');
+        } else if (filter === 'done') {
+          filtered = allTasks.filter(t => t.status === 'done');
+        } else if (filter === 'my-tasks') {
+          filtered = allTasks.filter(t => t._username === currentUsername);
+        }
+
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="empty-tasks">
+              <i class="fas fa-clipboard-list"></i>
+              <p>Tidak ada tugas dengan filter ini.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+        const isAdmin = currentUserRole === 'admin';
+        
+        filtered.forEach((task) => {
+          const taskDate = task.date ? new Date(task.date).toLocaleDateString('id-ID') : '-';
+          const statusLabel = task.status === 'done' ? '✅ Selesai' : '⏳ Pending';
+          const statusClass = task.status === 'done' ? 'done' : 'pending';
+          const username = task._username;
+          const fullname = task._fullname || username;
+          const isOwnTask = username === currentUsername;
+          const canEdit = isOwnTask || isAdmin;
+          const comments = task.comments || [];
+          const signatures = task.signatures || [];
+          const hasSignatures = signatures.length > 0;
+          const permission = task.signaturePermission || { allowedUsers: [], allowAll: false };
+          
+          html += `
+            <div class="task-item" data-task-id="${task.id}" data-username="${username}">
+              <div class="task-header">
+                <div>
+                  <div class="task-title">${escapeHtml(task.title)}</div>
+                  <div class="task-meta">
+                    <span><i class="fas fa-user"></i> ${escapeHtml(fullname)}</span>
+                    <span><i class="fas fa-calendar"></i> ${escapeHtml(taskDate)}</span>
+                    <span class="task-status ${statusClass}">${statusLabel}</span>
+                    ${isOwnTask ? '<span style="color:#a29bfe; font-size:0.55rem;">(Milikku)</span>' : ''}
+                    ${hasSignatures ? `<span style="color:#00ced1; font-size:0.55rem;"><i class="fas fa-check-circle"></i> ${signatures.length} tanda tangan</span>` : ''}
+                    ${comments.length > 0 ? `<span style="color:#a29bfe; font-size:0.55rem;"><i class="fas fa-comment"></i> ${comments.length}</span>` : ''}
+                    ${isAdmin ? `<span style="color:#ffd700; font-size:0.55rem;"><i class="fas fa-crown"></i> ${permission.allowAll ? 'Semua user' : permission.allowedUsers?.length || 0} user</span>` : ''}
+                  </div>
+                </div>
+                <div class="task-actions">
+                  ${canEdit ? `
+                    <button class="edit-btn" onclick="window.editTask('${task.id}', '${username}')">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="window.deleteTask('${task.id}', '${username}')">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  ` : ''}
+                  <button class="sign-task-btn" onclick="window.showTaskSignature('${task.id}', '${username}')" title="Tanda Tangan">
+                    <i class="fas fa-pen-fancy"></i>
+                  </button>
+                </div>
+              </div>
+              ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
+              
+              <div class="task-comments">
+                <div class="comment-list" id="commentList_${task.id}">
+                  ${comments.length > 0 ? comments.map((c, idx) => `
+                    <div class="comment-item">
+                      <div>
+                        <span class="comment-user">${escapeHtml(c.userFullname || c.user)}</span>
+                        <span class="comment-time">${new Date(c.time).toLocaleString('id-ID')}</span>
+                        ${(c.user === currentUsername || isAdmin) ? `
+                          <button onclick="window.deleteComment('${task.id}', '${username}', ${idx})" 
+                                  class="comment-delete-btn">
+                            <i class="fas fa-times"></i>
+                          </button>
+                        ` : ''}
+                      </div>
+                      <div class="comment-text">${escapeHtml(c.text)}</div>
+                    </div>
+                  `).join('') : `
+                    <div class="comment-empty">Belum ada komentar</div>
+                  `}
+                </div>
+                <form class="comment-form" id="commentForm_${task.id}" data-taskid="${task.id}" data-username="${username}">
+                  <input type="text" placeholder="Tulis komentar..." required>
+                  <button type="submit"><i class="fas fa-reply"></i> Kirim</button>
+                </form>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+        attachCommentEvents();
+        attachTaskSignatureEvents();
+      }
+
+      async function refreshTaskModal() {
+        await loadUsers();
+        const content = renderTaskManager();
+        const container = document.getElementById('modalContent');
+        if (container) {
+          container.innerHTML = content;
+          attachTaskEvents();
+          attachCommentEvents();
+          attachTaskSignatureEvents();
+        }
+      }
+
+      function refreshUserManagementModal() {
+        const content = renderManageUsers();
+        const container = document.getElementById('modalContent');
+        if (container) {
+          container.innerHTML = content;
+          attachUserManagementEvents();
+        }
+      }
+
+      // ============ SIGNATURE PERMISSION GLOBAL FUNCTIONS ============
+      window.addAllowedUser = async function(taskId, taskUsername) {
+        const select = document.getElementById(`addUserSelect_${taskId}`);
+        if (!select) return;
+        const username = select.value;
+        if (!username) return;
+
+        const permission = getTaskSignaturePermission(taskUsername, taskId);
+        if (!permission.allowedUsers) permission.allowedUsers = [];
+        if (permission.allowedUsers.includes(username)) return;
+
+        permission.allowedUsers.push(username);
+        const success = await updateSignaturePermission(taskUsername, taskId, permission);
+        if (success) {
+          window.showTaskSignature(taskId, taskUsername);
+        }
+      };
+
+      window.removeAllowedUser = async function(taskId, taskUsername, username) {
+        const permission = getTaskSignaturePermission(taskUsername, taskId);
+        if (!permission.allowedUsers) return;
+        permission.allowedUsers = permission.allowedUsers.filter(u => u !== username);
+        const success = await updateSignaturePermission(taskUsername, taskId, permission);
+        if (success) {
+          window.showTaskSignature(taskId, taskUsername);
+        }
+      };
+
+      function attachSignaturePermissionEvents(taskId, taskUsername) {
+        const allowAllCheckbox = document.getElementById(`allowAllSign_${taskId}`);
+        if (allowAllCheckbox) {
+          allowAllCheckbox.onchange = async function() {
+            const permission = getTaskSignaturePermission(taskUsername, taskId);
+            permission.allowAll = this.checked;
+            if (this.checked) {
+              permission.allowedUsers = [];
+            }
+            const success = await updateSignaturePermission(taskUsername, taskId, permission);
+            if (success) {
+              window.showTaskSignature(taskId, taskUsername);
+            }
+          };
+        }
+      }
+
+      // ============ TASK SIGNATURE GLOBAL FUNCTIONS ============
+      window.showTaskSignature = async function(taskId, username) {
+        try {
+          await loadUsers();
+          
+          let foundTask = null;
+          let foundUsername = null;
+          
+          for (const user of Object.keys(currentUsers)) {
+            const tasks = currentUsers[user].tasks || [];
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+              foundTask = task;
+              foundUsername = user;
+              break;
+            }
+          }
+          
+          if (!foundTask) {
+            alert('❌ Tugas tidak ditemukan!');
+            return;
+          }
+          
+          const signatureHtml = renderTaskSignature(taskId, foundUsername);
+          
+          openModal(`□ Tanda Tangan Tugas - ${foundTask.title || 'Tugas'}`, `
+            <div style="margin-bottom:0.5rem; display:flex; align-items:center; gap:8px; color:#8b9fc9; font-size:0.75rem;">
+              <i class="fas fa-tasks"></i>
+              <span>${escapeHtml(foundTask.title || 'Tugas')}</span>
+              <span style="color:#68769e;">·</span>
+              <span>${foundTask.status === 'done' ? '✅ Selesai' : '⏳ Pending'}</span>
+              <span style="color:#68769e;">·</span>
+              <span><i class="fas fa-user"></i> ${escapeHtml(currentUsers[foundUsername]?.fullname || foundUsername)}</span>
+            </div>
+            ${signatureHtml}
+          `);
+
+          setTimeout(() => {
+            initTaskSignatureCanvas(taskId, foundUsername);
+            attachSignaturePermissionEvents(taskId, foundUsername);
+          }, 300);
+
+        } catch (error) {
+          console.error('❌ Error showing task signature:', error);
+          alert('❌ Gagal menampilkan tanda tangan. Silakan coba lagi.');
+        }
+      };
+
+      window.signTaskAction = async function(taskId, taskUsername, signatureData) {
+        try {
+          const result = await signTask(taskUsername, taskId, signatureData);
+          if (result.success) {
+            alert('✅ Tanda tangan berhasil disimpan!');
+            window.showTaskSignature(taskId, taskUsername);
+            updateCounts();
+            renderActivity();
+          } else {
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('❌ Error signing task:', error);
+          alert('❌ Gagal menandatangani. Silakan coba lagi.');
+        }
+      };
+
+      // ============ UNSIGN TASK GLOBAL YANG DIPERBAIKI ============
+      window.unsignTask = async function(taskId, taskUsername) {
+        try {
+          const result = await unsignTask(taskUsername, taskId);
+          if (result.success) {
+            alert('✅ Tanda tangan berhasil dihapus!');
+            window.showTaskSignature(taskId, taskUsername);
+            updateCounts();
+            renderActivity();
+          } else {
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('❌ Error unsigning task:', error);
+          alert('❌ Gagal menghapus tanda tangan. Silakan coba lagi.');
+        }
+      };
+
+      // ============ TASK SIGNATURE CANVAS ============
+      let taskSignatureCanvas = null;
+      let taskSignatureCtx = null;
+      let taskIsDrawing = false;
+      let taskLastX = 0;
+      let taskLastY = 0;
+      let currentTaskId = '';
+      let currentTaskUsername = '';
+
+      function initTaskSignatureCanvas(taskId, username) {
+        const canvas = document.getElementById(`signCanvas_${taskId}`);
+        if (!canvas) return;
+
+        currentTaskId = taskId;
+        currentTaskUsername = username;
+
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+
+        taskSignatureCanvas = canvas;
+        taskSignatureCtx = canvas.getContext('2d');
+        taskSignatureCtx.scale(dpr, dpr);
+        taskSignatureCtx.lineWidth = 3;
+        taskSignatureCtx.lineCap = 'round';
+        taskSignatureCtx.lineJoin = 'round';
+        taskSignatureCtx.strokeStyle = '#c8d6f0';
+
+        const placeholder = canvas.parentElement.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'block';
+
+        const clearBtn = document.getElementById(`clearBtn_${taskId}`);
+        if (clearBtn) {
+          clearBtn.disabled = true;
+          clearBtn.onclick = function() {
+            clearTaskCanvas();
+            this.disabled = true;
+          };
+        }
+
+        const signBtn = document.getElementById(`signBtn_${taskId}`);
+        if (signBtn) {
+          signBtn.onclick = function() {
+            const dataUrl = canvas.toDataURL('image/png');
+            if (dataUrl === canvas.getAttribute('data-empty')) {
+              alert('Silakan buat tanda tangan terlebih dahulu!');
+              return;
+            }
+            window.signTaskAction(taskId, username, dataUrl);
+          };
+        }
+
+        canvas.removeEventListener('mousedown', startTaskDrawing);
+        canvas.removeEventListener('mousemove', taskDraw);
+        canvas.removeEventListener('mouseup', stopTaskDrawing);
+        canvas.removeEventListener('mouseleave', stopTaskDrawing);
+        canvas.removeEventListener('touchstart', startTaskDrawingTouch);
+        canvas.removeEventListener('touchmove', taskDrawTouch);
+        canvas.removeEventListener('touchend', stopTaskDrawing);
+
+        canvas.addEventListener('mousedown', startTaskDrawing);
+        canvas.addEventListener('mousemove', taskDraw);
+        canvas.addEventListener('mouseup', stopTaskDrawing);
+        canvas.addEventListener('mouseleave', stopTaskDrawing);
+
+        canvas.addEventListener('touchstart', startTaskDrawingTouch, { passive: false });
+        canvas.addEventListener('touchmove', taskDrawTouch, { passive: false });
+        canvas.addEventListener('touchend', stopTaskDrawing, { passive: false });
+
+        canvas.setAttribute('data-empty', canvas.toDataURL('image/png'));
+      }
+
+      function getTaskPosition(e) {
+        const rect = taskSignatureCanvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+
+      function startTaskDrawing(e) {
+        if (document.getElementById(`signBtn_${currentTaskId}`)?.disabled) return;
+        taskIsDrawing = true;
+        const pos = getTaskPosition(e);
+        taskLastX = pos.x;
+        taskLastY = pos.y;
+        
+        const placeholder = taskSignatureCanvas.parentElement.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'none';
+        
+        const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
+        if (clearBtn) clearBtn.disabled = false;
+      }
+
+      function taskDraw(e) {
+        if (!taskIsDrawing) return;
+        const pos = getTaskPosition(e);
+        taskSignatureCtx.beginPath();
+        taskSignatureCtx.moveTo(taskLastX, taskLastY);
+        taskSignatureCtx.lineTo(pos.x, pos.y);
+        taskSignatureCtx.stroke();
+        taskLastX = pos.x;
+        taskLastY = pos.y;
+      }
+
+      function startTaskDrawingTouch(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousedown', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        taskSignatureCanvas.dispatchEvent(mouseEvent);
+      }
+
+      function taskDrawTouch(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousemove', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        taskSignatureCanvas.dispatchEvent(mouseEvent);
+      }
+
+      function stopTaskDrawing(e) {
+        taskIsDrawing = false;
+      }
+
+      function clearTaskCanvas() {
+        if (!taskSignatureCtx || !taskSignatureCanvas) return;
+        const rect = taskSignatureCanvas.getBoundingClientRect();
+        taskSignatureCtx.clearRect(0, 0, rect.width, rect.height);
+        
+        const placeholder = taskSignatureCanvas.parentElement.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'block';
+        
+        const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
+        if (clearBtn) clearBtn.disabled = true;
+      }
+
+      function attachTaskSignatureEvents() {
+        document.querySelectorAll('.task-item .sign-task-btn').forEach(btn => {
+          btn.onclick = function() {
+            const taskId = this.closest('.task-item').dataset.taskId;
+            const username = this.closest('.task-item').dataset.username;
+            window.showTaskSignature(taskId, username);
+          };
+        });
+      }
+
+      // ============ GLOBAL FUNCTIONS ============
+      window.editTask = async function(taskId, username) {
+        await loadUsers();
+        const tasks = getTasks(username);
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return;
+
+        const newTitle = prompt('Edit Judul:', task.title);
+        if (newTitle === null) return;
+        const newDesc = prompt('Edit Deskripsi:', task.description || '');
+        if (newDesc === null) return;
+        const newStatus = confirm('Tandai sebagai Selesai? Klik OK untuk Selesai, Cancel untuk Pending') ? 'done' : 'pending';
+
+        await updateTask(username, taskId, { 
+          title: newTitle.trim() || task.title, 
+          description: newDesc.trim(),
+          status: newStatus
+        });
+        
+        await loadUsers();
+        refreshTaskModal();
+        updateCounts();
+        renderActivity();
+      };
+
+      window.deleteTask = async function(taskId, username) {
+        if (!confirm('Yakin ingin menghapus tugas ini?')) return;
+        await deleteTask(username, taskId);
+        await loadUsers();
+        refreshTaskModal();
+        updateCounts();
+        renderActivity();
+      };
+
+      // ============ DELETE COMMENT GLOBAL YANG DIPERBAIKI ============
+      window.deleteComment = async function(taskId, username, index) {
+        if (!confirm('Hapus komentar ini?')) return;
+        try {
+          const result = await deleteComment(username, taskId, index);
+          if (result.success) {
+            alert(result.message);
+            await refreshTaskModal();
+            updateCounts();
+            renderActivity();
+          } else {
+            alert(result.message || '❌ Gagal menghapus komentar. Silakan coba lagi.');
+          }
+        } catch (e) {
+          console.error('❌ Error deleteComment:', e);
+          alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+        }
+      };
+
+      // ============ REPORT GLOBAL FUNCTIONS ============
+      window.viewReport = async function(reportId, username) {
+        try {
+          await loadUsers();
+          
+          let foundReport = null;
+          let foundUsername = null;
+          
+          for (const user of Object.keys(currentUsers)) {
+            const reports = currentUsers[user].reports || [];
+            const report = reports.find(r => r.id === reportId);
+            if (report) {
+              foundReport = report;
+              foundUsername = user;
+              break;
+            }
+          }
+          
+          if (!foundReport) {
+            alert('❌ Laporan tidak ditemukan!');
+            return;
+          }
+
+          const isOwnReport = foundUsername === currentUsername;
+          const isAdmin = currentUserRole === 'admin';
+          if (!isOwnReport && !isAdmin) {
+            alert('❌ Anda tidak memiliki akses ke laporan ini!');
+            return;
+          }
+
+          let previewContent = '';
+          const fileExt = foundReport.filename ? foundReport.filename.split('.').pop().toLowerCase() : '';
+          const isTextFile = ['txt', 'csv', 'json', 'xml', 'html', 'css', 'js', 'md', 'log'].includes(fileExt);
+          const isImageFile = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'].includes(fileExt);
+          
+          if (foundReport.data) {
+            let base64Data = foundReport.data;
+            if (base64Data.includes(',')) {
+              base64Data = base64Data.split(',')[1];
+            }
+            
+            if (isTextFile) {
+              try {
+                const decoded = atob(base64Data);
+                previewContent = `<pre style="white-space:pre-wrap; word-wrap:break-word; font-family:monospace; font-size:0.75rem; color:#d3def5;">${escapeHtml(decoded)}</pre>`;
+              } catch (e) {
+                previewContent = '❌ Tidak dapat menampilkan konten file ini.';
+              }
+            } else if (isImageFile) {
+              previewContent = `<img src="${foundReport.data}" style="max-width:100%; border-radius:8px; margin-top:0.5rem; max-height:400px; object-fit:contain;">`;
+            } else {
+              const fileIcon = getFileIcon(foundReport.filename || 'file');
+              previewContent = `
+                <div style="text-align:center; padding:2rem 0; color:#68769e;">
+                  <i class="fas ${fileIcon}" style="font-size:4rem; color:#ffd700;"></i>
+                  <p style="margin-top:1rem; font-size:0.9rem; color:#d3def5;">${escapeHtml(foundReport.filename || 'Laporan')}</p>
+                  <p style="font-size:0.7rem; color:#68769e;">File ini tidak dapat ditampilkan langsung di browser.</p>
+                  <div style="margin-top:0.5rem; display:flex; gap:0.5rem; justify-content:center;">
+                    <button onclick="window.downloadReport('${reportId}', '${foundUsername}')" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem;">
+                      <i class="fas fa-download"></i> Download
+                    </button>
+                  </div>
+                </div>
+              `;
+            }
+          } else {
+            previewContent = `
+              <div style="text-align:center; padding:2rem 0; color:#68769e;">
+                <i class="fas fa-file-alt" style="font-size:4rem; color:#ff6b6b;"></i>
+                <p style="margin-top:1rem;">Data file tidak tersedia.</p>
+              </div>
+            `;
+          }
+
+          const typeLabel = foundReport.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
+          const typeIcon = foundReport.type === 'rajal' ? 'fa-clinic-medical' : 'fa-hospital';
+          const typeColor = foundReport.type === 'rajal' ? '#00ced1' : '#a29bfe';
+          
+          openModal(`□ Preview - ${foundReport.filename || 'Laporan'}`, `
+            <div class="stat-title" style="font-size:1rem;">
+              <i class="fas ${typeIcon}" style="color:${typeColor};"></i> 
+              ${escapeHtml(foundReport.filename || 'Laporan')}
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.8rem; font-size:0.75rem; color:#8b9fc9; padding:0.5rem; background:rgba(255,255,255,0.03); border-radius:10px;">
+              <span><i class="fas fa-tag"></i> ${typeLabel}</span>
+              <span><i class="fas fa-calendar"></i> ${escapeHtml(foundReport.month || 'Bulan tidak tersedia')}</span>
+              <span><i class="fas fa-user"></i> ${escapeHtml(foundReport.uploadedByFullname || foundReport.uploadedBy || foundUsername)}</span>
+              <span><i class="fas fa-file"></i> ${formatFileSize(foundReport.size || 0)}</span>
+              <span><i class="fas fa-clock"></i> ${new Date(foundReport.uploadedAt).toLocaleString('id-ID')}</span>
+            </div>
+            ${foundReport.description ? `<div style="color:#d3def5; margin-bottom:0.5rem; padding:0.5rem; background:rgba(255,255,255,0.02); border-radius:8px; border-left:3px solid ${typeColor};">${escapeHtml(foundReport.description)}</div>` : ''}
+            <div class="report-preview">
+              ${previewContent}
+            </div>
+            <div style="display:flex; gap:0.5rem; margin-top:0.8rem; flex-wrap:wrap;">
+              <button onclick="window.downloadReport('${reportId}', '${foundUsername}')" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem;">
+                <i class="fas fa-download"></i> Download
+              </button>
+              <button onclick="closeModal()" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem; background:rgba(255,255,255,0.1); box-shadow:none;">
+                <i class="fas fa-times"></i> Tutup
+              </button>
+            </div>
+          `);
+        } catch (error) {
+          console.error('❌ Error viewing report:', error);
+          alert('❌ Gagal menampilkan laporan. Silakan coba lagi.');
+        }
+      };
+
+      window.downloadReport = async function(reportId, username) {
+        try {
+          await loadUsers();
+          
+          let foundReport = null;
+          let foundUsername = null;
+          
+          for (const user of Object.keys(currentUsers)) {
+            const reports = currentUsers[user].reports || [];
+            const report = reports.find(r => r.id === reportId);
+            if (report) {
+              foundReport = report;
+              foundUsername = user;
+              break;
+            }
+          }
+          
+          if (!foundReport) {
+            alert('❌ Laporan tidak ditemukan!');
+            return;
+          }
+          
+          const isOwnReport = foundUsername === currentUsername;
+          const isAdmin = currentUserRole === 'admin';
+          if (!isOwnReport && !isAdmin) {
+            alert('❌ Anda tidak memiliki akses ke laporan ini!');
+            return;
+          }
+          
+          downloadFile(foundReport, foundReport.filename || 'laporan.pdf');
+        } catch (error) {
+          console.error('❌ Error downloading report:', error);
+          alert('❌ Gagal mendownload laporan. Silakan coba lagi.');
+        }
+      };
+
+      window.deleteReportById = async function(reportId, username) {
+        if (!confirm('⚠️ Yakin ingin menghapus laporan ini?')) return;
+        
+        try {
+          await loadUsers();
+          
+          let foundReport = null;
+          let foundUsername = null;
+          
+          for (const user of Object.keys(currentUsers)) {
+            const reports = currentUsers[user].reports || [];
+            const report = reports.find(r => r.id === reportId);
+            if (report) {
+              foundReport = report;
+              foundUsername = user;
+              break;
+            }
+          }
+          
+          if (!foundReport) {
+            alert('❌ Laporan tidak ditemukan!');
+            return;
+          }
+          
+          const isOwnReport = foundUsername === currentUsername;
+          const isAdmin = currentUserRole === 'admin';
+          if (!isOwnReport && !isAdmin) {
+            alert('❌ Anda tidak memiliki akses untuk menghapus laporan ini!');
+            return;
+          }
+          
+          const success = await deleteReport(foundUsername, reportId);
+          if (success) {
+            refreshReportModal();
+            updateCounts();
+            renderActivity();
+            alert('✅ Laporan berhasil dihapus!');
+          } else {
+            alert('❌ Gagal menghapus laporan. Silakan coba lagi.');
+          }
+        } catch (error) {
+          console.error('❌ Error deleting report:', error);
+          alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+        }
+      };
+
+      // ============ USER MANAGEMENT GLOBAL FUNCTIONS ============
+      window.editUser = async function(username) {
+        const user = currentUsers[username];
+        if (!user) return;
+
+        const newUsername = prompt('Username baru:', username);
+        if (newUsername === null) return;
+        const newFullname = prompt('Nama lengkap baru:', user.fullname);
+        if (newFullname === null) return;
+        const newPassword = prompt('Password baru (kosongkan untuk tetap):', '');
+        
+        const result = await updateUser(
+          username, 
+          newUsername.trim().toLowerCase(), 
+          newFullname.trim(), 
+          newPassword.trim() || user.password,
+          user.role
+        );
+        
+        if (result.success) {
+          alert('✅ User berhasil diupdate!');
+          if (username === currentUsername) {
+            sessionStorage.setItem('currentUser', newUsername.trim().toLowerCase());
+            currentUsername = newUsername.trim().toLowerCase();
+          }
+          await loadUsers();
+          refreshUserManagementModal();
+          renderActivity();
+          updateUIForRole(currentUserRole, currentUsername);
+        } else {
+          alert(result.message);
+        }
+      };
+
+      window.deleteUser = async function(username) {
+        if (!confirm(`Yakin ingin menghapus user "${username}"?`)) return;
+        const result = await deleteUser(username);
+        if (result.success) {
+          alert('✅ User berhasil dihapus!');
+          await loadUsers();
+          refreshUserManagementModal();
+          renderActivity();
+          updateUIForRole(currentUserRole, currentUsername);
+        } else {
+          alert(result.message);
+        }
+      };
+
+      window.resetUserPass = async function(username) {
+        const newPass = prompt(`Reset password untuk "${username}" :`, '123456');
+        if (newPass === null) return;
+        if (newPass.trim().length < 4) {
+          alert('Password minimal 4 karakter!');
+          return;
+        }
+        const result = await resetPassword(username, newPass.trim());
+        if (result.success) {
+          alert('✅ Password berhasil direset!');
+          await loadUsers();
+          refreshUserManagementModal();
+        } else {
+          alert(result.message);
+        }
+      };
+
+      window.makeAdmin = async function(username) {
+        if (!confirm(`Jadikan "${username}" sebagai Admin?`)) return;
+        const result = await updateUser(username, username, null, null, 'admin');
+        if (result.success) {
+          alert('✅ User sekarang menjadi Admin!');
+          await loadUsers();
+          refreshUserManagementModal();
+          renderActivity();
+        } else {
+          alert(result.message);
+        }
+      };
+
+      window.removeAdmin = async function(username) {
+        if (!confirm(`Hapus status Admin dari "${username}"?`)) return;
+        if (username === ADMIN_USERNAME) {
+          alert('❌ Tidak bisa menghapus admin utama!');
+          return;
+        }
+        const result = await updateUser(username, username, null, null, 'user');
+        if (result.success) {
+          alert('✅ Status Admin berhasil dihapus!');
+          await loadUsers();
+          refreshUserManagementModal();
+          renderActivity();
+        } else {
+          alert(result.message);
+        }
+      };
+
+      // ============ EVENT LISTENER KARTU ============
+      document.querySelectorAll('.home-card[data-modal]').forEach(card => {
+        card.addEventListener('click', function() {
+          const type = this.dataset.modal;
+          
+          if (type === 'statistik') {
+            const isAdmin = currentUserRole === 'admin';
+            if (!isAdmin) {
+              openModal('⛔ Akses Ditolak', accessDenied);
+              return;
+            }
+            openModal('□ Statistik Karir - Admin', dataStatistikAdmin);
+            return;
+          }
+          
+          if (type === 'manageUsers') {
+            const isAdmin = currentUserRole === 'admin';
+            if (!isAdmin) {
+              openModal('⛔ Akses Ditolak', accessDenied);
+              return;
+            }
+            openModal('□ Manajemen User', renderManageUsers());
+            return;
+          }
+          
+          if (type === 'tasks') {
+            openModal('□ Semua Tugas', renderTaskManager());
+            return;
+          }
+
+          if (type === 'reports') {
+            openModal('□ Laporan Bulanan', renderReports());
+            return;
+          }
+          
+          if (type === 'anggota') {
+            openModal('□ Anggota Unit', dataAnggota);
+          } else if (type === 'jadwal') {
+            openModal('□ Jadwal Mingguan', dataJadwal);
+          } else if (type === 'kunjungan') {
+            openModal('□ Statistik Kunjungan RS', renderStatistikKunjungan());
+          } else if (type === 'pesan') {
+            const pesanHari = getPesanByDay(dayName);
+            const pesanDetail = `
+              <div class="item"><i class="fas fa-envelope-open-text"></i> <span class="highlight">Notifikasi hari ini (${escapeHtml(dayName)})</span></div>
+              <div class="item"><i class="fas fa-clock"></i> ${dateStr} · ${timeStr}</div>
+              <div class="item"><i class="fas fa-briefcase"></i> ${escapeHtml(pesanHari)}</div>
+              <div class="item small-note" style="margin-top:8px; color:#68769e; font-size:0.8rem;">□ Info pekerjaan sesuai jadwal harian</div>
+            `;
+            openModal(`□ Pesan · ${dayName}`, pesanDetail);
+          }
+        });
+      });
+
+      // ============ EVENT LISTENER ============
+      loginForm.addEventListener('submit', handleLogin);
+      registerForm.addEventListener('submit', handleRegister);
+      logoutBtn.addEventListener('click', handleLogout);
+
+      goToRegister.addEventListener('click', () => {
+        showPage(registerPage);
+        registerError.classList.remove('show');
+        registerSuccess.classList.remove('show');
+        registerInfo.classList.remove('show');
+      });
+
+      goToLogin.addEventListener('click', () => {
+        showPage(loginPage);
+        loginError.classList.remove('show');
+        loginSuccess.classList.remove('show');
+        loginInfo.classList.remove('show');
+        loadUsers();
+      });
+
+      loginUsername.addEventListener('input', () => { loginError.classList.remove('show'); loginSuccess.classList.remove('show'); });
+      loginPassword.addEventListener('input', () => { loginError.classList.remove('show'); loginSuccess.classList.remove('show'); });
+      regUsername.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+      regFullname.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+      regPassword.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+      regConfirmPassword.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
 
       // ============ RENDER MANAJEMEN USER ============
       function renderManageUsers() {
@@ -2687,77 +4359,6 @@
         return html;
       }
 
-      function refreshUserManagementModal() {
-        const content = renderManageUsers();
-        const container = document.getElementById('modalContent');
-        if (container) {
-          container.innerHTML = content;
-          attachUserManagementEvents();
-        }
-      }
-
-      // ============ ATTACH USER MANAGEMENT EVENTS ============
-      function attachUserManagementEvents() {
-        const form = document.getElementById('addUserForm');
-        if (form) {
-          const newForm = form.cloneNode(true);
-          form.parentNode.replaceChild(newForm, form);
-          
-          newForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const username = document.getElementById('newUserUsername').value.trim().toLowerCase();
-            const fullname = document.getElementById('newUserFullname').value.trim();
-            const password = document.getElementById('newUserPassword').value.trim();
-            const role = document.getElementById('newUserRole').value;
-            const btn = this.querySelector('button[type="submit"]');
-
-            if (!username || !fullname || !password) {
-              showToast('Semua field harus diisi!', 'error');
-              return;
-            }
-
-            if (username.length < 3) {
-              showToast('Username minimal 3 karakter!', 'error');
-              return;
-            }
-
-            if (password.length < 4) {
-              showToast('Password minimal 4 karakter!', 'error');
-              return;
-            }
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-
-            try {
-              const result = await registerUser(username, fullname, password);
-              if (result.success) {
-                if (role === 'admin') {
-                  await loadUsers();
-                  currentUsers[username].role = 'admin';
-                  await saveUsers(currentUsers);
-                }
-                showToast('✅ User berhasil ditambahkan dan tersimpan di cloud!', 'success');
-                refreshUserManagementModal();
-                renderActivity();
-                this.reset();
-                document.getElementById('newUserPassword').value = '123456';
-              } else {
-                showToast(result.message, 'error');
-              }
-            } catch (error) {
-              console.error('Error:', error);
-              showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
-            } finally {
-              btn.disabled = false;
-              btn.innerHTML = '<i class="fas fa-user-plus"></i> Tambah User';
-            }
-          });
-        }
-      }
-
       // ============ RENDER STATISTIK KUNJUNGAN ============
       function renderStatistikKunjungan() {
         let tableHtml = `
@@ -2798,428 +4399,6 @@
         
         return tableHtml;
       }
-
-      // ============ GLOBAL FUNCTIONS ============
-      window.editTask = async function(taskId, username) {
-        await loadUsers();
-        const tasks = getTasks(username);
-        const task = tasks.find(t => t.id === taskId);
-        if (!task) return;
-
-        const newTitle = prompt('Edit Judul:', task.title);
-        if (newTitle === null) return;
-        const newDesc = prompt('Edit Deskripsi:', task.description || '');
-        if (newDesc === null) return;
-        const newStatus = confirm('Tandai sebagai Selesai? Klik OK untuk Selesai, Cancel untuk Pending') ? 'done' : 'pending';
-
-        await updateTask(username, taskId, { 
-          title: newTitle.trim() || task.title, 
-          description: newDesc.trim(),
-          status: newStatus
-        });
-        
-        await loadUsers();
-        refreshTaskModal();
-        updateCounts();
-        renderActivity();
-        showToast('✅ Tugas berhasil diperbarui dan tersimpan di cloud!', 'success');
-      };
-
-      window.deleteTask = async function(taskId, username) {
-        if (!confirm('Yakin ingin menghapus tugas ini?')) return;
-        await deleteTask(username, taskId);
-        await loadUsers();
-        refreshTaskModal();
-        updateCounts();
-        renderActivity();
-        showToast('✅ Tugas berhasil dihapus dari cloud!', 'success');
-      };
-
-      window.deleteComment = async function(taskId, username, index) {
-        if (!confirm('Hapus komentar ini?')) return;
-        try {
-          const result = await deleteComment(username, taskId, index);
-          if (result.success) {
-            showToast(result.message, 'success');
-            await refreshTaskModal();
-            updateCounts();
-            renderActivity();
-          } else {
-            showToast(result.message || '❌ Gagal menghapus komentar. Silakan coba lagi.', 'error');
-          }
-        } catch (e) {
-          console.error('❌ Error deleteComment:', e);
-          showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
-        }
-      };
-
-      // ============ REPORT GLOBAL FUNCTIONS ============
-      window.viewReport = async function(reportId, username) {
-        try {
-          await loadUsers();
-          
-          let foundReport = null;
-          let foundUsername = null;
-          
-          for (const user of Object.keys(currentUsers)) {
-            const reports = currentUsers[user].reports || [];
-            const report = reports.find(r => r.id === reportId);
-            if (report) {
-              foundReport = report;
-              foundUsername = user;
-              break;
-            }
-          }
-          
-          if (!foundReport) {
-            showToast('❌ Laporan tidak ditemukan!', 'error');
-            return;
-          }
-
-          const isOwnReport = foundUsername === currentUsername;
-          const isAdmin = currentUserRole === 'admin';
-          if (!isOwnReport && !isAdmin) {
-            showToast('❌ Anda tidak memiliki akses ke laporan ini!', 'error');
-            return;
-          }
-
-          let previewContent = '';
-          const fileExt = foundReport.filename ? foundReport.filename.split('.').pop().toLowerCase() : '';
-          const isTextFile = ['txt', 'csv', 'json', 'xml', 'html', 'css', 'js', 'md', 'log'].includes(fileExt);
-          const isImageFile = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'].includes(fileExt);
-          
-          if (foundReport.data) {
-            let base64Data = foundReport.data;
-            if (base64Data.includes(',')) {
-              base64Data = base64Data.split(',')[1];
-            }
-            
-            if (isTextFile) {
-              try {
-                const decoded = atob(base64Data);
-                previewContent = `<pre style="white-space:pre-wrap; word-wrap:break-word; font-family:monospace; font-size:0.75rem; color:#d3def5;">${escapeHtml(decoded)}</pre>`;
-              } catch (e) {
-                previewContent = '❌ Tidak dapat menampilkan konten file ini.';
-              }
-            } else if (isImageFile) {
-              previewContent = `<img src="${foundReport.data}" style="max-width:100%; border-radius:8px; margin-top:0.5rem; max-height:400px; object-fit:contain;">`;
-            } else {
-              const fileIcon = getFileIcon(foundReport.filename || 'file');
-              previewContent = `
-                <div style="text-align:center; padding:2rem 0; color:#68769e;">
-                  <i class="fas ${fileIcon}" style="font-size:4rem; color:#ffd700;"></i>
-                  <p style="margin-top:1rem; font-size:0.9rem; color:#d3def5;">${escapeHtml(foundReport.filename || 'Laporan')}</p>
-                  <p style="font-size:0.7rem; color:#68769e;">File ini tidak dapat ditampilkan langsung di browser.</p>
-                  <div style="margin-top:0.5rem; display:flex; gap:0.5rem; justify-content:center;">
-                    <button onclick="window.downloadReport('${reportId}', '${foundUsername}')" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem;">
-                      <i class="fas fa-download"></i> Download
-                    </button>
-                  </div>
-                </div>
-              `;
-            }
-          } else {
-            previewContent = `
-              <div style="text-align:center; padding:2rem 0; color:#68769e;">
-                <i class="fas fa-file-alt" style="font-size:4rem; color:#ff6b6b;"></i>
-                <p style="margin-top:1rem;">Data file tidak tersedia.</p>
-              </div>
-            `;
-          }
-
-          const typeLabel = foundReport.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
-          const typeIcon = foundReport.type === 'rajal' ? 'fa-clinic-medical' : 'fa-hospital';
-          const typeColor = foundReport.type === 'rajal' ? '#00ced1' : '#a29bfe';
-          
-          openModal(`□ Preview - ${foundReport.filename || 'Laporan'}`, `
-            <div class="stat-title" style="font-size:1rem;">
-              <i class="fas ${typeIcon}" style="color:${typeColor};"></i> 
-              ${escapeHtml(foundReport.filename || 'Laporan')}
-            </div>
-            <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.8rem; font-size:0.75rem; color:#8b9fc9; padding:0.5rem; background:rgba(255,255,255,0.03); border-radius:10px;">
-              <span><i class="fas fa-tag"></i> ${typeLabel}</span>
-              <span><i class="fas fa-calendar"></i> ${escapeHtml(foundReport.month || 'Bulan tidak tersedia')}</span>
-              <span><i class="fas fa-user"></i> ${escapeHtml(foundReport.uploadedByFullname || foundReport.uploadedBy || foundUsername)}</span>
-              <span><i class="fas fa-file"></i> ${formatFileSize(foundReport.size || 0)}</span>
-              <span><i class="fas fa-clock"></i> ${new Date(foundReport.uploadedAt).toLocaleString('id-ID')}</span>
-            </div>
-            ${foundReport.description ? `<div style="color:#d3def5; margin-bottom:0.5rem; padding:0.5rem; background:rgba(255,255,255,0.02); border-radius:8px; border-left:3px solid ${typeColor};">${escapeHtml(foundReport.description)}</div>` : ''}
-            <div class="report-preview">
-              ${previewContent}
-            </div>
-            <div style="display:flex; gap:0.5rem; margin-top:0.8rem; flex-wrap:wrap;">
-              <button onclick="window.downloadReport('${reportId}', '${foundUsername}')" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem;">
-                <i class="fas fa-download"></i> Download
-              </button>
-              <button onclick="closeModal()" class="btn-primary btn-small" style="width:auto; padding:0.3rem 1rem; font-size:0.7rem; background:rgba(255,255,255,0.1); box-shadow:none;">
-                <i class="fas fa-times"></i> Tutup
-              </button>
-            </div>
-          `);
-        } catch (error) {
-          console.error('❌ Error viewing report:', error);
-          showToast('❌ Gagal menampilkan laporan. Silakan coba lagi.', 'error');
-        }
-      };
-
-      window.downloadReport = async function(reportId, username) {
-        try {
-          await loadUsers();
-          
-          let foundReport = null;
-          let foundUsername = null;
-          
-          for (const user of Object.keys(currentUsers)) {
-            const reports = currentUsers[user].reports || [];
-            const report = reports.find(r => r.id === reportId);
-            if (report) {
-              foundReport = report;
-              foundUsername = user;
-              break;
-            }
-          }
-          
-          if (!foundReport) {
-            showToast('❌ Laporan tidak ditemukan!', 'error');
-            return;
-          }
-          
-          const isOwnReport = foundUsername === currentUsername;
-          const isAdmin = currentUserRole === 'admin';
-          if (!isOwnReport && !isAdmin) {
-            showToast('❌ Anda tidak memiliki akses ke laporan ini!', 'error');
-            return;
-          }
-          
-          downloadFile(foundReport, foundReport.filename || 'laporan.pdf');
-          showToast('✅ Download dimulai!', 'success');
-        } catch (error) {
-          console.error('❌ Error downloading report:', error);
-          showToast('❌ Gagal mendownload laporan. Silakan coba lagi.', 'error');
-        }
-      };
-
-      window.deleteReportById = async function(reportId, username) {
-        if (!confirm('⚠️ Yakin ingin menghapus laporan ini?')) return;
-        
-        try {
-          await loadUsers();
-          
-          let foundReport = null;
-          let foundUsername = null;
-          
-          for (const user of Object.keys(currentUsers)) {
-            const reports = currentUsers[user].reports || [];
-            const report = reports.find(r => r.id === reportId);
-            if (report) {
-              foundReport = report;
-              foundUsername = user;
-              break;
-            }
-          }
-          
-          if (!foundReport) {
-            showToast('❌ Laporan tidak ditemukan!', 'error');
-            return;
-          }
-          
-          const isOwnReport = foundUsername === currentUsername;
-          const isAdmin = currentUserRole === 'admin';
-          if (!isOwnReport && !isAdmin) {
-            showToast('❌ Anda tidak memiliki akses untuk menghapus laporan ini!', 'error');
-            return;
-          }
-          
-          const success = await deleteReport(foundUsername, reportId);
-          if (success) {
-            refreshReportModal();
-            updateCounts();
-            renderActivity();
-            showToast('✅ Laporan berhasil dihapus dari cloud!', 'success');
-          } else {
-            showToast('❌ Gagal menghapus laporan. Silakan coba lagi.', 'error');
-          }
-        } catch (error) {
-          console.error('❌ Error deleting report:', error);
-          showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
-        }
-      };
-
-      // ============ USER MANAGEMENT GLOBAL FUNCTIONS ============
-      window.editUser = async function(username) {
-        const user = currentUsers[username];
-        if (!user) return;
-
-        const newUsername = prompt('Username baru:', username);
-        if (newUsername === null) return;
-        const newFullname = prompt('Nama lengkap baru:', user.fullname);
-        if (newFullname === null) return;
-        const newPassword = prompt('Password baru (kosongkan untuk tetap):', '');
-        
-        const result = await updateUser(
-          username, 
-          newUsername.trim().toLowerCase(), 
-          newFullname.trim(), 
-          newPassword.trim() || user.password,
-          user.role
-        );
-        
-        if (result.success) {
-          showToast('✅ User berhasil diupdate!', 'success');
-          if (username === currentUsername) {
-            sessionStorage.setItem('currentUser', newUsername.trim().toLowerCase());
-            currentUsername = newUsername.trim().toLowerCase();
-          }
-          await loadUsers();
-          refreshUserManagementModal();
-          renderActivity();
-          updateUIForRole(currentUserRole, currentUsername);
-        } else {
-          showToast(result.message, 'error');
-        }
-      };
-
-      window.deleteUser = async function(username) {
-        if (!confirm(`Yakin ingin menghapus user "${username}"?`)) return;
-        const result = await deleteUser(username);
-        if (result.success) {
-          showToast('✅ User berhasil dihapus dari cloud!', 'success');
-          await loadUsers();
-          refreshUserManagementModal();
-          renderActivity();
-          updateUIForRole(currentUserRole, currentUsername);
-        } else {
-          showToast(result.message, 'error');
-        }
-      };
-
-      window.resetUserPass = async function(username) {
-        const newPass = prompt(`Reset password untuk "${username}" :`, '123456');
-        if (newPass === null) return;
-        if (newPass.trim().length < 4) {
-          showToast('Password minimal 4 karakter!', 'error');
-          return;
-        }
-        const result = await resetPassword(username, newPass.trim());
-        if (result.success) {
-          showToast('✅ Password berhasil direset!', 'success');
-          await loadUsers();
-          refreshUserManagementModal();
-        } else {
-          showToast(result.message, 'error');
-        }
-      };
-
-      window.makeAdmin = async function(username) {
-        if (!confirm(`Jadikan "${username}" sebagai Admin?`)) return;
-        const result = await updateUser(username, username, null, null, 'admin');
-        if (result.success) {
-          showToast('✅ User sekarang menjadi Admin!', 'success');
-          await loadUsers();
-          refreshUserManagementModal();
-          renderActivity();
-        } else {
-          showToast(result.message, 'error');
-        }
-      };
-
-      window.removeAdmin = async function(username) {
-        if (!confirm(`Hapus status Admin dari "${username}"?`)) return;
-        if (username === ADMIN_USERNAME) {
-          showToast('❌ Tidak bisa menghapus admin utama!', 'error');
-          return;
-        }
-        const result = await updateUser(username, username, null, null, 'user');
-        if (result.success) {
-          showToast('✅ Status Admin berhasil dihapus!', 'success');
-          await loadUsers();
-          refreshUserManagementModal();
-          renderActivity();
-        } else {
-          showToast(result.message, 'error');
-        }
-      };
-
-      // ============ EVENT LISTENER KARTU ============
-      document.querySelectorAll('.home-card[data-modal]').forEach(card => {
-        card.addEventListener('click', function() {
-          const type = this.dataset.modal;
-          
-          if (type === 'statistik') {
-            const isAdmin = currentUserRole === 'admin';
-            if (!isAdmin) {
-              openModal('⛔ Akses Ditolak', accessDenied);
-              return;
-            }
-            openModal('□ Statistik Karir - Admin', dataStatistikAdmin);
-            return;
-          }
-          
-          if (type === 'manageUsers') {
-            const isAdmin = currentUserRole === 'admin';
-            if (!isAdmin) {
-              openModal('⛔ Akses Ditolak', accessDenied);
-              return;
-            }
-            openModal('□ Manajemen User', renderManageUsers());
-            return;
-          }
-          
-          if (type === 'tasks') {
-            openModal('□ Semua Tugas', renderTaskManager());
-            return;
-          }
-
-          if (type === 'reports') {
-            openModal('□ Laporan Bulanan', renderReports());
-            return;
-          }
-          
-          if (type === 'anggota') {
-            openModal('□ Anggota Unit', dataAnggota);
-          } else if (type === 'jadwal') {
-            openModal('□ Jadwal Mingguan', dataJadwal);
-          } else if (type === 'kunjungan') {
-            openModal('□ Statistik Kunjungan RS', renderStatistikKunjungan());
-          } else if (type === 'pesan') {
-            const pesanHari = getPesanByDay(dayName);
-            const pesanDetail = `
-              <div class="item"><i class="fas fa-envelope-open-text"></i> <span class="highlight">Notifikasi hari ini (${escapeHtml(dayName)})</span></div>
-              <div class="item"><i class="fas fa-clock"></i> ${dateStr} · ${timeStr}</div>
-              <div class="item"><i class="fas fa-briefcase"></i> ${escapeHtml(pesanHari)}</div>
-              <div class="item small-note" style="margin-top:8px; color:#68769e; font-size:0.8rem;">□ Info pekerjaan sesuai jadwal harian</div>
-            `;
-            openModal(`□ Pesan · ${dayName}`, pesanDetail);
-          }
-        });
-      });
-
-      // ============ EVENT LISTENER ============
-      loginForm.addEventListener('submit', handleLogin);
-      registerForm.addEventListener('submit', handleRegister);
-      logoutBtn.addEventListener('click', handleLogout);
-
-      goToRegister.addEventListener('click', () => {
-        showPage(registerPage);
-        registerError.classList.remove('show');
-        registerSuccess.classList.remove('show');
-        registerInfo.classList.remove('show');
-      });
-
-      goToLogin.addEventListener('click', () => {
-        showPage(loginPage);
-        loginError.classList.remove('show');
-        loginSuccess.classList.remove('show');
-        loginInfo.classList.remove('show');
-        loadUsers();
-      });
-
-      loginUsername.addEventListener('input', () => { loginError.classList.remove('show'); loginSuccess.classList.remove('show'); });
-      loginPassword.addEventListener('input', () => { loginError.classList.remove('show'); loginSuccess.classList.remove('show'); });
-      regUsername.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
-      regFullname.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
-      regPassword.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
-      regConfirmPassword.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
 
       // ============ INISIALISASI ============
       window.initApp = async function() {
@@ -3273,7 +4452,9 @@
           showPage(loginPage);
         }
 
-        console.log('□ Aplikasi siap! Data tersimpan di cloud dan lokal');
+        console.log('□ Aplikasi siap dengan Task Manager + Tanda Tangan Drawing!');
+        console.log('□ SEMUA user dapat menandatangani tugas manapun!');
+        console.log('□ HANYA ADMIN yang dapat menghapus tanda tangan!');
         console.log('□ Total user terdaftar:', Object.keys(currentUsers).length);
         console.log('□ Admin:', Object.keys(currentUsers).filter(k => currentUsers[k].role === 'admin'));
       };
