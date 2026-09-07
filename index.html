@@ -25,7 +25,6 @@
       padding: 1.2rem;
     }
 
-    /* ===== LOADING WRAPPER ===== */
     .loading-wrapper {
       width: 100%;
       max-width: 480px;
@@ -50,7 +49,6 @@
       visibility: hidden;
     }
 
-    /* ===== LOGO / ICON ===== */
     .logo-container {
       position: relative;
       display: inline-flex;
@@ -1289,6 +1287,21 @@
     .access-denied h4 { color: #ffbaba; font-size: 1rem; margin-bottom: 0.3rem; }
     .access-denied p { color: #8b9fc9; font-size: 0.8rem; }
 
+    /* ===== CLOUD SYNC INDICATOR ===== */
+    .cloud-sync-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.6rem;
+      padding: 0.1rem 0.6rem;
+      border-radius: 30px;
+      margin-top: 0.2rem;
+    }
+    .cloud-sync-status.online { color: #46d47c; background: rgba(70,212,124,0.1); border: 1px solid rgba(70,212,124,0.15); }
+    .cloud-sync-status.offline { color: #ff6b6b; background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.15); }
+    .cloud-sync-status.sync { color: #ffd93d; background: rgba(255,217,61,0.1); border: 1px solid rgba(255,217,61,0.15); animation: pulse 1.5s ease-in-out infinite; }
+    .cloud-sync-status i { font-size: 0.5rem; }
+
     @media (max-width: 400px) {
       .container { padding: 1rem 0.8rem; }
       .home-grid { gap: 0.5rem; }
@@ -1402,6 +1415,9 @@
         </div>
         <h2>Selamat Datang</h2>
         <p>Cloud Database · Akses dari mana saja</p>
+        <div class="cloud-sync-status online" id="cloudStatusHeader">
+          <i class="fas fa-cloud-upload-alt"></i> Cloud Sync: <span id="cloudStatusText">Online</span>
+        </div>
       </div>
       <div id="loginError" class="error-msg"><i class="fas fa-exclamation-circle"></i><span id="loginErrorText">Username atau password salah</span></div>
       <div id="loginSuccess" class="success-msg"><i class="fas fa-check-circle"></i><span id="loginSuccessText">Login berhasil!</span></div>
@@ -1424,6 +1440,9 @@
         </div>
         <h2>Daftar Akun</h2>
         <p>Buat akun baru · Tersimpan di cloud</p>
+        <div class="cloud-sync-status online" id="cloudStatusRegister">
+          <i class="fas fa-cloud-upload-alt"></i> Cloud Sync: <span>Online</span>
+        </div>
       </div>
       <div id="registerError" class="error-msg"><i class="fas fa-exclamation-circle"></i><span id="registerErrorText">Terjadi kesalahan</span></div>
       <div id="registerSuccess" class="success-msg"><i class="fas fa-check-circle"></i><span id="registerSuccessText">Akun berhasil dibuat!</span></div>
@@ -1445,7 +1464,7 @@
           <div class="avatar" id="userAvatar">M</div>
           <div class="greeting">
             <h2 id="greetingUser">Halo, User <span class="role-badge user" id="roleBadge">User</span></h2>
-            <p><i class="fas fa-circle" style="color:#46d47c; font-size:0.4rem; vertical-align:middle;"></i> online · cloud sync</p>
+            <p><i class="fas fa-circle" style="color:#46d47c; font-size:0.4rem; vertical-align:middle;"></i> <span id="statusOnline">online</span> · cloud sync</p>
           </div>
         </div>
         <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Keluar</button>
@@ -1603,7 +1622,6 @@
 
         if (progressInterval) clearInterval(progressInterval);
 
-        // ===== DURASI LOADING 2 DETIK =====
         const startTime = Date.now();
         const duration = 2000; // 2 detik
 
@@ -1628,7 +1646,7 @@
             
             console.log('✅ Loading selesai dalam 2 detik!');
           }
-        }, 16); // update setiap 16ms untuk animasi 60fps
+        }, 16);
       }
 
       document.getElementById('restartLoading').addEventListener('dblclick', function() {
@@ -1688,7 +1706,25 @@
         note: 'BTO TIDAK DALAM AVERAGE TAPI DALAM JUMLAH SETAHUN'
       };
 
+      // ============ FALLBACK DATA AWAL ============
+      const DEFAULT_USERS = {
+        'marco': {
+          fullname: 'Marco Fajar Setiawan, S.K.M, CAHSE',
+          password: 'MARCOFS',
+          role: 'admin',
+          tasks: [],
+          reports: [],
+          files: [],
+          createdAt: new Date().toISOString()
+        }
+      };
+
       // ============ CLOUD DATABASE FUNCTIONS ============
+      let currentUsers = {};
+      let currentUserRole = 'user';
+      let currentUsername = '';
+      let isCloudAvailable = true;
+
       async function getUsersFromCloud() {
         try {
           const response = await fetch(`${CONFIG.BASE_URL}/b/${CONFIG.BIN_ID}/latest`, {
@@ -1696,9 +1732,13 @@
           });
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const data = await response.json();
+          isCloudAvailable = true;
+          updateCloudStatus(true);
           return data.record || {};
         } catch (error) {
-          console.error('❌ Gagal mengambil data dari cloud:', error);
+          console.warn('⚠️ Cloud tidak tersedia, menggunakan localStorage:', error);
+          isCloudAvailable = false;
+          updateCloudStatus(false);
           return getUsersFromLocal();
         }
       }
@@ -1716,10 +1756,14 @@
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           console.log('✅ Data berhasil disimpan ke cloud');
           saveUsersToLocal(users);
+          isCloudAvailable = true;
+          updateCloudStatus(true);
           return true;
         } catch (error) {
-          console.error('❌ Gagal menyimpan ke cloud:', error);
+          console.warn('⚠️ Gagal menyimpan ke cloud, menyimpan lokal:', error);
           saveUsersToLocal(users);
+          isCloudAvailable = false;
+          updateCloudStatus(false);
           return false;
         }
       }
@@ -1729,8 +1773,17 @@
       function getUsersFromLocal() {
         try {
           const data = localStorage.getItem(DB_KEY);
-          return data ? JSON.parse(data) : {};
-        } catch { return {}; }
+          if (data) {
+            const parsed = JSON.parse(data);
+            if (Object.keys(parsed).length === 0) {
+              return { ...DEFAULT_USERS };
+            }
+            return parsed;
+          }
+          return { ...DEFAULT_USERS };
+        } catch { 
+          return { ...DEFAULT_USERS };
+        }
       }
 
       function saveUsersToLocal(users) {
@@ -1740,16 +1793,64 @@
         } catch { return false; }
       }
 
-      let currentUsers = {};
-      let currentUserRole = 'user';
-      let currentUsername = '';
+      function updateCloudStatus(online) {
+        const statusElements = document.querySelectorAll('.cloud-sync-status');
+        statusElements.forEach(el => {
+          el.className = `cloud-sync-status ${online ? 'online' : 'offline'}`;
+          const textSpan = el.querySelector('span');
+          if (textSpan) {
+            textSpan.textContent = online ? 'Online' : 'Offline ⚠️';
+          }
+        });
+        
+        const statusTextEl = document.getElementById('cloudStatusText');
+        if (statusTextEl) {
+          statusTextEl.textContent = online ? 'Online' : 'Offline ⚠️';
+        }
+      }
 
       async function loadUsers() {
         try {
           updateDbStatus('□ Menghubungkan ke cloud...', 'sync');
           currentUsers = await getUsersFromCloud();
           const count = Object.keys(currentUsers).length;
-          updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
+          
+          // Validasi dan perbaiki struktur data
+          let needSave = false;
+          Object.keys(currentUsers).forEach(key => {
+            if (!currentUsers[key].role) {
+              currentUsers[key].role = 'user';
+              needSave = true;
+            }
+            if (!currentUsers[key].tasks) {
+              currentUsers[key].tasks = [];
+              needSave = true;
+            }
+            if (!currentUsers[key].reports) {
+              currentUsers[key].reports = [];
+              needSave = true;
+            }
+            if (!currentUsers[key].files) {
+              currentUsers[key].files = [];
+              needSave = true;
+            }
+          });
+
+          // Pastikan admin marco ada
+          if (!currentUsers['marco']) {
+            currentUsers['marco'] = { ...DEFAULT_USERS['marco'] };
+            needSave = true;
+          }
+
+          if (needSave) {
+            await saveUsers(currentUsers);
+          }
+
+          if (isCloudAvailable) {
+            updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
+          } else {
+            updateDbStatus(`⚠️ ${count} akun (mode offline)`, 'offline');
+          }
           return currentUsers;
         } catch (error) {
           currentUsers = getUsersFromLocal();
@@ -1857,7 +1958,7 @@
         return { success: true, message: '✅ Tugas berhasil ditandatangani!' };
       }
 
-      // ============ UNSIGN TASK YANG DIPERBAIKI ============
+      // ============ UNSIGN TASK ============
       async function unsignTask(taskUsername, taskId) {
         const isAdmin = currentUserRole === 'admin';
         
@@ -1865,7 +1966,6 @@
           return { success: false, message: '❌ Hanya Admin yang dapat menghapus tanda tangan!' };
         }
         
-        // Cari task
         if (!currentUsers[taskUsername]) {
           return { success: false, message: 'User tidak ditemukan!' };
         }
@@ -1880,27 +1980,23 @@
         const task = tasks[taskIndex];
         const signatures = task.signatures || [];
         
-        // Cari tanda tangan milik user saat ini
         const signIndex = signatures.findIndex(s => s.signer === currentUsername);
         
         if (signIndex === -1) {
           return { success: false, message: 'Anda belum menandatangani tugas ini!' };
         }
 
-        // Hapus tanda tangan
         signatures.splice(signIndex, 1);
         task.signatures = signatures;
         tasks[taskIndex] = task;
         currentUsers[taskUsername].tasks = tasks;
         
-        // Simpan ke cloud
         const saved = await saveUsers(currentUsers);
         
         if (saved) {
           console.log('✅ Tanda tangan berhasil dihapus dari cloud');
           return { success: true, message: '✅ Tanda tangan berhasil dihapus!' };
         } else {
-          // Meskipun gagal ke cloud, data sudah tersimpan di lokal
           console.warn('⚠️ Tanda tangan tersimpan di lokal tapi gagal ke cloud');
           return { success: true, message: '✅ Tanda tangan berhasil dihapus (lokal)!' };
         }
@@ -2188,7 +2284,7 @@
         return true;
       }
 
-      // ============ FUNGSI KOMENTAR YANG DIPERBAIKI ============
+      // ============ FUNGSI KOMENTAR ============
       async function addComment(taskUsername, taskId, commentText) {
         try {
           await loadUsers();
@@ -2244,7 +2340,6 @@
         }
       }
 
-      // ============ FUNGSI DELETE KOMENTAR YANG DIPERBAIKI ============
       async function deleteComment(taskUsername, taskId, commentIndex) {
         try {
           await loadUsers();
@@ -2270,17 +2365,14 @@
           
           const comment = task.comments[commentIndex];
           
-          // Cek hak akses
           if (comment.user !== currentUsername && currentUserRole !== 'admin') {
             return { success: false, message: 'Anda tidak berhak menghapus komentar ini!' };
           }
           
-          // Hapus komentar
           task.comments.splice(commentIndex, 1);
           tasks[taskIndex] = task;
           currentUsers[taskUsername].tasks = tasks;
           
-          // Simpan ke cloud
           const saved = await saveUsers(currentUsers);
           
           if (saved) {
@@ -2288,7 +2380,6 @@
             await loadUsers();
             return { success: true, message: '✅ Komentar berhasil dihapus!' };
           } else {
-            // Meskipun gagal ke cloud, data sudah tersimpan di lokal
             console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
             return { success: true, message: '✅ Komentar berhasil dihapus (lokal)!' };
           }
@@ -2509,6 +2600,7 @@
           <div class="stat-title"><i class="fas fa-file-alt"></i> Laporan Bulanan</div>
           <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
             <i class="fas fa-users"></i> Semua user · ${allReports.length} total laporan
+            ${isCloudAvailable ? '<span style="color:#46d47c;"> ☁️ Cloud</span>' : '<span style="color:#ff6b6b;"> ⚠️ Offline</span>'}
           </p>
         `;
 
@@ -2516,6 +2608,7 @@
           <div class="report-upload-form">
             <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
               <i class="fas fa-upload"></i> Upload Laporan Bulanan
+              <span style="font-size:0.55rem; color:#68769e; font-weight:normal;">${isCloudAvailable ? '☁️ akan tersimpan di cloud' : '⚠️ tersimpan lokal'}</span>
             </h4>
             <form id="reportUploadForm">
               <div class="form-row">
@@ -2631,6 +2724,7 @@
           <div class="stat-title"><i class="fas fa-tasks"></i> Semua Tugas</div>
           <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
             <i class="fas fa-users"></i> Semua user · ${allTasks.length} total tugas
+            ${isCloudAvailable ? '<span style="color:#46d47c;"> ☁️ Cloud</span>' : '<span style="color:#ff6b6b;"> ⚠️ Offline</span>'}
           </p>
         `;
 
@@ -2638,6 +2732,7 @@
           <div style="margin-bottom:1rem; background:rgba(255,255,255,0.03); padding:0.8rem; border-radius:14px; border:1px solid rgba(255,255,255,0.04);">
             <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
               <i class="fas fa-plus-circle"></i> Tambah Tugas Baru
+              <span style="font-size:0.55rem; color:#68769e; font-weight:normal;">${isCloudAvailable ? '☁️ akan tersimpan di cloud' : '⚠️ tersimpan lokal'}</span>
             </h4>
             <form id="taskForm">
               <div class="input-group" style="margin-bottom:0.5rem;">
@@ -2894,7 +2989,7 @@
           <div class="activity-item"><i class="fas fa-tasks"></i><span>Total: ${allTasks.length} tugas (${pendingTasks} pending) · ${totalComments} komentar · ${totalSignatures} tanda tangan</span><small>${timeStr}</small></div>
           <div class="activity-item"><i class="fas fa-file-alt"></i><span>Laporan: ${allReports.length} laporan</span><small>${timeStr}</small></div>
           <div class="activity-item"><i class="fas fa-users"></i><span>User terdaftar: ${totalUsers} akun</span><small>${timeStr}</small></div>
-          <div class="activity-item"><i class="fas fa-cloud"></i><span>Database: Cloud Sync</span><small>✅</small></div>
+          <div class="activity-item"><i class="fas fa-cloud"></i><span>Database: ${isCloudAvailable ? 'Cloud Sync ✅' : 'Offline Mode ⚠️'}</span><small>${timeStr}</small></div>
         `;
         pesanPreview.textContent = dayName;
       }
@@ -3326,7 +3421,7 @@
         }
       }
 
-      // ============ ATTACH COMMENT EVENTS YANG DIPERBAIKI ============
+      // ============ ATTACH COMMENT EVENTS ============
       function attachCommentEvents() {
         document.querySelectorAll('.comment-form').forEach(form => {
           const newForm = form.cloneNode(true);
@@ -3357,7 +3452,6 @@
                 await refreshTaskModal();
                 updateCounts();
                 renderActivity();
-                // Tampilkan pesan sukses
                 const successMsg = document.createElement('div');
                 successMsg.className = 'success-msg show';
                 successMsg.style.marginTop = '0.5rem';
@@ -3662,7 +3756,7 @@
         }
       };
 
-      // ============ UNSIGN TASK GLOBAL YANG DIPERBAIKI ============
+      // ============ UNSIGN TASK GLOBAL ============
       window.unsignTask = async function(taskId, taskUsername) {
         try {
           const result = await unsignTask(taskUsername, taskId);
@@ -3866,7 +3960,7 @@
         renderActivity();
       };
 
-      // ============ DELETE COMMENT GLOBAL YANG DIPERBAIKI ============
+      // ============ DELETE COMMENT GLOBAL ============
       window.deleteComment = async function(taskId, username, index) {
         if (!confirm('Hapus komentar ini?')) return;
         try {
@@ -4263,6 +4357,7 @@
           <div class="stat-title"><i class="fas fa-users-cog"></i> Manajemen User</div>
           <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
             <i class="fas fa-user"></i> Total user: ${Object.keys(currentUsers).length}
+            ${isCloudAvailable ? '<span style="color:#46d47c;"> ☁️ Cloud</span>' : '<span style="color:#ff6b6b;"> ⚠️ Offline</span>'}
           </p>
         `;
 
@@ -4404,27 +4499,45 @@
       window.initApp = async function() {
         await loadUsers();
         
+        // Pastikan admin marco ada dengan data lengkap
         if (!currentUsers['marco']) {
-          currentUsers['marco'] = {
-            fullname: 'Marco Fajar Setiawan, S.K.M, CAHSE',
-            password: 'MARCOFS',
-            role: 'admin',
-            tasks: [],
-            reports: [],
-            files: [],
-            createdAt: new Date().toISOString()
-          };
+          currentUsers['marco'] = { ...DEFAULT_USERS['marco'] };
           await saveUsers(currentUsers);
           console.log('✅ User admin "marco" dibuat di cloud');
-        } else if (!currentUsers['marco'].role) {
-          currentUsers['marco'].role = 'admin';
-          if (!currentUsers['marco'].tasks) currentUsers['marco'].tasks = [];
-          if (!currentUsers['marco'].reports) currentUsers['marco'].reports = [];
-          if (!currentUsers['marco'].files) currentUsers['marco'].files = [];
-          await saveUsers(currentUsers);
-          console.log('✅ User "marco" diupdate menjadi admin');
+        } else {
+          // Update jika ada field yang kurang
+          let needUpdate = false;
+          if (!currentUsers['marco'].role || currentUsers['marco'].role !== 'admin') {
+            currentUsers['marco'].role = 'admin';
+            needUpdate = true;
+          }
+          if (!currentUsers['marco'].tasks) {
+            currentUsers['marco'].tasks = [];
+            needUpdate = true;
+          }
+          if (!currentUsers['marco'].reports) {
+            currentUsers['marco'].reports = [];
+            needUpdate = true;
+          }
+          if (!currentUsers['marco'].files) {
+            currentUsers['marco'].files = [];
+            needUpdate = true;
+          }
+          if (!currentUsers['marco'].fullname) {
+            currentUsers['marco'].fullname = 'Marco Fajar Setiawan, S.K.M, CAHSE';
+            needUpdate = true;
+          }
+          if (!currentUsers['marco'].password) {
+            currentUsers['marco'].password = 'MARCOFS';
+            needUpdate = true;
+          }
+          if (needUpdate) {
+            await saveUsers(currentUsers);
+            console.log('✅ User "marco" diperbarui');
+          }
         }
 
+        // Validasi semua user
         let needSave = false;
         Object.keys(currentUsers).forEach(key => {
           if (!currentUsers[key].role) {
@@ -4457,6 +4570,7 @@
         console.log('□ HANYA ADMIN yang dapat menghapus tanda tangan!');
         console.log('□ Total user terdaftar:', Object.keys(currentUsers).length);
         console.log('□ Admin:', Object.keys(currentUsers).filter(k => currentUsers[k].role === 'admin'));
+        console.log('□ Mode Cloud:', isCloudAvailable ? 'Online ✅' : 'Offline ⚠️');
       };
 
       if (document.getElementById('appContainer').classList.contains('show')) {
