@@ -695,13 +695,11 @@
 </head>
 <body>
 
-  <!-- SYNC INDICATOR -->
   <div class="sync-indicator" id="syncIndicator">
     <i class="fas fa-sync fa-spin"></i>
     <span id="syncText">Sinkronisasi...</span>
   </div>
 
-  <!-- LOADING PAGE -->
   <div class="loading-wrapper" id="loadingWrapper">
     <div class="logo-container">
       <div class="logo-ring"></div>
@@ -779,9 +777,7 @@
     </div>
   </div>
 
-  <!-- MAIN APP CONTAINER -->
   <div id="appContainer">
-    <!-- LOGIN -->
     <div id="loginPage" class="page active">
       <div class="auth-header">
         <div class="logo-icon">
@@ -803,7 +799,6 @@
       <div class="db-status" id="dbStatus">□ Menghubungkan ke GitHub Gist...</div>
     </div>
 
-    <!-- REGISTER -->
     <div id="registerPage" class="page">
       <div class="auth-header">
         <div class="logo-icon" style="background:linear-gradient(135deg,#00b894,#55efc4);">
@@ -826,7 +821,6 @@
       <div class="auth-footer">Sudah punya akun? <a id="goToLogin">Masuk di sini</a></div>
     </div>
 
-    <!-- HOME -->
     <div id="homePage" class="page">
       <div class="home-header">
         <div class="user-info">
@@ -901,7 +895,6 @@
     </div>
   </div>
 
-  <!-- MODAL -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-box">
       <button class="modal-close" id="modalClose">&times;</button>
@@ -1007,9 +1000,7 @@
             loadingWrapper.classList.add('hidden');
             appContainer.classList.add('show');
             
-            if (typeof initApp === 'function') {
-              initApp();
-            }
+            if (typeof initApp === 'function') initApp();
           }
         }, 16);
       }
@@ -1044,10 +1035,10 @@
     // MAIN APP
     // ============================================================
     (function() {
-      // ⭐ KONFIGURASI — GANTI TOKEN BARU DI SINI
+      // ⭐ TOKEN BARU
       const CONFIG = {
         GIST_ID: 'e72596072e35b31864d2c17fb1f81543',
-        GITHUB_TOKEN: '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',
+        GITHUB_TOKEN: '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',
         BASE_URL: 'https://api.github.com',
         DATA_FILE: 'data.json'
       };
@@ -1092,7 +1083,6 @@
         return sessionStorage.getItem('githubToken') || CONFIG.GITHUB_TOKEN;
       }
 
-      // ⭐ Ambil data dari Gist (SUMBER UTAMA)
       async function getUsersFromCloud() {
         const token = getGitHubToken();
         const response = await fetch(`${CONFIG.BASE_URL}/gists/${CONFIG.GIST_ID}`, {
@@ -1102,7 +1092,11 @@
             'Cache-Control': 'no-cache'
           }
         });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) {
+          const err = new Error(`HTTP ${response.status}`);
+          err.status = response.status;
+          throw err;
+        }
         const gist = await response.json();
         if (gist.files && gist.files[CONFIG.DATA_FILE]) {
           const content = gist.files[CONFIG.DATA_FILE].content;
@@ -1111,18 +1105,14 @@
         return {};
       }
 
-      // ⭐ Simpan ke Gist dengan PROTEKSI
       async function saveUsersToCloud(users) {
         const token = getGitHubToken();
 
-        // ⭐ PROTEKSI 1: Tolak simpan kalau kosong
         const count = Object.keys(users || {}).length;
         if (count === 0) {
-          console.error('❌ DITOLAK: Tidak boleh simpan data kosong!');
           throw new Error('Data kosong tidak boleh disimpan');
         }
 
-        // ⭐ PROTEKSI 2: Ambil data terbaru dari Gist dulu untuk merge
         let remoteUsers = {};
         try {
           remoteUsers = await getUsersFromCloud();
@@ -1132,7 +1122,6 @@
 
         const remoteCount = Object.keys(remoteUsers).length;
 
-        // ⭐ PROTEKSI 3: Tolak kalau user turun drastis (data corruption)
         if (remoteCount > 2 && count < remoteCount * 0.5) {
           const ok = confirm(
             `⚠️ PERINGATAN DATA!\n\n` +
@@ -1143,11 +1132,8 @@
           if (!ok) throw new Error('Dibatalkan oleh user');
         }
 
-        // ⭐ MERGE: gabungkan remote + local (local menang untuk user yang sama)
-        // User yang cuma ada di remote tetap dipertahankan
         const merged = { ...remoteUsers, ...users };
 
-        // ⭐ Backup lokal sebelum simpan
         try {
           const backupKey = 'dailywork_backup_' + new Date().toISOString().slice(0, 10);
           localStorage.setItem(backupKey, JSON.stringify({
@@ -1179,13 +1165,11 @@
         }
 
         console.log('✅ Data tersimpan ke Gist:', Object.keys(merged).length, 'user');
-        // Cache lokal (hanya untuk fallback offline)
         try { localStorage.setItem('dailywork_users_cloud', JSON.stringify(merged)); } catch(e){}
         currentUsers = merged;
         return true;
       }
 
-      // ============ KOMPRESI TANDA TANGAN ============
       function compressSignature(dataUrl, maxWidth = 200) {
         return new Promise((resolve) => {
           const img = new Image();
@@ -1200,9 +1184,7 @@
               ctx.fillRect(0, 0, canvas.width, canvas.height);
               ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
               resolve(canvas.toDataURL('image/jpeg', 0.5));
-            } catch (e) {
-              resolve(dataUrl);
-            }
+            } catch (e) { resolve(dataUrl); }
           };
           img.onerror = () => resolve(dataUrl);
           img.src = dataUrl;
@@ -1224,7 +1206,6 @@
       let isSaving = false;
       let saveQueue = Promise.resolve();
 
-      // ⭐ Load dari Gist (SUMBER UTAMA)
       async function loadUsers() {
         updateDbStatus('□ Menghubungkan ke GitHub Gist...', 'sync');
         try {
@@ -1232,27 +1213,25 @@
           currentUsers = users;
           const count = Object.keys(users).length;
           updateDbStatus(`✅ ${count} akun tersimpan di Gist`, 'online');
-          // Simpan cache lokal
           try { localStorage.setItem(DB_KEY, JSON.stringify(users)); } catch(e){}
           return users;
         } catch (error) {
           console.error('❌ Gagal load dari Gist:', error);
-          // Fallback ke local cache HANYA kalau Gist benar-benar tidak bisa diakses
           const local = getUsersFromLocal();
           currentUsers = local;
           const count = Object.keys(local).length;
-          updateDbStatus(`⚠️ Mode offline · ${count} akun (cache lokal)`, 'offline');
+          let msg = '⚠️ Mode offline · ' + count + ' akun (cache lokal)';
+          if (error.status === 401) msg = '❌ Token invalid (401) · pakai cache';
+          else if (error.status === 403) msg = '❌ Akses ditolak (403) · cek token';
+          else if (error.status === 404) msg = '❌ Gist tidak ditemukan (404)';
+          updateDbStatus(msg, 'offline');
           return local;
         }
       }
 
-      // ⭐ Save dengan QUEUE — anti tumpang tindih
       async function saveUsers(users) {
-        // Tambahkan ke antrian, tunggu antrian sebelumnya selesai
         saveQueue = saveQueue.then(async () => {
-          while (isSaving) {
-            await new Promise(r => setTimeout(r, 50));
-          }
+          while (isSaving) await new Promise(r => setTimeout(r, 50));
           isSaving = true;
           showSync('Menyimpan ke Gist...');
           try {
@@ -1267,7 +1246,6 @@
             const count = Object.keys(users).length;
             updateDbStatus(`❌ Gagal simpan · cek koneksi`, 'offline');
             showSyncError('❌ Gagal simpan');
-            // Simpan cache lokal untuk retry nanti
             try { localStorage.setItem(DB_KEY, JSON.stringify(users)); } catch(e){}
             throw error;
           } finally {
@@ -1390,13 +1368,8 @@
         tasks[taskIndex] = task;
         currentUsers[taskUsername].tasks = tasks;
         
-        const saved = await saveUsers(currentUsers);
-        
-        if (saved) {
-          return { success: true, message: '✅ Tanda tangan berhasil dihapus!' };
-        } else {
-          return { success: true, message: '✅ Tanda tangan berhasil dihapus (lokal)!' };
-        }
+        await saveUsers(currentUsers);
+        return { success: true, message: '✅ Tanda tangan berhasil dihapus!' };
       }
 
       // ============ REPORTS ============
@@ -1478,15 +1451,11 @@
       function downloadFile(fileData, filename) {
         try {
           let base64Data = fileData.data;
-          if (base64Data.includes(',')) {
-            base64Data = base64Data.split(',')[1];
-          }
+          if (base64Data.includes(',')) base64Data = base64Data.split(',')[1];
           
           const byteCharacters = atob(base64Data);
           const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
+          for (let i = 0; i < byteCharacters.length; i++) byteNumbers[i] = byteCharacters.charCodeAt(i);
           const byteArray = new Uint8Array(byteNumbers);
           const blob = new Blob([byteArray], { type: fileData.type || 'application/octet-stream' });
           
@@ -1546,7 +1515,6 @@
         return { success: true, user: currentUsers[username], role: role };
       }
 
-      // ============ MANAJEMEN USER ============
       async function updateUser(oldUsername, newUsername, newFullname, newPassword, newRole) {
         await loadUsers();
         
@@ -1939,9 +1907,6 @@
           <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
             <i class="fas fa-users"></i> Semua user · ${allReports.length} total laporan
           </p>
-        `;
-
-        html += `
           <div class="report-upload-form">
             <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
               <i class="fas fa-upload"></i> Upload Laporan Bulanan
@@ -1976,26 +1941,17 @@
               </div>
             </form>
           </div>
-        `;
-
-        html += `
           <div class="filter-bar">
             <button class="active" data-filter="all">Semua</button>
             <button data-filter="rajal"><i class="fas fa-clinic-medical"></i> RAJAL</button>
             <button data-filter="ranap"><i class="fas fa-hospital"></i> RANAP</button>
             <button data-filter="my-reports" style="border-color:#6c5ce7;">□ Laporanku</button>
           </div>
+          <div class="report-list" id="reportListContainer">
         `;
 
-        html += `<div class="report-list" id="reportListContainer">`;
-
         if (allReports.length === 0) {
-          html += `
-            <div class="empty-tasks">
-              <i class="fas fa-file-alt"></i>
-              <p>Belum ada laporan. Upload laporan bulanan!</p>
-            </div>
-          `;
+          html += `<div class="empty-tasks"><i class="fas fa-file-alt"></i><p>Belum ada laporan. Upload laporan bulanan!</p></div>`;
         } else {
           allReports.forEach((report) => {
             const typeLabel = report.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
@@ -2044,9 +2000,7 @@
             `;
           });
         }
-
         html += `</div>`;
-
         return html;
       }
 
@@ -2059,9 +2013,6 @@
           <p style="color:#8b9fc9; font-size:0.75rem; margin-bottom:0.8rem;">
             <i class="fas fa-users"></i> Semua user · ${allTasks.length} total tugas
           </p>
-        `;
-
-        html += `
           <div style="margin-bottom:1rem; background:rgba(255,255,255,0.03); padding:0.8rem; border-radius:14px; border:1px solid rgba(255,255,255,0.04);">
             <h4 style="color:#a29bfe; font-size:0.85rem; margin-bottom:0.5rem;">
               <i class="fas fa-plus-circle"></i> Tambah Tugas Baru
@@ -2099,26 +2050,17 @@
               </button>
             </form>
           </div>
-        `;
-
-        html += `
           <div class="filter-bar">
             <button class="active" data-filter="all">Semua</button>
             <button data-filter="pending">⏳ Pending</button>
             <button data-filter="done">✅ Selesai</button>
             <button data-filter="my-tasks" style="border-color:#6c5ce7;">□ Tugasku</button>
           </div>
+          <div class="task-list" id="taskListContainer">
         `;
 
-        html += `<div class="task-list" id="taskListContainer">`;
-
         if (allTasks.length === 0) {
-          html += `
-            <div class="empty-tasks">
-              <i class="fas fa-clipboard-list"></i>
-              <p>Belum ada tugas. Tambahkan tugas baru!</p>
-            </div>
-          `;
+          html += `<div class="empty-tasks"><i class="fas fa-clipboard-list"></i><p>Belum ada tugas. Tambahkan tugas baru!</p></div>`;
         } else {
           allTasks.forEach((task) => {
             const taskDate = task.date ? new Date(task.date).toLocaleDateString('id-ID') : '-';
@@ -2163,7 +2105,6 @@
                   </div>
                 </div>
                 ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
-                
                 <div class="task-comments">
                   <div class="comment-list" id="commentList_${task.id}">
                     ${comments.length > 0 ? comments.map((c, idx) => `
@@ -2193,9 +2134,7 @@
             `;
           });
         }
-
         html += `</div>`;
-
         return html;
       }
 
@@ -2295,7 +2234,6 @@
           statistikCard.querySelector('.admin-lock').innerHTML = '<i class="fas fa-lock"></i> Admin';
           statistikCard.querySelector('.admin-lock').style.color = '#ff6b6b';
         }
-        
         updateCounts();
       }
 
@@ -2349,12 +2287,10 @@
             greetingUser.innerHTML = `Halo, ${escapeHtml(fullname)} <span class="role-badge ${role === 'admin' ? 'admin' : 'user'}">${role === 'admin' ? 'Admin' : 'User'}</span>`;
             
             updateUIForRole(role, username);
-            
             showPage(homePage);
             renderActivity();
             sessionStorage.setItem('currentUser', username);
             sessionStorage.setItem('userRole', role);
-            console.log('✅ Login berhasil untuk user:', username, 'Role:', role);
           } else {
             loginErrorText.textContent = result.message;
             loginError.classList.add('show');
@@ -2362,7 +2298,6 @@
         } catch (error) {
           loginErrorText.textContent = 'Terjadi kesalahan. Coba lagi.';
           loginError.classList.add('show');
-          console.error('❌ Login error:', error);
         } finally {
           loginBtn.disabled = false;
           loginBtn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Masuk';
@@ -2385,24 +2320,9 @@
           registerError.classList.add('show');
           return;
         }
-
-        if (username.length < 3) {
-          registerErrorText.textContent = 'Username minimal 3 karakter.';
-          registerError.classList.add('show');
-          return;
-        }
-
-        if (password.length < 4) {
-          registerErrorText.textContent = 'Password minimal 4 karakter.';
-          registerError.classList.add('show');
-          return;
-        }
-
-        if (password !== confirm) {
-          registerErrorText.textContent = 'Password dan konfirmasi tidak cocok.';
-          registerError.classList.add('show');
-          return;
-        }
+        if (username.length < 3) { registerErrorText.textContent = 'Username minimal 3 karakter.'; registerError.classList.add('show'); return; }
+        if (password.length < 4) { registerErrorText.textContent = 'Password minimal 4 karakter.'; registerError.classList.add('show'); return; }
+        if (password !== confirm) { registerErrorText.textContent = 'Password dan konfirmasi tidak cocok.'; registerError.classList.add('show'); return; }
 
         registerBtn.disabled = true;
         registerBtn.innerHTML = '<span class="loading-spinner"></span> Menyimpan...';
@@ -2416,7 +2336,6 @@
           if (result.success) {
             registerSuccessText.textContent = result.message;
             registerSuccess.classList.add('show');
-            
             regUsername.value = '';
             regFullname.value = '';
             regPassword.value = '';
@@ -2428,9 +2347,7 @@
               loginPassword.value = '';
               loginSuccessText.textContent = '✅ Akun berhasil dibuat dan tersimpan di Gist!';
               loginSuccess.classList.add('show');
-              setTimeout(() => {
-                loginSuccess.classList.remove('show');
-              }, 4000);
+              setTimeout(() => loginSuccess.classList.remove('show'), 4000);
             }, 1500);
           } else {
             registerErrorText.textContent = result.message;
@@ -2439,7 +2356,6 @@
         } catch (error) {
           registerErrorText.textContent = 'Gagal menyimpan ke Gist. Coba lagi.';
           registerError.classList.add('show');
-          console.error('❌ Register error:', error);
         } finally {
           registerBtn.disabled = false;
           registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Daftar';
@@ -2473,7 +2389,6 @@
             greetingUser.innerHTML = `Halo, ${escapeHtml(fullname)} <span class="role-badge ${role === 'admin' ? 'admin' : 'user'}">${role === 'admin' ? 'Admin' : 'User'}</span>`;
             
             updateUIForRole(role, currentUser);
-            
             showPage(homePage);
             renderActivity();
             return true;
@@ -2491,7 +2406,6 @@
       const modalContent = document.getElementById('modalContent');
       const modalClose = document.getElementById('modalClose');
 
-      // ⭐ Variabel global untuk fix canvas
       let pendingSignatureTaskId = null;
       let pendingSignatureUsername = null;
 
@@ -2501,9 +2415,8 @@
         modalOverlay.classList.add('show');
         
         if (title.includes('Laporan Bulanan') || title.includes('Laporan')) {
-          setTimeout(() => { attachReportEvents(); }, 100);
+          setTimeout(() => attachReportEvents(), 100);
         }
-        
         if (title.includes('Task Manager') || title.includes('Semua Tugas')) {
           setTimeout(() => {
             attachTaskEvents();
@@ -2511,12 +2424,9 @@
             attachTaskSignatureEvents();
           }, 100);
         }
-        
         if (title.includes('Manajemen User')) {
-          setTimeout(() => { attachUserManagementEvents(); }, 100);
+          setTimeout(() => attachUserManagementEvents(), 100);
         }
-
-        // ⭐ FIX: Pakai variabel global, bukan parse judul
         if (title.includes('Tanda Tangan Tugas')) {
           setTimeout(() => {
             if (pendingSignatureTaskId && pendingSignatureUsername) {
@@ -2551,10 +2461,7 @@
             
             if (!file) { alert('Pilih file terlebih dahulu!'); return; }
             if (!month) { alert('Pilih bulan laporan!'); return; }
-            if (file.size > 5 * 1024 * 1024) {
-              alert('Ukuran file maksimal 5MB untuk menjaga ukuran Gist!');
-              return;
-            }
+            if (file.size > 5 * 1024 * 1024) { alert('Ukuran file maksimal 5MB!'); return; }
             
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
@@ -2582,8 +2489,7 @@
               };
               reader.readAsDataURL(file);
             } catch (error) {
-              console.error('Error:', error);
-              alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+              alert('❌ Terjadi kesalahan.');
             } finally {
               btn.disabled = false;
               btn.innerHTML = '<i class="fas fa-upload"></i> Upload';
@@ -2591,7 +2497,7 @@
           };
         }
 
-        document.querySelectorAll('#reportListContainer .filter-bar button, .filter-bar button').forEach(btn => {
+        document.querySelectorAll('.filter-bar button').forEach(btn => {
           btn.onclick = function() {
             const container = this.closest('.modal-content') || document;
             container.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
@@ -2734,11 +2640,10 @@
                 updateCounts();
                 renderActivity();
               } else {
-                alert('❌ Gagal menambah komentar. Silakan coba lagi.');
+                alert('❌ Gagal menambah komentar.');
               }
             } catch (error) {
-              console.error('Error:', error);
-              alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+              alert('❌ Terjadi kesalahan.');
             } finally {
               btn.disabled = false;
               btn.innerHTML = '<i class="fas fa-reply"></i> Kirim';
@@ -2781,9 +2686,7 @@
         });
 
         const dateInput = document.getElementById('taskDate');
-        if (dateInput) {
-          dateInput.value = new Date().toISOString().split('T')[0];
-        }
+        if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
       }
 
       function filterTasks(filter) {
@@ -2847,7 +2750,6 @@
                 </div>
               </div>
               ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
-              
               <div class="task-comments">
                 <div class="comment-list" id="commentList_${task.id}">
                   ${comments.length > 0 ? comments.map((c, idx) => `
@@ -2912,9 +2814,7 @@
 
         permission.allowedUsers.push(username);
         const success = await updateSignaturePermission(taskUsername, taskId, permission);
-        if (success) {
-          window.showTaskSignature(taskId, taskUsername);
-        }
+        if (success) window.showTaskSignature(taskId, taskUsername);
       };
 
       window.removeAllowedUser = async function(taskId, taskUsername, username) {
@@ -2922,9 +2822,7 @@
         if (!permission.allowedUsers) return;
         permission.allowedUsers = permission.allowedUsers.filter(u => u !== username);
         const success = await updateSignaturePermission(taskUsername, taskId, permission);
-        if (success) {
-          window.showTaskSignature(taskId, taskUsername);
-        }
+        if (success) window.showTaskSignature(taskId, taskUsername);
       };
 
       function attachSignaturePermissionEvents(taskId, taskUsername) {
@@ -3038,7 +2936,6 @@
               
               window.signTaskAction(taskId, username, dataUrl);
             } catch (err) {
-              console.error('Error signing:', err);
               alert('❌ Terjadi kesalahan. Silakan coba lagi.');
             }
           };
@@ -3149,7 +3046,6 @@
         canvasHasDrawing = false;
       }
 
-      // ⭐ Render modal dari memori tanpa fetch
       function renderSignatureModalFromMemory(taskId, taskUsername) {
         let foundTask = null;
         for (const user of Object.keys(currentUsers)) {
@@ -3177,7 +3073,6 @@
         return true;
       }
 
-      // ============ GLOBAL FUNCTIONS - TASK SIGNATURE ============
       window.showTaskSignature = async function(taskId, username) {
         try {
           let found = false;
@@ -3222,10 +3117,8 @@
             </div>
             ${signatureHtml}
           `);
-
         } catch (error) {
-          console.error('❌ Error showing task signature:', error);
-          alert('❌ Gagal menampilkan tanda tangan. Silakan coba lagi.');
+          alert('❌ Gagal menampilkan tanda tangan.');
         }
       };
 
@@ -3248,7 +3141,6 @@
             alert(result.message);
           }
         } catch (error) {
-          console.error('❌ Error signing task:', error);
           alert('❌ Gagal menandatangani. Silakan coba lagi.');
         }
       };
@@ -3265,8 +3157,7 @@
             alert(result.message);
           }
         } catch (error) {
-          console.error('❌ Error unsigning task:', error);
-          alert('❌ Gagal menghapus tanda tangan. Silakan coba lagi.');
+          alert('❌ Gagal menghapus tanda tangan.');
         }
       };
 
@@ -3280,7 +3171,6 @@
         });
       }
 
-      // ============ GLOBAL FUNCTIONS - TASK ============
       window.editTask = async function(taskId, username) {
         await loadUsers();
         const tasks = getTasks(username);
@@ -3325,12 +3215,10 @@
             alert(result.message || '❌ Gagal menghapus komentar.');
           }
         } catch (e) {
-          console.error('❌ Error deleteComment:', e);
           alert('❌ Terjadi kesalahan.');
         }
       };
 
-      // ============ GLOBAL FUNCTIONS - REPORT ============
       window.viewReport = async function(reportId, username) {
         try {
           await loadUsers();
@@ -3341,21 +3229,14 @@
           for (const user of Object.keys(currentUsers)) {
             const reports = currentUsers[user].reports || [];
             const report = reports.find(r => r.id === reportId);
-            if (report) {
-              foundReport = report;
-              foundUsername = user;
-              break;
-            }
+            if (report) { foundReport = report; foundUsername = user; break; }
           }
           
           if (!foundReport) { alert('❌ Laporan tidak ditemukan!'); return; }
 
           const isOwnReport = foundUsername === currentUsername;
           const isAdmin = currentUserRole === 'admin';
-          if (!isOwnReport && !isAdmin) {
-            alert('❌ Anda tidak memiliki akses ke laporan ini!');
-            return;
-          }
+          if (!isOwnReport && !isAdmin) { alert('❌ Tidak ada akses!'); return; }
 
           let previewContent = '';
           const fileExt = foundReport.filename ? foundReport.filename.split('.').pop().toLowerCase() : '';
@@ -3371,22 +3252,16 @@
                 const decoded = atob(base64Data);
                 previewContent = `<pre style="white-space:pre-wrap; word-wrap:break-word; font-family:monospace; font-size:0.75rem; color:#d3def5;">${escapeHtml(decoded)}</pre>`;
               } catch (e) {
-                previewContent = '❌ Tidak dapat menampilkan konten file ini.';
+                previewContent = '❌ Tidak dapat menampilkan.';
               }
             } else if (isImageFile) {
               previewContent = `<img src="${foundReport.data}" style="max-width:100%; border-radius:8px; margin-top:0.5rem; max-height:400px; object-fit:contain;">`;
             } else {
               const fileIcon = getFileIcon(foundReport.filename || 'file');
-              previewContent = `
-                <div style="text-align:center; padding:2rem 0; color:#68769e;">
-                  <i class="fas ${fileIcon}" style="font-size:4rem; color:#ffd700;"></i>
-                  <p style="margin-top:1rem; font-size:0.9rem; color:#d3def5;">${escapeHtml(foundReport.filename || 'Laporan')}</p>
-                  <p style="font-size:0.7rem; color:#68769e;">File ini tidak dapat ditampilkan langsung di browser.</p>
-                </div>
-              `;
+              previewContent = `<div style="text-align:center; padding:2rem 0; color:#68769e;"><i class="fas ${fileIcon}" style="font-size:4rem; color:#ffd700;"></i><p style="margin-top:1rem; font-size:0.9rem; color:#d3def5;">${escapeHtml(foundReport.filename || 'Laporan')}</p></div>`;
             }
           } else {
-            previewContent = `<div style="text-align:center; padding:2rem 0; color:#68769e;"><i class="fas fa-file-alt" style="font-size:4rem; color:#ff6b6b;"></i><p style="margin-top:1rem;">Data file tidak tersedia.</p></div>`;
+            previewContent = `<div style="text-align:center; padding:2rem 0;"><p>Data file tidak tersedia.</p></div>`;
           }
 
           const typeLabel = foundReport.type === 'rajal' ? 'RAJAL (Rawat Jalan)' : 'RANAP (Rawat Inap)';
@@ -3403,7 +3278,6 @@
               <span><i class="fas fa-calendar"></i> ${escapeHtml(foundReport.month || 'Bulan tidak tersedia')}</span>
               <span><i class="fas fa-user"></i> ${escapeHtml(foundReport.uploadedByFullname || foundReport.uploadedBy || foundUsername)}</span>
               <span><i class="fas fa-file"></i> ${formatFileSize(foundReport.size || 0)}</span>
-              <span><i class="fas fa-clock"></i> ${new Date(foundReport.uploadedAt).toLocaleString('id-ID')}</span>
             </div>
             ${foundReport.description ? `<div style="color:#d3def5; margin-bottom:0.5rem; padding:0.5rem; background:rgba(255,255,255,0.02); border-radius:8px; border-left:3px solid ${typeColor};">${escapeHtml(foundReport.description)}</div>` : ''}
             <div class="report-preview">${previewContent}</div>
@@ -3417,8 +3291,7 @@
             </div>
           `);
         } catch (error) {
-          console.error('❌ Error viewing report:', error);
-          alert('❌ Gagal menampilkan laporan. Silakan coba lagi.');
+          alert('❌ Gagal menampilkan laporan.');
         }
       };
 
@@ -3439,15 +3312,11 @@
           
           const isOwnReport = foundUsername === currentUsername;
           const isAdmin = currentUserRole === 'admin';
-          if (!isOwnReport && !isAdmin) {
-            alert('❌ Anda tidak memiliki akses ke laporan ini!');
-            return;
-          }
+          if (!isOwnReport && !isAdmin) { alert('❌ Tidak ada akses!'); return; }
           
           downloadFile(foundReport, foundReport.filename || 'laporan.pdf');
         } catch (error) {
-          console.error('❌ Error downloading report:', error);
-          alert('❌ Gagal mendownload laporan.');
+          alert('❌ Gagal mendownload.');
         }
       };
 
@@ -3470,10 +3339,7 @@
           
           const isOwnReport = foundUsername === currentUsername;
           const isAdmin = currentUserRole === 'admin';
-          if (!isOwnReport && !isAdmin) {
-            alert('❌ Anda tidak memiliki akses untuk menghapus laporan ini!');
-            return;
-          }
+          if (!isOwnReport && !isAdmin) { alert('❌ Tidak ada akses!'); return; }
           
           await deleteReport(foundUsername, reportId);
           refreshReportModal();
@@ -3481,12 +3347,10 @@
           renderActivity();
           alert('✅ Laporan berhasil dihapus!');
         } catch (error) {
-          console.error('❌ Error deleting report:', error);
           alert('❌ Terjadi kesalahan.');
         }
       };
 
-      // ============ GLOBAL FUNCTIONS - USER MANAGEMENT ============
       window.editUser = async function(username) {
         const user = currentUsers[username];
         if (!user) return;
@@ -3570,7 +3434,6 @@
         }
       };
 
-      // ============ EVENT LISTENER KARTU ============
       document.querySelectorAll('.home-card[data-modal]').forEach(card => {
         card.addEventListener('click', function() {
           const type = this.dataset.modal;
@@ -3605,7 +3468,6 @@
         });
       });
 
-      // ============ EVENT LISTENER ============
       loginForm.addEventListener('submit', handleLogin);
       registerForm.addEventListener('submit', handleRegister);
       logoutBtn.addEventListener('click', handleLogout);
@@ -3632,7 +3494,6 @@
       regPassword.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
       regConfirmPassword.addEventListener('input', () => { registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
 
-      // ============ RENDER MANAJEMEN USER ============
       function renderManageUsers() {
         if (currentUserRole !== 'admin') return accessDenied;
 
@@ -3732,7 +3593,6 @@
         return html;
       }
 
-      // ============ RENDER STATISTIK KUNJUNGAN ============
       function renderStatistikKunjungan() {
         let tableHtml = `
           <div class="stat-title"><i class="fas fa-chart-bar"></i> Statistik Kunjungan RS</div>
@@ -3766,7 +3626,6 @@
         return tableHtml;
       }
 
-      // ============ INISIALISASI ============
       window.initApp = async function() {
         await loadUsers();
         
