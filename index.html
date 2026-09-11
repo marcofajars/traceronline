@@ -18,9 +18,6 @@
       padding: 1.2rem;
     }
 
-    /* ============================================================
-       LOADING PAGE
-       ============================================================ */
     .loading-wrapper {
       width: 100%; max-width: 480px;
       background: rgba(255,255,255,0.04);
@@ -899,7 +896,7 @@
 
   <script>
     // ============================================================
-    // LOADING PAGE CONTROLLER - DURASI 2 DETIK
+    // LOADING PAGE CONTROLLER
     // ============================================================
     (function() {
       const progressFill = document.getElementById('progressFill');
@@ -1028,12 +1025,9 @@
     })();
 
     // ============================================================
-    // MAIN APP - GITHUB GIST VERSION
+    // MAIN APP
     // ============================================================
     (function() {
-      // ============================================================
-      // KONFIGURASI GITHUB GIST
-      // ============================================================
       const CONFIG = {
         GIST_ID: 'e72596072e35b31864d2c17fb1f81543',
         GITHUB_TOKEN: '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',
@@ -1124,7 +1118,6 @@
               canvas.width = img.width * scale;
               canvas.height = img.height * scale;
               const ctx = canvas.getContext('2d');
-              // Background putih supaya JPEG tidak transparan jadi hitam
               ctx.fillStyle = '#ffffff';
               ctx.fillRect(0, 0, canvas.width, canvas.height);
               ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -2449,18 +2442,24 @@
           }, 100);
         }
 
+        // ⭐ FIX #4: Gunakan variabel global, BUKAN parsing judul
         if (title.includes('Tanda Tangan Tugas')) {
           setTimeout(() => {
-            const taskId = title.split(' - ')[1] || '';
-            const username = document.querySelector('[data-username]')?.dataset?.username || currentUsername;
-            initTaskSignatureCanvas(taskId, username);
-            attachSignaturePermissionEvents(taskId, username);
-          }, 500);
+            if (pendingSignatureTaskId && pendingSignatureUsername) {
+              initTaskSignatureCanvas(pendingSignatureTaskId, pendingSignatureUsername);
+              attachSignaturePermissionEvents(pendingSignatureTaskId, pendingSignatureUsername);
+            } else {
+              console.warn('⚠️ pendingSignatureTaskId belum diset!');
+            }
+          }, 400);
         }
       }
       
       function closeModal() {
         modalOverlay.classList.remove('show');
+        // ⭐ FIX: Reset variabel global saat modal ditutup
+        pendingSignatureTaskId = null;
+        pendingSignatureUsername = null;
       }
       
       modalClose.addEventListener('click', closeModal);
@@ -2940,16 +2939,28 @@
       let currentTaskUsername = '';
       let canvasHasDrawing = false;
 
-      function initTaskSignatureCanvas(taskId, username) {
+      // ⭐ FIX #1: Variabel global untuk simpan taskId yang sedang ditandatangani
+      let pendingSignatureTaskId = null;
+      let pendingSignatureUsername = null;
+
+      // ⭐ FIX #2: Tambah parameter attempt untuk batasi retry
+      function initTaskSignatureCanvas(taskId, username, attempt = 0) {
         let canvas = document.getElementById(`signCanvas_${taskId}`);
         
+        // ⭐ FIX #2: Batasi retry maksimal 10x
+        if (attempt > 10) {
+          console.error('❌ Canvas tidak ditemukan setelah 10 percobaan. taskId:', taskId);
+          return;
+        }
+        
         if (!canvas) {
-          setTimeout(() => initTaskSignatureCanvas(taskId, username), 300);
+          console.warn(`⚠️ Canvas belum ada (percobaan ${attempt + 1}/10) untuk taskId:`, taskId);
+          setTimeout(() => initTaskSignatureCanvas(taskId, username, attempt + 1), 300);
           return;
         }
 
         if (canvas.offsetParent === null) {
-          setTimeout(() => initTaskSignatureCanvas(taskId, username), 200);
+          setTimeout(() => initTaskSignatureCanvas(taskId, username, attempt + 1), 200);
           return;
         }
 
@@ -3142,10 +3153,47 @@
         canvasHasDrawing = false;
       }
 
+      // ⭐ FIX #3: Fungsi baru — render modal dari memori tanpa fetch
+      function renderSignatureModalFromMemory(taskId, taskUsername) {
+        let foundTask = null;
+        for (const user of Object.keys(currentUsers)) {
+          const tasks = currentUsers[user].tasks || [];
+          const task = tasks.find(t => t.id === taskId);
+          if (task) { foundTask = task; break; }
+        }
+        if (!foundTask) return false;
+        
+        pendingSignatureTaskId = taskId;
+        pendingSignatureUsername = taskUsername;
+        
+        const signatureHtml = renderTaskSignature(taskId, taskUsername);
+        openModal(`□ Tanda Tangan Tugas - ${foundTask.title || 'Tugas'}`, `
+          <div style="margin-bottom:0.5rem; display:flex; align-items:center; gap:8px; color:#8b9fc9; font-size:0.75rem;">
+            <i class="fas fa-tasks"></i>
+            <span>${escapeHtml(foundTask.title || 'Tugas')}</span>
+            <span style="color:#68769e;">·</span>
+            <span>${foundTask.status === 'done' ? '✅ Selesai' : '⏳ Pending'}</span>
+            <span style="color:#68769e;">·</span>
+            <span><i class="fas fa-user"></i> ${escapeHtml(currentUsers[taskUsername]?.fullname || taskUsername)}</span>
+          </div>
+          ${signatureHtml}
+        `);
+        return true;
+      }
+
       // ============ GLOBAL FUNCTIONS - TASK SIGNATURE ============
       window.showTaskSignature = async function(taskId, username) {
         try {
-          await loadUsers();
+          // ⭐ FIX: Cek dulu apakah task sudah ada di memori, kalau tidak baru fetch
+          let found = false;
+          for (const user of Object.keys(currentUsers)) {
+            const tasks = currentUsers[user].tasks || [];
+            if (tasks.find(t => t.id === taskId)) { found = true; break; }
+          }
+          
+          if (!found) {
+            await loadUsers();
+          }
           
           let foundTask = null;
           let foundUsername = null;
@@ -3165,6 +3213,10 @@
             return;
           }
           
+          // ⭐ FIX #1: Simpan taskId & username di variabel global
+          pendingSignatureTaskId = taskId;
+          pendingSignatureUsername = foundUsername;
+          
           const signatureHtml = renderTaskSignature(taskId, foundUsername);
           
           openModal(`□ Tanda Tangan Tugas - ${foundTask.title || 'Tugas'}`, `
@@ -3178,11 +3230,6 @@
             </div>
             ${signatureHtml}
           `);
-
-          setTimeout(() => {
-            initTaskSignatureCanvas(taskId, foundUsername);
-            attachSignaturePermissionEvents(taskId, foundUsername);
-          }, 600);
 
         } catch (error) {
           console.error('❌ Error showing task signature:', error);
@@ -3202,13 +3249,13 @@
             return;
           }
           
-          // Kompres tanda tangan sebelum disimpan
           const compressed = await compressSignature(signatureData, 200);
           
           const result = await signTask(taskUsername, taskId, compressed);
           if (result.success) {
             alert('✅ Tanda tangan berhasil disimpan!');
-            window.showTaskSignature(taskId, taskUsername);
+            // ⭐ FIX #3: Render dari memori, JANGAN fetch dari Gist
+            renderSignatureModalFromMemory(taskId, taskUsername);
             updateCounts();
             renderActivity();
           } else {
@@ -3225,7 +3272,7 @@
           const result = await unsignTask(taskUsername, taskId);
           if (result.success) {
             alert('✅ Tanda tangan berhasil dihapus!');
-            window.showTaskSignature(taskId, taskUsername);
+            renderSignatureModalFromMemory(taskId, taskUsername);
             updateCounts();
             renderActivity();
           } else {
