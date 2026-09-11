@@ -1035,10 +1035,10 @@
     // MAIN APP
     // ============================================================
     (function() {
-      // ⭐ TOKEN BARU
+      // ⭐⭐⭐ GANTI TOKEN DI BARIS INI ⭐⭐⭐
       const CONFIG = {
         GIST_ID: 'e72596072e35b31864d2c17fb1f81543',
-        GITHUB_TOKEN: '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',
+        GITHUB_TOKEN: 'ISI_TOKEN_BARU_ANDA_DISINI',
         BASE_URL: 'https://api.github.com',
         DATA_FILE: 'data.json'
       };
@@ -1085,11 +1085,13 @@
 
       async function getUsersFromCloud() {
         const token = getGitHubToken();
+        // ⭐ FIX: Header Cache-Control dihapus, pakai cache:'no-store'
         const response = await fetch(`${CONFIG.BASE_URL}/gists/${CONFIG.GIST_ID}`, {
+          method: 'GET',
+          cache: 'no-store',
           headers: {
             'Authorization': `Bearer ${token}`,
-            'Accept': 'application/vnd.github+json',
-            'Cache-Control': 'no-cache'
+            'Accept': 'application/vnd.github+json'
           }
         });
         if (!response.ok) {
@@ -1145,6 +1147,7 @@
 
         const response = await fetch(`${CONFIG.BASE_URL}/gists/${CONFIG.GIST_ID}`, {
           method: 'PATCH',
+          cache: 'no-store',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/vnd.github+json',
@@ -2121,9 +2124,7 @@
                         </div>
                         <div class="comment-text">${escapeHtml(c.text)}</div>
                       </div>
-                    `).join('') : `
-                      <div class="comment-empty">Belum ada komentar</div>
-                    `}
+                    `).join('') : `<div class="comment-empty">Belum ada komentar</div>`}
                   </div>
                   <form class="comment-form" id="commentForm_${task.id}" data-taskid="${task.id}" data-username="${username}">
                     <input type="text" placeholder="Tulis komentar..." required>
