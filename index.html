@@ -25,7 +25,6 @@
       padding: 1.2rem;
     }
 
-    /* ===== LOADING WRAPPER ===== */
     .loading-wrapper {
       width: 100%;
       max-width: 480px;
@@ -50,7 +49,6 @@
       visibility: hidden;
     }
 
-    /* ===== LOGO / ICON ===== */
     .logo-container {
       position: relative;
       display: inline-flex;
@@ -346,9 +344,6 @@
       color: #5f7197;
     }
 
-    /* ============================================================
-       MAIN APP STYLES
-       ============================================================ */
     #appContainer {
       width: 100%;
       max-width: 480px;
@@ -538,7 +533,6 @@
     .home-card.disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.3); }
     .home-card.disabled:active { transform: none; }
 
-    /* ===== TASK SIGNATURE SECTION ===== */
     .task-signature-section {
       margin-top: 0.8rem;
       padding: 0.8rem;
@@ -581,11 +575,13 @@
       background: rgba(255,255,255,0.02);
       position: relative;
       margin: 0.3rem 0;
+      min-height: 200px;
+      touch-action: none;
     }
     .task-signature-section .sign-canvas-wrapper canvas {
       display: block;
       width: 100%;
-      height: 180px;
+      height: 200px;
       cursor: crosshair;
       touch-action: none;
       background: rgba(255,255,255,0.02);
@@ -635,8 +631,9 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 0.3rem 0;
+      padding: 0.4rem 0;
       border-bottom: 1px solid rgba(255,255,255,0.03);
+      flex-wrap: wrap;
     }
     .task-signature-section .sign-list .sign-item:last-child { border-bottom: none; }
     .task-signature-section .sign-list .sign-item .sign-avatar {
@@ -651,9 +648,11 @@
       font-size: 0.6rem;
       font-weight: 600;
       text-transform: uppercase;
+      flex-shrink: 0;
     }
     .task-signature-section .sign-list .sign-item .sign-info {
       flex: 1;
+      min-width: 100px;
     }
     .task-signature-section .sign-list .sign-item .sign-info .sign-name {
       color: #f0f4ff;
@@ -682,117 +681,21 @@
     .task-signature-section .sign-list .sign-item .btn-unsign-task:hover {
       background: rgba(255,70,70,0.2);
     }
+    .task-signature-section .sign-list .sign-item .signature-preview {
+      max-width: 80px;
+      margin-top: 2px;
+    }
+    .task-signature-section .sign-list .sign-item .signature-preview img {
+      max-height: 35px;
+      border-radius: 4px;
+      background: white;
+    }
     .task-signature-section .sign-empty {
       color: #68769e;
       font-size: 0.65rem;
       padding: 0.2rem 0;
       text-align: center;
     }
-
-    /* ===== SIGNATURE PREVIEW ===== */
-    .signature-preview {
-      margin-top: 0.3rem;
-      padding: 0.3rem;
-      background: rgba(255,255,255,0.02);
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .signature-preview img {
-      max-height: 40px;
-      border-radius: 4px;
-      background: white;
-    }
-    .signature-preview .signature-label {
-      font-size: 0.6rem;
-      color: #8b9fc9;
-    }
-
-    /* ===== SIGNATURE PERMISSION TOGGLE ===== */
-    .signature-permission {
-      margin-top: 0.5rem;
-      padding: 0.5rem;
-      background: rgba(255,255,255,0.02);
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    .signature-permission .permission-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .signature-permission .permission-header label {
-      color: #a29bfe;
-      font-size: 0.7rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-    }
-    .signature-permission .permission-header input[type="checkbox"] {
-      accent-color: #6c5ce7;
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-    .signature-permission .permission-desc {
-      color: #8b9fc9;
-      font-size: 0.55rem;
-      margin-top: 0.2rem;
-    }
-    .signature-permission .allowed-users {
-      margin-top: 0.3rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-    .signature-permission .allowed-users .user-tag {
-      background: rgba(108,92,231,0.15);
-      color: #a29bfe;
-      font-size: 0.5rem;
-      padding: 0.1rem 0.4rem;
-      border-radius: 30px;
-      border: 1px solid rgba(108,92,231,0.15);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .signature-permission .allowed-users .user-tag .remove-user {
-      cursor: pointer;
-      color: #ff6b6b;
-      font-size: 0.45rem;
-    }
-    .signature-permission .allowed-users .user-tag .remove-user:hover { opacity: 0.7; }
-    .signature-permission .add-user-form {
-      display: flex;
-      gap: 4px;
-      margin-top: 0.3rem;
-    }
-    .signature-permission .add-user-form select {
-      flex: 1;
-      padding: 0.15rem 0.4rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 6px;
-      font-size: 0.6rem;
-      color: #d3def5;
-      outline: none;
-    }
-    .signature-permission .add-user-form select:focus { border-color: #6c5ce7; }
-    .signature-permission .add-user-form button {
-      padding: 0.1rem 0.5rem;
-      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-      border: none;
-      border-radius: 6px;
-      font-size: 0.55rem;
-      color: white;
-      cursor: pointer;
-    }
-    .signature-permission .add-user-form button:hover { opacity: 0.8; }
 
     .report-list { margin: 0.5rem 0; }
     .report-item {
@@ -1304,14 +1207,20 @@
       .user-list-item .user-actions { flex-wrap: wrap; }
       .report-upload-form .form-row { grid-template-columns: 1fr; }
       .task-signature-section .sign-canvas-wrapper canvas { height: 140px; }
+      .task-signature-section .sign-canvas-wrapper { min-height: 140px; }
+    }
+
+    .task-signature-section .sign-canvas-wrapper canvas {
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- ============================================================
-       LOADING PAGE
-       ============================================================ -->
+  <!-- LOADING PAGE -->
   <div class="loading-wrapper" id="loadingWrapper">
     <div class="logo-container">
       <div class="logo-ring"></div>
@@ -1389,9 +1298,7 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       MAIN APP CONTAINER
-       ============================================================ -->
+  <!-- MAIN APP CONTAINER -->
   <div id="appContainer">
     <!-- LOGIN -->
     <div id="loginPage" class="page active">
@@ -1545,7 +1452,6 @@
       let seconds = 0;
       let timerInterval = null;
       let progressInterval = null;
-      let loadingComplete = false;
 
       const statusList = [
         'Menghubungkan ke cloud ...',
@@ -1603,9 +1509,8 @@
 
         if (progressInterval) clearInterval(progressInterval);
 
-        // ===== DURASI LOADING 2 DETIK =====
         const startTime = Date.now();
-        const duration = 2000; // 2 detik
+        const duration = 2000;
 
         progressInterval = setInterval(() => {
           const elapsed = Date.now() - startTime;
@@ -1617,7 +1522,6 @@
             clearInterval(progressInterval);
             clearInterval(timerInterval);
             statusText.textContent = '✅ Siap digunakan!';
-            loadingComplete = true;
             
             loadingWrapper.classList.add('hidden');
             appContainer.classList.add('show');
@@ -1625,10 +1529,8 @@
             if (typeof initApp === 'function') {
               initApp();
             }
-            
-            console.log('✅ Loading selesai dalam 2 detik!');
           }
-        }, 16); // update setiap 16ms untuk animasi 60fps
+        }, 16);
       }
 
       document.getElementById('restartLoading').addEventListener('dblclick', function() {
@@ -1652,28 +1554,26 @@
         appContainer.classList.remove('show');
         
         startLoading();
-        console.log('□ Loading di-restart (double click logo)');
       });
 
       startLoading();
     })();
 
     // ============================================================
-    // MAIN APP - DENGAN FITUR TANDA TANGAN DI TASK MANAGER
+    // MAIN APP
     // ============================================================
     (function() {
       // ============================================================
-      //  KONFIGURASI CLOUD DATABASE
+      // KONFIGURASI CLOUD DATABASE
       // ============================================================
       const CONFIG = {
-        API_KEY: '$2a$10$P7RO7PJ08dhfFO15XVMJZ.2sUM1qpWzEjwai4.Iym6Cb5auzxSjQ2',
-        BIN_ID: '6a3f5e86da38895dfe0610b9',
+        API_KEY: '$2a$10$7rZHV/iWgXI04P/PbrTY1.Z3OpbyiN./CgUQydbDe/IPPcPpTduEK',
+        BIN_ID: '6a9e71e6ffd5d16053e852a5',
         BASE_URL: 'https://api.jsonbin.io/v3'
       };
 
       const ADMIN_USERNAME = 'marco';
 
-      // ============ DATA STATISTIK KUNJUNGAN ============
       const DATA_KUNJUNGAN = {
         data: [
           { uraian: 'KELAS RS', satuan: 'KELAS C', '2023': '', '2024': '', '2025': '' },
@@ -1820,12 +1720,6 @@
         return true;
       }
 
-      function canUserSign(taskUsername, taskId, signerUsername) {
-        const permission = getTaskSignaturePermission(taskUsername, taskId);
-        if (permission.allowAll) return true;
-        return permission.allowedUsers && permission.allowedUsers.includes(signerUsername);
-      }
-
       async function updateSignaturePermission(taskUsername, taskId, permission) {
         const saved = saveTaskSignaturePermission(taskUsername, taskId, permission);
         if (saved) {
@@ -1837,6 +1731,10 @@
 
       // ============ SIGN TASK ============
       async function signTask(taskUsername, taskId, signatureData) {
+        if (!signatureData || signatureData.length < 100) {
+          return { success: false, message: '❌ Tanda tangan tidak valid! Silakan buat ulang.' };
+        }
+        
         const signatures = getTaskSignatures(taskUsername, taskId);
         const alreadySigned = signatures.some(s => s.signer === currentUsername);
         if (alreadySigned) {
@@ -1857,7 +1755,7 @@
         return { success: true, message: '✅ Tugas berhasil ditandatangani!' };
       }
 
-      // ============ UNSIGN TASK YANG DIPERBAIKI ============
+      // ============ UNSIGN TASK ============
       async function unsignTask(taskUsername, taskId) {
         const isAdmin = currentUserRole === 'admin';
         
@@ -1865,7 +1763,6 @@
           return { success: false, message: '❌ Hanya Admin yang dapat menghapus tanda tangan!' };
         }
         
-        // Cari task
         if (!currentUsers[taskUsername]) {
           return { success: false, message: 'User tidak ditemukan!' };
         }
@@ -1880,28 +1777,22 @@
         const task = tasks[taskIndex];
         const signatures = task.signatures || [];
         
-        // Cari tanda tangan milik user saat ini
         const signIndex = signatures.findIndex(s => s.signer === currentUsername);
         
         if (signIndex === -1) {
           return { success: false, message: 'Anda belum menandatangani tugas ini!' };
         }
 
-        // Hapus tanda tangan
         signatures.splice(signIndex, 1);
         task.signatures = signatures;
         tasks[taskIndex] = task;
         currentUsers[taskUsername].tasks = tasks;
         
-        // Simpan ke cloud
         const saved = await saveUsers(currentUsers);
         
         if (saved) {
-          console.log('✅ Tanda tangan berhasil dihapus dari cloud');
           return { success: true, message: '✅ Tanda tangan berhasil dihapus!' };
         } else {
-          // Meskipun gagal ke cloud, data sudah tersimpan di lokal
-          console.warn('⚠️ Tanda tangan tersimpan di lokal tapi gagal ke cloud');
           return { success: true, message: '✅ Tanda tangan berhasil dihapus (lokal)!' };
         }
       }
@@ -1967,36 +1858,17 @@
       function getFileIcon(filename) {
         const ext = filename.split('.').pop().toLowerCase();
         const icons = {
-          'pdf': 'fa-file-pdf',
-          'doc': 'fa-file-word',
-          'docx': 'fa-file-word',
-          'xls': 'fa-file-excel',
-          'xlsx': 'fa-file-excel',
-          'ppt': 'fa-file-powerpoint',
-          'pptx': 'fa-file-powerpoint',
-          'jpg': 'fa-file-image',
-          'jpeg': 'fa-file-image',
-          'png': 'fa-file-image',
-          'gif': 'fa-file-image',
-          'svg': 'fa-file-image',
-          'webp': 'fa-file-image',
-          'mp4': 'fa-file-video',
-          'avi': 'fa-file-video',
-          'mov': 'fa-file-video',
-          'mp3': 'fa-file-audio',
-          'wav': 'fa-file-audio',
-          'zip': 'fa-file-archive',
-          'rar': 'fa-file-archive',
-          '7z': 'fa-file-archive',
-          'txt': 'fa-file-alt',
-          'csv': 'fa-file-csv',
-          'json': 'fa-file-code',
-          'xml': 'fa-file-code',
-          'html': 'fa-file-code',
-          'css': 'fa-file-code',
-          'js': 'fa-file-code',
-          'md': 'fa-file-alt',
-          '': 'fa-file'
+          'pdf': 'fa-file-pdf', 'doc': 'fa-file-word', 'docx': 'fa-file-word',
+          'xls': 'fa-file-excel', 'xlsx': 'fa-file-excel',
+          'ppt': 'fa-file-powerpoint', 'pptx': 'fa-file-powerpoint',
+          'jpg': 'fa-file-image', 'jpeg': 'fa-file-image', 'png': 'fa-file-image',
+          'gif': 'fa-file-image', 'svg': 'fa-file-image', 'webp': 'fa-file-image',
+          'mp4': 'fa-file-video', 'avi': 'fa-file-video', 'mov': 'fa-file-video',
+          'mp3': 'fa-file-audio', 'wav': 'fa-file-audio',
+          'zip': 'fa-file-archive', 'rar': 'fa-file-archive', '7z': 'fa-file-archive',
+          'txt': 'fa-file-alt', 'csv': 'fa-file-csv', 'json': 'fa-file-code',
+          'xml': 'fa-file-code', 'html': 'fa-file-code', 'css': 'fa-file-code',
+          'js': 'fa-file-code', 'md': 'fa-file-alt', '': 'fa-file'
         };
         return icons[ext] || 'fa-file';
       }
@@ -2188,7 +2060,7 @@
         return true;
       }
 
-      // ============ FUNGSI KOMENTAR YANG DIPERBAIKI ============
+      // ============ FUNGSI KOMENTAR ============
       async function addComment(taskUsername, taskId, commentText) {
         try {
           await loadUsers();
@@ -2244,13 +2116,11 @@
         }
       }
 
-      // ============ FUNGSI DELETE KOMENTAR YANG DIPERBAIKI ============
       async function deleteComment(taskUsername, taskId, commentIndex) {
         try {
           await loadUsers();
           
           if (!currentUsers[taskUsername]) {
-            console.error('User tidak ditemukan:', taskUsername);
             return { success: false, message: 'User tidak ditemukan!' };
           }
           
@@ -2258,7 +2128,6 @@
           const taskIndex = tasks.findIndex(t => t.id === taskId);
           
           if (taskIndex === -1) {
-            console.error('Task tidak ditemukan:', taskId);
             return { success: false, message: 'Tugas tidak ditemukan!' };
           }
           
@@ -2270,26 +2139,20 @@
           
           const comment = task.comments[commentIndex];
           
-          // Cek hak akses
           if (comment.user !== currentUsername && currentUserRole !== 'admin') {
             return { success: false, message: 'Anda tidak berhak menghapus komentar ini!' };
           }
           
-          // Hapus komentar
           task.comments.splice(commentIndex, 1);
           tasks[taskIndex] = task;
           currentUsers[taskUsername].tasks = tasks;
           
-          // Simpan ke cloud
           const saved = await saveUsers(currentUsers);
           
           if (saved) {
-            console.log('✅ Komentar berhasil dihapus dari cloud');
             await loadUsers();
             return { success: true, message: '✅ Komentar berhasil dihapus!' };
           } else {
-            // Meskipun gagal ke cloud, data sudah tersimpan di lokal
-            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
             return { success: true, message: '✅ Komentar berhasil dihapus (lokal)!' };
           }
         } catch (error) {
@@ -2425,8 +2288,6 @@
       function renderTaskSignature(taskId, taskUsername) {
         const signatures = getTaskSignatures(taskUsername, taskId);
         const hasSigned = signatures.some(s => s.signer === currentUsername);
-        const isAdmin = currentUserRole === 'admin';
-        
         const canSign = !hasSigned;
 
         let html = `
@@ -2443,11 +2304,10 @@
             <div class="sign-list">
               ${signatures.length > 0 ? signatures.map((s, index) => {
                 let signaturePreview = '';
-                if (s.signatureData) {
+                if (s.signatureData && s.signatureData.length > 100) {
                   signaturePreview = `
                     <div class="signature-preview">
                       <img src="${s.signatureData}" alt="Tanda tangan ${s.signer}" title="Tanda tangan ${s.signerFullname || s.signer}">
-                      <span class="signature-label">Tanda tangan</span>
                     </div>
                   `;
                 }
@@ -2460,7 +2320,7 @@
                       ${signaturePreview}
                     </div>
                     <span class="sign-status-text"><i class="fas fa-check-circle"></i></span>
-                    ${s.signer === currentUsername && isAdmin ? `
+                    ${s.signer === currentUsername && currentUserRole === 'admin' ? `
                       <button class="btn-unsign-task" onclick="window.unsignTask('${taskId}', '${taskUsername}')">
                         <i class="fas fa-times"></i>
                       </button>
@@ -2474,7 +2334,7 @@
 
             ${canSign ? `
               <div class="sign-canvas-wrapper">
-                <canvas id="signCanvas_${taskId}" width="600" height="200"></canvas>
+                <canvas id="signCanvas_${taskId}"></canvas>
                 <div class="placeholder-text">Tanda tangan di sini</div>
               </div>
               <div class="sign-actions">
@@ -2575,7 +2435,6 @@
             const isOwnReport = report._username === currentUsername;
             const canDelete = isOwnReport || isAdmin;
             const monthYear = report.month || 'Bulan tidak tersedia';
-            const fileIcon = getFileIcon(report.filename || 'file.pdf');
             
             html += `
               <div class="report-item" data-report-id="${report.id}" data-username="${report._username}">
@@ -3103,7 +2962,7 @@
             const username = document.querySelector('[data-username]')?.dataset?.username || currentUsername;
             initTaskSignatureCanvas(taskId, username);
             attachSignaturePermissionEvents(taskId, username);
-          }, 300);
+          }, 500);
         }
       }
       
@@ -3326,7 +3185,7 @@
         }
       }
 
-      // ============ ATTACH COMMENT EVENTS YANG DIPERBAIKI ============
+      // ============ ATTACH COMMENT EVENTS ============
       function attachCommentEvents() {
         document.querySelectorAll('.comment-form').forEach(form => {
           const newForm = form.cloneNode(true);
@@ -3357,7 +3216,6 @@
                 await refreshTaskModal();
                 updateCounts();
                 renderActivity();
-                // Tampilkan pesan sukses
                 const successMsg = document.createElement('div');
                 successMsg.className = 'success-msg show';
                 successMsg.style.marginTop = '0.5rem';
@@ -3597,6 +3455,235 @@
         }
       }
 
+      // ============ TASK SIGNATURE CANVAS - PERBAIKAN UTAMA ============
+      let taskSignatureCanvas = null;
+      let taskSignatureCtx = null;
+      let taskIsDrawing = false;
+      let taskLastX = 0;
+      let taskLastY = 0;
+      let currentTaskId = '';
+      let currentTaskUsername = '';
+      let canvasHasDrawing = false; // PERBAIKAN: Flag untuk tracking apakah user sudah menggambar
+
+      function initTaskSignatureCanvas(taskId, username) {
+        let canvas = document.getElementById(`signCanvas_${taskId}`);
+        
+        if (!canvas) {
+          console.warn('Canvas belum ditemukan, mencoba mencari ulang...');
+          setTimeout(() => {
+            initTaskSignatureCanvas(taskId, username);
+          }, 300);
+          return;
+        }
+
+        if (canvas.offsetParent === null) {
+          console.warn('Canvas tidak terlihat, menunggu...');
+          setTimeout(() => {
+            initTaskSignatureCanvas(taskId, username);
+          }, 200);
+          return;
+        }
+
+        currentTaskId = taskId;
+        currentTaskUsername = username;
+        canvasHasDrawing = false; // RESET FLAG
+
+        const rect = canvas.getBoundingClientRect();
+        let width = rect.width || 600;
+        let height = rect.height || 200;
+        
+        if (width < 100) width = 600;
+        if (height < 50) height = 200;
+        
+        const dpr = window.devicePixelRatio || 1;
+        
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        
+        canvas.setAttribute('data-taskid', taskId);
+        canvas.setAttribute('data-username', username);
+
+        taskSignatureCanvas = canvas;
+        taskSignatureCtx = canvas.getContext('2d');
+        
+        taskSignatureCtx.setTransform(1, 0, 0, 1, 0, 0);
+        taskSignatureCtx.scale(dpr, dpr);
+        
+        // Bersihkan canvas dengan background transparan
+        taskSignatureCtx.clearRect(0, 0, width, height);
+        
+        taskSignatureCtx.lineWidth = 3;
+        taskSignatureCtx.lineCap = 'round';
+        taskSignatureCtx.lineJoin = 'round';
+        taskSignatureCtx.strokeStyle = '#c8d6f0';
+
+        const placeholder = canvas.parentElement?.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'block';
+
+        // ===== TOMBOL CLEAR =====
+        const clearBtn = document.getElementById(`clearBtn_${taskId}`);
+        if (clearBtn) {
+          clearBtn.disabled = true;
+          clearBtn.onclick = function(e) {
+            e.stopPropagation();
+            clearTaskCanvas();
+            this.disabled = true;
+            canvasHasDrawing = false; // RESET FLAG
+          };
+        }
+
+        // ===== TOMBOL SIGN =====
+        const signBtn = document.getElementById(`signBtn_${taskId}`);
+        if (signBtn) {
+          // Clone untuk menghapus event listener lama
+          const newSignBtn = signBtn.cloneNode(true);
+          signBtn.parentNode.replaceChild(newSignBtn, signBtn);
+          
+          newSignBtn.onclick = function(e) {
+            e.stopPropagation();
+            try {
+              // PERBAIKAN: Cek flag drawing, bukan data URL
+              if (!canvasHasDrawing) {
+                alert('Silakan buat tanda tangan terlebih dahulu!');
+                return;
+              }
+              
+              const dataUrl = canvas.toDataURL('image/png');
+              
+              // Validasi data URL
+              if (!dataUrl || dataUrl.length < 500) {
+                alert('Tanda tangan tidak valid. Silakan buat ulang!');
+                return;
+              }
+              
+              window.signTaskAction(taskId, username, dataUrl);
+            } catch (err) {
+              console.error('Error signing:', err);
+              alert('❌ Terjadi kesalahan. Silakan coba lagi.');
+            }
+          };
+          
+          document.getElementById(`signBtn_${taskId}`).disabled = false;
+        }
+
+        // Simpan state kosong
+        canvas.setAttribute('data-empty', canvas.toDataURL('image/png'));
+
+        // Hapus event listener lama
+        canvas.removeEventListener('mousedown', startTaskDrawing);
+        canvas.removeEventListener('mousemove', taskDraw);
+        canvas.removeEventListener('mouseup', stopTaskDrawing);
+        canvas.removeEventListener('mouseleave', stopTaskDrawing);
+        canvas.removeEventListener('touchstart', startTaskDrawingTouch);
+        canvas.removeEventListener('touchmove', taskDrawTouch);
+        canvas.removeEventListener('touchend', stopTaskDrawing);
+
+        // Event listener untuk mouse
+        canvas.addEventListener('mousedown', startTaskDrawing);
+        canvas.addEventListener('mousemove', taskDraw);
+        canvas.addEventListener('mouseup', stopTaskDrawing);
+        canvas.addEventListener('mouseleave', stopTaskDrawing);
+
+        // Event listener untuk touch (mobile)
+        canvas.addEventListener('touchstart', startTaskDrawingTouch, { passive: false });
+        canvas.addEventListener('touchmove', taskDrawTouch, { passive: false });
+        canvas.addEventListener('touchend', stopTaskDrawing, { passive: false });
+
+        console.log('✅ Canvas signature siap untuk task:', taskId, 'drawing flag:', canvasHasDrawing);
+      }
+
+      function getTaskPosition(e) {
+        const rect = taskSignatureCanvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        
+        let clientX, clientY;
+        if (e.touches) {
+          clientX = e.touches[0].clientX;
+          clientY = e.touches[0].clientY;
+        } else {
+          clientX = e.clientX;
+          clientY = e.clientY;
+        }
+        
+        const scaleX = taskSignatureCanvas.width / (rect.width * dpr);
+        const scaleY = taskSignatureCanvas.height / (rect.height * dpr);
+        
+        return {
+          x: (clientX - rect.left) * scaleX,
+          y: (clientY - rect.top) * scaleY
+        };
+      }
+
+      function startTaskDrawing(e) {
+        e.preventDefault();
+        
+        const signBtn = document.getElementById(`signBtn_${currentTaskId}`);
+        if (signBtn && signBtn.disabled) return;
+        
+        taskIsDrawing = true;
+        canvasHasDrawing = true; // PERBAIKAN: Set flag saat mulai menggambar
+        
+        const pos = getTaskPosition(e);
+        taskLastX = pos.x;
+        taskLastY = pos.y;
+        
+        const placeholder = taskSignatureCanvas.parentElement?.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'none';
+        
+        const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
+        if (clearBtn) clearBtn.disabled = false;
+      }
+
+      function taskDraw(e) {
+        e.preventDefault();
+        if (!taskIsDrawing) return;
+        
+        const pos = getTaskPosition(e);
+        taskSignatureCtx.beginPath();
+        taskSignatureCtx.moveTo(taskLastX, taskLastY);
+        taskSignatureCtx.lineTo(pos.x, pos.y);
+        taskSignatureCtx.stroke();
+        taskLastX = pos.x;
+        taskLastY = pos.y;
+      }
+
+      function startTaskDrawingTouch(e) {
+        e.preventDefault();
+        if (!e.touches || e.touches.length === 0) return;
+        startTaskDrawing(e);
+      }
+
+      function taskDrawTouch(e) {
+        e.preventDefault();
+        if (!e.touches || e.touches.length === 0) return;
+        taskDraw(e);
+      }
+
+      function stopTaskDrawing(e) {
+        taskIsDrawing = false;
+      }
+
+      function clearTaskCanvas() {
+        if (!taskSignatureCtx || !taskSignatureCanvas) return;
+        const rect = taskSignatureCanvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const width = rect.width || 600;
+        const height = rect.height || 200;
+        
+        // Bersihkan canvas
+        taskSignatureCtx.clearRect(0, 0, width * dpr, height * dpr);
+        
+        const placeholder = taskSignatureCanvas.parentElement?.querySelector('.placeholder-text');
+        if (placeholder) placeholder.style.display = 'block';
+        
+        const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
+        if (clearBtn) clearBtn.disabled = true;
+        
+        canvasHasDrawing = false; // RESET FLAG
+      }
+
       // ============ TASK SIGNATURE GLOBAL FUNCTIONS ============
       window.showTaskSignature = async function(taskId, username) {
         try {
@@ -3634,10 +3721,11 @@
             ${signatureHtml}
           `);
 
+          // Inisialisasi canvas setelah modal terbuka
           setTimeout(() => {
             initTaskSignatureCanvas(taskId, foundUsername);
             attachSignaturePermissionEvents(taskId, foundUsername);
-          }, 300);
+          }, 600);
 
         } catch (error) {
           console.error('❌ Error showing task signature:', error);
@@ -3647,6 +3735,22 @@
 
       window.signTaskAction = async function(taskId, taskUsername, signatureData) {
         try {
+          // PERBAIKAN: Validasi data dengan lebih baik
+          if (!signatureData) {
+            alert('❌ Tanda tangan tidak valid. Silakan buat ulang.');
+            return;
+          }
+          
+          if (signatureData.length < 200) {
+            alert('❌ Tanda tangan terlalu pendek. Silakan buat ulang.');
+            return;
+          }
+          
+          if (!signatureData.startsWith('data:image/png;base64,')) {
+            alert('❌ Format tanda tangan tidak valid. Silakan buat ulang.');
+            return;
+          }
+          
           const result = await signTask(taskUsername, taskId, signatureData);
           if (result.success) {
             alert('✅ Tanda tangan berhasil disimpan!');
@@ -3662,7 +3766,6 @@
         }
       };
 
-      // ============ UNSIGN TASK GLOBAL YANG DIPERBAIKI ============
       window.unsignTask = async function(taskId, taskUsername) {
         try {
           const result = await unsignTask(taskUsername, taskId);
@@ -3679,148 +3782,6 @@
           alert('❌ Gagal menghapus tanda tangan. Silakan coba lagi.');
         }
       };
-
-      // ============ TASK SIGNATURE CANVAS ============
-      let taskSignatureCanvas = null;
-      let taskSignatureCtx = null;
-      let taskIsDrawing = false;
-      let taskLastX = 0;
-      let taskLastY = 0;
-      let currentTaskId = '';
-      let currentTaskUsername = '';
-
-      function initTaskSignatureCanvas(taskId, username) {
-        const canvas = document.getElementById(`signCanvas_${taskId}`);
-        if (!canvas) return;
-
-        currentTaskId = taskId;
-        currentTaskUsername = username;
-
-        const rect = canvas.getBoundingClientRect();
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = Math.round(rect.width * dpr);
-        canvas.height = Math.round(rect.height * dpr);
-
-        taskSignatureCanvas = canvas;
-        taskSignatureCtx = canvas.getContext('2d');
-        taskSignatureCtx.scale(dpr, dpr);
-        taskSignatureCtx.lineWidth = 3;
-        taskSignatureCtx.lineCap = 'round';
-        taskSignatureCtx.lineJoin = 'round';
-        taskSignatureCtx.strokeStyle = '#c8d6f0';
-
-        const placeholder = canvas.parentElement.querySelector('.placeholder-text');
-        if (placeholder) placeholder.style.display = 'block';
-
-        const clearBtn = document.getElementById(`clearBtn_${taskId}`);
-        if (clearBtn) {
-          clearBtn.disabled = true;
-          clearBtn.onclick = function() {
-            clearTaskCanvas();
-            this.disabled = true;
-          };
-        }
-
-        const signBtn = document.getElementById(`signBtn_${taskId}`);
-        if (signBtn) {
-          signBtn.onclick = function() {
-            const dataUrl = canvas.toDataURL('image/png');
-            if (dataUrl === canvas.getAttribute('data-empty')) {
-              alert('Silakan buat tanda tangan terlebih dahulu!');
-              return;
-            }
-            window.signTaskAction(taskId, username, dataUrl);
-          };
-        }
-
-        canvas.removeEventListener('mousedown', startTaskDrawing);
-        canvas.removeEventListener('mousemove', taskDraw);
-        canvas.removeEventListener('mouseup', stopTaskDrawing);
-        canvas.removeEventListener('mouseleave', stopTaskDrawing);
-        canvas.removeEventListener('touchstart', startTaskDrawingTouch);
-        canvas.removeEventListener('touchmove', taskDrawTouch);
-        canvas.removeEventListener('touchend', stopTaskDrawing);
-
-        canvas.addEventListener('mousedown', startTaskDrawing);
-        canvas.addEventListener('mousemove', taskDraw);
-        canvas.addEventListener('mouseup', stopTaskDrawing);
-        canvas.addEventListener('mouseleave', stopTaskDrawing);
-
-        canvas.addEventListener('touchstart', startTaskDrawingTouch, { passive: false });
-        canvas.addEventListener('touchmove', taskDrawTouch, { passive: false });
-        canvas.addEventListener('touchend', stopTaskDrawing, { passive: false });
-
-        canvas.setAttribute('data-empty', canvas.toDataURL('image/png'));
-      }
-
-      function getTaskPosition(e) {
-        const rect = taskSignatureCanvas.getBoundingClientRect();
-        return {
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
-        };
-      }
-
-      function startTaskDrawing(e) {
-        if (document.getElementById(`signBtn_${currentTaskId}`)?.disabled) return;
-        taskIsDrawing = true;
-        const pos = getTaskPosition(e);
-        taskLastX = pos.x;
-        taskLastY = pos.y;
-        
-        const placeholder = taskSignatureCanvas.parentElement.querySelector('.placeholder-text');
-        if (placeholder) placeholder.style.display = 'none';
-        
-        const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
-        if (clearBtn) clearBtn.disabled = false;
-      }
-
-      function taskDraw(e) {
-        if (!taskIsDrawing) return;
-        const pos = getTaskPosition(e);
-        taskSignatureCtx.beginPath();
-        taskSignatureCtx.moveTo(taskLastX, taskLastY);
-        taskSignatureCtx.lineTo(pos.x, pos.y);
-        taskSignatureCtx.stroke();
-        taskLastX = pos.x;
-        taskLastY = pos.y;
-      }
-
-      function startTaskDrawingTouch(e) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const mouseEvent = new MouseEvent('mousedown', {
-          clientX: touch.clientX,
-          clientY: touch.clientY
-        });
-        taskSignatureCanvas.dispatchEvent(mouseEvent);
-      }
-
-      function taskDrawTouch(e) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const mouseEvent = new MouseEvent('mousemove', {
-          clientX: touch.clientX,
-          clientY: touch.clientY
-        });
-        taskSignatureCanvas.dispatchEvent(mouseEvent);
-      }
-
-      function stopTaskDrawing(e) {
-        taskIsDrawing = false;
-      }
-
-      function clearTaskCanvas() {
-        if (!taskSignatureCtx || !taskSignatureCanvas) return;
-        const rect = taskSignatureCanvas.getBoundingClientRect();
-        taskSignatureCtx.clearRect(0, 0, rect.width, rect.height);
-        
-        const placeholder = taskSignatureCanvas.parentElement.querySelector('.placeholder-text');
-        if (placeholder) placeholder.style.display = 'block';
-        
-        const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
-        if (clearBtn) clearBtn.disabled = true;
-      }
 
       function attachTaskSignatureEvents() {
         document.querySelectorAll('.task-item .sign-task-btn').forEach(btn => {
@@ -3866,7 +3827,6 @@
         renderActivity();
       };
 
-      // ============ DELETE COMMENT GLOBAL YANG DIPERBAIKI ============
       window.deleteComment = async function(taskId, username, index) {
         if (!confirm('Hapus komentar ini?')) return;
         try {
