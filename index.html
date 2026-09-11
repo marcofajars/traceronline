@@ -6,14 +6,7 @@
   <title>Daily Work Web - Tracer Online</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* ============================================================
-       LOADING PAGE STYLES
-       ============================================================ */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       min-height: 100vh;
@@ -25,375 +18,196 @@
       padding: 1.2rem;
     }
 
+    /* ============================================================
+       LOADING PAGE
+       ============================================================ */
     .loading-wrapper {
-      width: 100%;
-      max-width: 480px;
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 2.4rem;
-      padding: 2.8rem 1.8rem 2.2rem;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04);
-      text-align: center;
-      transition: 0.6s ease;
-      position: relative;
-      z-index: 10;
+      width: 100%; max-width: 480px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 2.4rem; padding: 2.8rem 1.8rem 2.2rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+      text-align: center; transition: 0.6s ease;
+      position: relative; z-index: 10;
     }
-
     .loading-wrapper.hidden {
-      opacity: 0;
-      transform: scale(0.96);
-      pointer-events: none;
-      position: absolute;
-      visibility: hidden;
+      opacity: 0; transform: scale(0.96);
+      pointer-events: none; position: absolute; visibility: hidden;
     }
-
     .logo-container {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 96px;
-      height: 96px;
-      margin-bottom: 1.4rem;
+      position: relative; display: inline-flex;
+      align-items: center; justify-content: center;
+      width: 96px; height: 96px; margin-bottom: 1.4rem;
     }
-
     .logo-ring {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 2px solid rgba(108, 92, 231, 0.15);
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 2px solid rgba(108,92,231,0.15);
       animation: ringPulse 2.4s ease-in-out infinite;
     }
-
-    .logo-ring:nth-child(2) {
-      border-color: rgba(162, 155, 254, 0.08);
-      animation-delay: 0.8s;
-      border-width: 3px;
-    }
-
-    .logo-ring:nth-child(3) {
-      border-color: rgba(108, 92, 231, 0.05);
-      animation-delay: 1.6s;
-      border-width: 4px;
-    }
-
+    .logo-ring:nth-child(2) { border-color: rgba(162,155,254,0.08); animation-delay: 0.8s; border-width: 3px; }
+    .logo-ring:nth-child(3) { border-color: rgba(108,92,231,0.05); animation-delay: 1.6s; border-width: 4px; }
     @keyframes ringPulse {
-      0%, 100% { transform: scale(1); opacity: 0.3; }
+      0%,100% { transform: scale(1); opacity: 0.3; }
       50% { transform: scale(1.25); opacity: 0.9; }
     }
-
     .logo-icon {
-      position: relative;
-      z-index: 2;
-      width: 64px;
-      height: 64px;
+      position: relative; z-index: 2; width: 64px; height: 64px;
       background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-      border-radius: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 16px 48px rgba(108, 92, 231, 0.35);
-      transition: transform 0.3s;
-      cursor: pointer;
+      border-radius: 22px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 16px 48px rgba(108,92,231,0.35);
+      transition: transform 0.3s; cursor: pointer;
     }
-
-    .logo-icon:hover {
-      transform: scale(1.05);
-    }
-
-    .logo-icon svg {
-      width: 36px;
-      height: 36px;
-      fill: white;
-    }
-
+    .logo-icon:hover { transform: scale(1.05); }
+    .logo-icon svg { width: 36px; height: 36px; fill: white; }
     .loading-title {
-      color: #f0f4ff;
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 0.2rem;
+      color: #f0f4ff; font-size: 1.6rem; font-weight: 700;
+      letter-spacing: -0.5px; margin-bottom: 0.2rem;
     }
-
     .loading-sub {
-      color: #8b9fc9;
-      font-size: 0.9rem;
-      font-weight: 400;
-      margin-bottom: 2rem;
-      border-left: 3px solid #6c5ce7;
-      padding-left: 0.8rem;
-      display: inline-block;
+      color: #8b9fc9; font-size: 0.9rem; font-weight: 400;
+      margin-bottom: 2rem; border-left: 3px solid #6c5ce7;
+      padding-left: 0.8rem; display: inline-block;
     }
-
     .progress-track {
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 20px;
-      overflow: hidden;
-      margin-bottom: 0.8rem;
-      position: relative;
+      width: 100%; height: 6px; background: rgba(255,255,255,0.06);
+      border-radius: 20px; overflow: hidden; margin-bottom: 0.8rem; position: relative;
     }
-
     .progress-fill {
-      height: 100%;
-      width: 0%;
+      height: 100%; width: 0%;
       background: linear-gradient(90deg, #6c5ce7, #a29bfe, #fdcb6e);
-      border-radius: 20px;
-      transition: width 0.1s ease;
-      position: relative;
-      box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
+      border-radius: 20px; transition: width 0.1s ease;
+      position: relative; box-shadow: 0 0 20px rgba(108,92,231,0.3);
     }
-
     .progress-fill::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 0;
-      height: 100%;
-      width: 20px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25));
+      content: ''; position: absolute; right: 0; top: 0;
+      height: 100%; width: 20px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25));
       border-radius: 20px;
     }
-
     .progress-stats {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.6rem;
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 1.6rem;
     }
-
     .progress-percent {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #a29bfe;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.5px;
+      font-size: 1.1rem; font-weight: 700; color: #a29bfe;
+      font-variant-numeric: tabular-nums; letter-spacing: 0.5px;
     }
-
     .progress-status {
-      font-size: 0.75rem;
-      color: #8b9fc9;
-      background: rgba(255, 255, 255, 0.04);
-      padding: 0.2rem 1rem;
-      border-radius: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 0.75rem; color: #8b9fc9;
+      background: rgba(255,255,255,0.04); padding: 0.2rem 1rem;
+      border-radius: 40px; border: 1px solid rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 6px;
     }
-
     .progress-status .dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #46d47c;
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 50%; background: #46d47c;
       animation: dotPulse 1.2s ease-in-out infinite;
     }
-
     @keyframes dotPulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
+      0%,100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.3; transform: scale(0.6); }
     }
-
     .task-list-loading {
-      margin-top: 1.2rem;
-      text-align: left;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 16px;
-      padding: 0.8rem 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.03);
+      margin-top: 1.2rem; text-align: left;
+      background: rgba(255,255,255,0.02); border-radius: 16px;
+      padding: 0.8rem 1rem; border: 1px solid rgba(255,255,255,0.03);
     }
-
     .task-list-loading .task-label {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #5f7197;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 0.65rem; text-transform: uppercase;
+      letter-spacing: 1px; color: #5f7197; margin-bottom: 0.5rem;
+      display: flex; align-items: center; gap: 8px;
     }
-
-    .task-list-loading .task-label i {
-      color: #6c5ce7;
-    }
-
+    .task-list-loading .task-label i { color: #6c5ce7; }
     .loading-task-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-      animation: fadeSlide 0.5s ease forwards;
-      opacity: 0;
+      display: flex; align-items: center; gap: 10px;
+      padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+      animation: fadeSlide 0.5s ease forwards; opacity: 0;
     }
-
     .loading-task-item:nth-child(1) { animation-delay: 0.1s; }
     .loading-task-item:nth-child(2) { animation-delay: 0.3s; }
     .loading-task-item:nth-child(3) { animation-delay: 0.5s; }
     .loading-task-item:last-child { border-bottom: none; }
-
     @keyframes fadeSlide {
       from { opacity: 0; transform: translateX(-8px); }
       to { opacity: 1; transform: translateX(0); }
     }
-
     .loading-task-item .task-icon-small {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: rgba(108, 92, 231, 0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(108,92,231,0.12);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-
-    .loading-task-item .task-icon-small i {
-      font-size: 0.7rem;
-      color: #a29bfe;
-    }
-
-    .loading-task-item .task-info {
-      flex: 1;
-    }
-
-    .loading-task-item .task-name {
-      color: #d3def5;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-
-    .loading-task-item .task-meta {
-      color: #5f7197;
-      font-size: 0.6rem;
-      display: flex;
-      gap: 12px;
-      margin-top: 1px;
-    }
-
+    .loading-task-item .task-icon-small i { font-size: 0.7rem; color: #a29bfe; }
+    .loading-task-item .task-info { flex: 1; }
+    .loading-task-item .task-name { color: #d3def5; font-size: 0.8rem; font-weight: 500; }
+    .loading-task-item .task-meta { color: #5f7197; font-size: 0.6rem; display: flex; gap: 12px; margin-top: 1px; }
     .loading-task-item .task-status-badge {
-      font-size: 0.5rem;
-      padding: 0.05rem 0.5rem;
-      border-radius: 30px;
-      background: rgba(255, 215, 0, 0.12);
-      color: #ffd700;
-      flex-shrink: 0;
+      font-size: 0.5rem; padding: 0.05rem 0.5rem;
+      border-radius: 30px; background: rgba(255,215,0,0.12);
+      color: #ffd700; flex-shrink: 0;
     }
-
-    .loading-task-item .task-status-badge.done {
-      background: rgba(0, 206, 209, 0.12);
-      color: #00ced1;
-    }
-
+    .loading-task-item .task-status-badge.done { background: rgba(0,206,209,0.12); color: #00ced1; }
     .spinner-dots {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin: 0.8rem 0 0.2rem;
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; margin: 0.8rem 0 0.2rem;
     }
-
     .spinner-dots span {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #6c5ce7;
+      display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; background: #6c5ce7;
       animation: bounceDot 1.4s ease-in-out infinite both;
     }
-
     .spinner-dots span:nth-child(1) { animation-delay: -0.32s; }
     .spinner-dots span:nth-child(2) { animation-delay: -0.16s; }
     .spinner-dots span:nth-child(3) { animation-delay: 0s; }
-
     @keyframes bounceDot {
-      0%, 80%, 100% { transform: scale(0.4); opacity: 0.4; }
+      0%,80%,100% { transform: scale(0.4); opacity: 0.4; }
       40% { transform: scale(1); opacity: 1; }
     }
-
     .loading-footer {
-      margin-top: 1.6rem;
-      color: #4a5a7a;
-      font-size: 0.6rem;
-      letter-spacing: 0.5px;
-      border-top: 1px solid rgba(255, 255, 255, 0.03);
-      padding-top: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      margin-top: 1.6rem; color: #4a5a7a; font-size: 0.6rem;
+      letter-spacing: 0.5px; border-top: 1px solid rgba(255,255,255,0.03);
+      padding-top: 1rem; display: flex; justify-content: center;
+      align-items: center; gap: 12px; flex-wrap: wrap;
     }
-
     .loading-footer .badge {
-      background: rgba(108, 92, 231, 0.1);
-      padding: 0.1rem 0.8rem;
-      border-radius: 30px;
-      color: #a29bfe;
-      font-size: 0.55rem;
-      border: 1px solid rgba(108, 92, 231, 0.08);
+      background: rgba(108,92,231,0.1); padding: 0.1rem 0.8rem;
+      border-radius: 30px; color: #a29bfe; font-size: 0.55rem;
+      border: 1px solid rgba(108,92,231,0.08);
     }
-
-    .loading-footer i {
-      color: #5f7197;
-    }
+    .loading-footer i { color: #5f7197; }
 
     #appContainer {
-      width: 100%;
-      max-width: 480px;
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 2rem;
-      padding: 1.5rem 1.2rem;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      display: none;
-      animation: fadeUp 0.5s ease forwards;
+      width: 100%; max-width: 480px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 2rem; padding: 1.5rem 1.2rem;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: none; animation: fadeUp 0.5s ease forwards;
     }
-
-    #appContainer.show {
-      display: block;
-    }
-
+    #appContainer.show { display: block; }
     @keyframes fadeUp {
       0% { opacity: 0; transform: translateY(20px) scale(0.98); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
-
     .page { display: none; animation: fadeUp 0.4s ease forwards; }
     .page.active { display: block; }
 
     .auth-header { text-align: center; margin-bottom: 1.8rem; }
     .auth-header .logo-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 70px;
-      height: 70px;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 70px; height: 70px;
       background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-      border-radius: 24px;
-      margin-bottom: 0.8rem;
-      box-shadow: 0 12px 32px rgba(108, 92, 231, 0.35);
-      position: relative;
+      border-radius: 24px; margin-bottom: 0.8rem;
+      box-shadow: 0 12px 32px rgba(108,92,231,0.35); position: relative;
     }
     .auth-header .logo-icon svg { width: 38px; height: 38px; fill: white; }
     .auth-header .logo-icon .ring {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 24px;
-      border: 2px solid rgba(255,255,255,0.15);
+      position: absolute; width: 100%; height: 100%;
+      border-radius: 24px; border: 2px solid rgba(255,255,255,0.15);
       animation: pulse 2s ease-in-out infinite;
     }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
     .auth-header h2 { color: #f0f4ff; font-weight: 600; font-size: 1.6rem; letter-spacing: -0.5px; }
     .auth-header p { color: #9aa9c9; font-size: 0.9rem; margin-top: 0.2rem; }
 
@@ -403,7 +217,7 @@
     .input-group .input-icon i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #7b8fb0; font-size: 0.95rem; }
     .input-group input, .input-group textarea, .input-group select {
       width: 100%; padding: 0.8rem 1rem 0.8rem 3rem;
-      background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.06);
       border-radius: 16px; font-size: 0.95rem; color: #f0f4ff; outline: none;
       transition: 0.25s; box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
     }
@@ -418,17 +232,15 @@
     .btn-primary {
       width: 100%; padding: 0.85rem; border: none;
       background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-      border-radius: 16px;
-      font-size: 1rem; font-weight: 600; color: white; cursor: pointer;
-      transition: 0.25s; box-shadow: 0 8px 24px rgba(108, 92, 231, 0.3);
+      border-radius: 16px; font-size: 1rem; font-weight: 600; color: white;
+      cursor: pointer; transition: 0.25s;
+      box-shadow: 0 8px 24px rgba(108,92,231,0.3);
       display: flex; align-items: center; justify-content: center; gap: 10px;
     }
-    .btn-primary:hover { transform: scale(1.01); box-shadow: 0 12px 32px rgba(108, 92, 231, 0.45); }
+    .btn-primary:hover { transform: scale(1.01); box-shadow: 0 12px 32px rgba(108,92,231,0.45); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    .btn-danger { background: linear-gradient(135deg, #ff6b6b, #ee5a24); box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3); }
-    .btn-danger:hover { box-shadow: 0 12px 32px rgba(255, 107, 107, 0.45); }
-    .btn-success { background: linear-gradient(135deg, #00b894, #00cec9); box-shadow: 0 8px 24px rgba(0, 206, 201, 0.3); }
-    .btn-success:hover { box-shadow: 0 12px 32px rgba(0, 206, 201, 0.45); }
+    .btn-danger { background: linear-gradient(135deg, #ff6b6b, #ee5a24); box-shadow: 0 8px 24px rgba(255,107,107,0.3); }
+    .btn-success { background: linear-gradient(135deg, #00b894, #00cec9); box-shadow: 0 8px 24px rgba(0,206,201,0.3); }
     .btn-small { padding: 0.3rem 0.7rem; font-size: 0.7rem; width: auto; border-radius: 12px; }
 
     .auth-footer { text-align: center; margin-top: 1.5rem; color: #7b8fb0; font-size: 0.85rem; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 1.2rem; }
@@ -437,9 +249,9 @@
 
     .error-msg { background: rgba(255,70,70,0.1); border-left: 3px solid #ff5e5e; padding: 0.6rem 1rem; border-radius: 14px; color: #ffbaba; font-size: 0.85rem; margin-bottom: 1rem; display: none; align-items: center; gap: 10px; }
     .error-msg.show { display: flex; }
-    .success-msg { background: rgba(70, 212, 124, 0.1); border-left: 3px solid #46d47c; padding: 0.6rem 1rem; border-radius: 14px; color: #9ae6b8; font-size: 0.85rem; margin-bottom: 1rem; display: none; align-items: center; gap: 10px; }
+    .success-msg { background: rgba(70,212,124,0.1); border-left: 3px solid #46d47c; padding: 0.6rem 1rem; border-radius: 14px; color: #9ae6b8; font-size: 0.85rem; margin-bottom: 1rem; display: none; align-items: center; gap: 10px; }
     .success-msg.show { display: flex; }
-    .info-msg { background: rgba(108, 92, 231, 0.1); border-left: 3px solid #6c5ce7; padding: 0.6rem 1rem; border-radius: 14px; color: #b8aaff; font-size: 0.85rem; margin-bottom: 1rem; display: none; align-items: center; gap: 10px; }
+    .info-msg { background: rgba(108,92,231,0.1); border-left: 3px solid #6c5ce7; padding: 0.6rem 1rem; border-radius: 14px; color: #b8aaff; font-size: 0.85rem; margin-bottom: 1rem; display: none; align-items: center; gap: 10px; }
     .info-msg.show { display: flex; }
 
     .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.2); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; }
@@ -452,8 +264,7 @@
       width: 44px; height: 44px; border-radius: 16px;
       display: flex; align-items: center; justify-content: center;
       font-size: 1.4rem; font-weight: 600; color: white;
-      box-shadow: 0 6px 16px rgba(108,92,231,0.3);
-      text-transform: uppercase;
+      box-shadow: 0 6px 16px rgba(108,92,231,0.3); text-transform: uppercase;
     }
     .home-header .avatar.admin-avatar { background: linear-gradient(135deg, #ff6b6b, #ffd93d); box-shadow: 0 6px 16px rgba(255,107,107,0.3); }
     .home-header .greeting h2 { color: #f0f4ff; font-weight: 600; font-size: 1.2rem; }
@@ -472,48 +283,32 @@
     }
     .logout-btn:hover { background: rgba(255,70,70,0.12); border-color: #ff6b6b; color: #ffbaba; }
 
-    .home-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.8rem;
-      margin: 1.2rem 0 0.8rem;
-    }
+    .home-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin: 1.2rem 0 0.8rem; }
     .home-card {
-      background: rgba(255,255,255,0.03);
-      backdrop-filter: blur(4px);
-      padding: 1rem 0.4rem;
-      border-radius: 18px;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.04);
-      transition: 0.25s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      position: relative;
+      background: rgba(255,255,255,0.03); backdrop-filter: blur(4px);
+      padding: 1rem 0.4rem; border-radius: 18px; text-align: center;
+      border: 1px solid rgba(255,255,255,0.04); transition: 0.25s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer;
+      -webkit-tap-highlight-color: transparent; position: relative;
     }
     .home-card:active { transform: scale(0.96); }
     .home-card .icon-wrap {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
-      background: rgba(108,92,231,0.12);
-      margin-bottom: 0.3rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px; border-radius: 16px;
+      background: rgba(108,92,231,0.12); margin-bottom: 0.3rem;
     }
     .home-card .icon-wrap i { font-size: 1.4rem; color: #a29bfe; }
-    .home-card .icon-wrap .task-icon { background: rgba(0, 206, 209, 0.12); }
+    .home-card .icon-wrap .task-icon { background: rgba(0,206,209,0.12); }
     .home-card .icon-wrap .task-icon i { color: #00ced1; }
-    .home-card .icon-wrap .report-icon { background: rgba(255, 215, 0, 0.12); }
+    .home-card .icon-wrap .report-icon { background: rgba(255,215,0,0.12); }
     .home-card .icon-wrap .report-icon i { color: #ffd700; }
-    .home-card .icon-wrap .jadwal-icon { background: rgba(255, 215, 0, 0.12); }
+    .home-card .icon-wrap .jadwal-icon { background: rgba(255,215,0,0.12); }
     .home-card .icon-wrap .jadwal-icon i { color: #ffd700; }
-    .home-card .icon-wrap .admin-icon { background: rgba(255, 107, 107, 0.15); }
+    .home-card .icon-wrap .admin-icon { background: rgba(255,107,107,0.15); }
     .home-card .icon-wrap .admin-icon i { color: #ff6b6b; }
-    .home-card .icon-wrap .user-icon { background: rgba(108, 92, 231, 0.15); }
+    .home-card .icon-wrap .user-icon { background: rgba(108,92,231,0.15); }
     .home-card .icon-wrap .user-icon i { color: #a29bfe; }
-    .home-card .icon-wrap .stat-icon { background: rgba(0, 206, 209, 0.12); }
+    .home-card .icon-wrap .stat-icon { background: rgba(0,206,209,0.12); }
     .home-card .icon-wrap .stat-icon i { color: #00ced1; }
     .home-card h4 { color: #e8eeff; font-weight: 500; font-size: 0.85rem; margin-top: 0.1rem; }
     .home-card p { color: #8b9fc9; font-size: 0.65rem; }
@@ -534,248 +329,117 @@
     .home-card.disabled:active { transform: none; }
 
     .task-signature-section {
-      margin-top: 0.8rem;
-      padding: 0.8rem;
-      background: rgba(255,255,255,0.03);
-      border-radius: 12px;
+      margin-top: 0.8rem; padding: 0.8rem;
+      background: rgba(255,255,255,0.03); border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.05);
     }
     .task-signature-section .sign-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 0.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px; margin-bottom: 0.5rem;
     }
-    .task-signature-section .sign-header h5 {
-      color: #a29bfe;
-      font-size: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .task-signature-section .sign-header .sign-badge {
-      font-size: 0.5rem;
-      padding: 0.1rem 0.5rem;
-      border-radius: 30px;
-    }
-    .task-signature-section .sign-header .sign-badge.signed {
-      background: rgba(0,206,209,0.15);
-      color: #00ced1;
-    }
-    .task-signature-section .sign-header .sign-badge.not-signed {
-      background: rgba(255,215,0,0.1);
-      color: #ffd700;
-    }
+    .task-signature-section .sign-header h5 { color: #a29bfe; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
+    .task-signature-section .sign-header .sign-badge { font-size: 0.5rem; padding: 0.1rem 0.5rem; border-radius: 30px; }
+    .task-signature-section .sign-header .sign-badge.signed { background: rgba(0,206,209,0.15); color: #00ced1; }
+    .task-signature-section .sign-header .sign-badge.not-signed { background: rgba(255,215,0,0.1); color: #ffd700; }
     .task-signature-section .sign-canvas-wrapper {
-      border: 2px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.02);
-      position: relative;
-      margin: 0.3rem 0;
-      min-height: 200px;
+      border: 2px solid rgba(255,255,255,0.06); border-radius: 10px;
+      overflow: hidden; background: rgba(255,255,255,0.02);
+      position: relative; margin: 0.3rem 0; min-height: 200px;
       touch-action: none;
     }
     .task-signature-section .sign-canvas-wrapper canvas {
-      display: block;
-      width: 100%;
-      height: 200px;
-      cursor: crosshair;
-      touch-action: none;
+      display: block; width: 100%; height: 200px;
+      cursor: crosshair; touch-action: none;
       background: rgba(255,255,255,0.02);
     }
     .task-signature-section .sign-canvas-wrapper .placeholder-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #4a5a7a;
-      font-size: 0.7rem;
-      pointer-events: none;
-      opacity: 0.5;
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); color: #4a5a7a;
+      font-size: 0.7rem; pointer-events: none; opacity: 0.5;
     }
-    .task-signature-section .sign-actions {
-      display: flex;
-      gap: 6px;
-      margin-top: 0.4rem;
-      flex-wrap: wrap;
-    }
+    .task-signature-section .sign-actions { display: flex; gap: 6px; margin-top: 0.4rem; flex-wrap: wrap; }
     .task-signature-section .sign-actions button {
-      padding: 0.2rem 0.7rem;
-      border-radius: 8px;
+      padding: 0.2rem 0.7rem; border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.06);
-      background: rgba(255,255,255,0.05);
-      color: #d3def5;
-      font-size: 0.6rem;
-      cursor: pointer;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      background: rgba(255,255,255,0.05); color: #d3def5;
+      font-size: 0.6rem; cursor: pointer; transition: 0.2s;
+      display: flex; align-items: center; gap: 4px;
     }
     .task-signature-section .sign-actions .btn-sign-task {
       background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-      border: none;
-      color: white;
+      border: none; color: white;
     }
     .task-signature-section .sign-actions .btn-sign-task:hover { opacity: 0.8; }
     .task-signature-section .sign-actions .btn-sign-task:disabled { opacity: 0.4; cursor: not-allowed; }
     .task-signature-section .sign-actions .btn-clear-task:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
     .task-signature-section .sign-actions .btn-clear-task:disabled { opacity: 0.3; cursor: not-allowed; }
-    .task-signature-section .sign-list {
-      margin-top: 0.4rem;
-    }
+    .task-signature-section .sign-list { margin-top: 0.4rem; }
     .task-signature-section .sign-list .sign-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
+      display: flex; align-items: center; gap: 8px;
+      padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.03);
       flex-wrap: wrap;
     }
     .task-signature-section .sign-list .sign-item:last-child { border-bottom: none; }
     .task-signature-section .sign-list .sign-item .sign-avatar {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
+      width: 24px; height: 24px; border-radius: 50%;
       background: rgba(108,92,231,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #a29bfe;
-      font-size: 0.6rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #a29bfe; font-size: 0.6rem; font-weight: 600;
+      text-transform: uppercase; flex-shrink: 0;
     }
-    .task-signature-section .sign-list .sign-item .sign-info {
-      flex: 1;
-      min-width: 100px;
-    }
-    .task-signature-section .sign-list .sign-item .sign-info .sign-name {
-      color: #f0f4ff;
-      font-size: 0.7rem;
-    }
-    .task-signature-section .sign-list .sign-item .sign-info .sign-time {
-      color: #8b9fc9;
-      font-size: 0.55rem;
-    }
+    .task-signature-section .sign-list .sign-item .sign-info { flex: 1; min-width: 100px; }
+    .task-signature-section .sign-list .sign-item .sign-info .sign-name { color: #f0f4ff; font-size: 0.7rem; }
+    .task-signature-section .sign-list .sign-item .sign-info .sign-time { color: #8b9fc9; font-size: 0.55rem; }
     .task-signature-section .sign-list .sign-item .sign-status-text {
-      font-size: 0.5rem;
-      padding: 0.05rem 0.4rem;
-      border-radius: 30px;
-      background: rgba(0,206,209,0.12);
-      color: #00ced1;
+      font-size: 0.5rem; padding: 0.05rem 0.4rem;
+      border-radius: 30px; background: rgba(0,206,209,0.12); color: #00ced1;
     }
     .task-signature-section .sign-list .sign-item .btn-unsign-task {
-      background: rgba(255,70,70,0.1);
-      border: 1px solid rgba(255,70,70,0.15);
-      color: #ff6b6b;
-      padding: 0.05rem 0.3rem;
-      border-radius: 4px;
-      font-size: 0.45rem;
-      cursor: pointer;
+      background: rgba(255,70,70,0.1); border: 1px solid rgba(255,70,70,0.15);
+      color: #ff6b6b; padding: 0.05rem 0.3rem; border-radius: 4px;
+      font-size: 0.45rem; cursor: pointer;
     }
-    .task-signature-section .sign-list .sign-item .btn-unsign-task:hover {
-      background: rgba(255,70,70,0.2);
-    }
-    .task-signature-section .sign-list .sign-item .signature-preview {
-      max-width: 80px;
-      margin-top: 2px;
-    }
-    .task-signature-section .sign-list .sign-item .signature-preview img {
-      max-height: 35px;
-      border-radius: 4px;
-      background: white;
-    }
-    .task-signature-section .sign-empty {
-      color: #68769e;
-      font-size: 0.65rem;
-      padding: 0.2rem 0;
-      text-align: center;
-    }
+    .task-signature-section .sign-list .sign-item .btn-unsign-task:hover { background: rgba(255,70,70,0.2); }
+    .task-signature-section .sign-list .sign-item .signature-preview { max-width: 80px; margin-top: 2px; }
+    .task-signature-section .sign-list .sign-item .signature-preview img { max-height: 35px; border-radius: 4px; background: white; }
+    .task-signature-section .sign-empty { color: #68769e; font-size: 0.65rem; padding: 0.2rem 0; text-align: center; }
 
     .report-list { margin: 0.5rem 0; }
     .report-item {
-      background: rgba(255,255,255,0.03);
-      border-radius: 14px;
-      padding: 0.7rem 0.9rem;
-      margin-bottom: 0.6rem;
-      border: 1px solid rgba(255,255,255,0.04);
-      transition: 0.2s;
+      background: rgba(255,255,255,0.03); border-radius: 14px;
+      padding: 0.7rem 0.9rem; margin-bottom: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.04); transition: 0.2s;
     }
     .report-item:hover { background: rgba(255,255,255,0.06); }
     .report-item .report-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 8px;
-      flex-wrap: wrap;
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 8px; flex-wrap: wrap;
     }
-    .report-item .report-title {
-      color: #f0f4ff;
-      font-weight: 500;
-      font-size: 0.85rem;
-    }
+    .report-item .report-title { color: #f0f4ff; font-weight: 500; font-size: 0.85rem; }
     .report-item .report-meta {
-      color: #8b9fc9;
-      font-size: 0.65rem;
-      margin-top: 0.2rem;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      color: #8b9fc9; font-size: 0.65rem; margin-top: 0.2rem;
+      display: flex; gap: 10px; flex-wrap: wrap;
     }
     .report-item .report-meta i { margin-right: 3px; }
-    .report-item .report-actions {
-      display: flex;
-      gap: 5px;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-    }
+    .report-item .report-actions { display: flex; gap: 5px; flex-shrink: 0; flex-wrap: wrap; }
     .report-item .report-actions button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.06);
-      color: #d3def5;
-      padding: 0.15rem 0.5rem;
-      border-radius: 10px;
-      font-size: 0.6rem;
-      cursor: pointer;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 3px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06);
+      color: #d3def5; padding: 0.15rem 0.5rem; border-radius: 10px;
+      font-size: 0.6rem; cursor: pointer; transition: 0.2s;
+      display: flex; align-items: center; gap: 3px;
     }
     .report-item .report-actions .view-btn:hover { background: rgba(0,206,209,0.15); border-color: #00ced1; color: #00ced1; }
     .report-item .report-actions .download-btn:hover { background: rgba(253,203,110,0.15); border-color: #ffd700; color: #ffd700; }
     .report-item .report-actions .delete-btn:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
-    .report-item .report-desc {
-      color: #b0c4e8;
-      font-size: 0.75rem;
-      margin-top: 0.3rem;
-      padding-top: 0.3rem;
-      border-top: 1px solid rgba(255,255,255,0.03);
-    }
-    .report-type-badge {
-      display: inline-block;
-      font-size: 0.5rem;
-      padding: 0.05rem 0.5rem;
-      border-radius: 30px;
-      margin-left: 4px;
-    }
+    .report-item .report-desc { color: #b0c4e8; font-size: 0.75rem; margin-top: 0.3rem; padding-top: 0.3rem; border-top: 1px solid rgba(255,255,255,0.03); }
+    .report-type-badge { display: inline-block; font-size: 0.5rem; padding: 0.05rem 0.5rem; border-radius: 30px; margin-left: 4px; }
     .report-type-badge.rajal { background: rgba(0,206,209,0.15); color: #00ced1; }
     .report-type-badge.ranap { background: rgba(108,92,231,0.15); color: #a29bfe; }
 
     .report-preview {
-      background: rgba(255,255,255,0.03);
-      border-radius: 12px;
-      padding: 1rem;
-      max-height: 450px;
-      overflow-y: auto;
-      font-size: 0.8rem;
-      line-height: 1.8;
-      color: #d3def5;
+      background: rgba(255,255,255,0.03); border-radius: 12px;
+      padding: 1rem; max-height: 450px; overflow-y: auto;
+      font-size: 0.8rem; line-height: 1.8; color: #d3def5;
       border: 1px solid rgba(255,255,255,0.05);
     }
     .report-preview::-webkit-scrollbar { width: 4px; }
@@ -783,181 +447,75 @@
     .report-preview::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.3); border-radius: 10px; }
 
     .report-upload-form {
-      background: rgba(255,255,255,0.03);
-      padding: 0.8rem;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.03); padding: 0.8rem;
+      border-radius: 14px; border: 1px solid rgba(255,255,255,0.04);
       margin-bottom: 1rem;
     }
-    .report-upload-form .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
+    .report-upload-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem; }
     .report-upload-form .form-row .input-group { margin-bottom: 0; }
-    .report-upload-form .file-input-wrapper {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    .report-upload-form .file-input-wrapper { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
     .report-upload-form .file-input-wrapper input[type="file"] {
-      flex: 1;
-      min-width: 120px;
-      padding: 0.5rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      font-size: 0.65rem;
-      color: #d3def5;
-      cursor: pointer;
+      flex: 1; min-width: 120px; padding: 0.5rem;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; font-size: 0.65rem; color: #d3def5; cursor: pointer;
     }
     .report-upload-form .file-input-wrapper input[type="file"]::-webkit-file-upload-button {
-      background: rgba(108,92,231,0.2);
-      border: none;
-      border-radius: 6px;
-      color: #a29bfe;
-      padding: 0.1rem 0.5rem;
-      font-size: 0.55rem;
-      cursor: pointer;
+      background: rgba(108,92,231,0.2); border: none; border-radius: 6px;
+      color: #a29bfe; padding: 0.1rem 0.5rem; font-size: 0.55rem; cursor: pointer;
     }
 
     .task-list { margin: 0.5rem 0; }
     .task-item {
-      background: rgba(255,255,255,0.03);
-      border-radius: 14px;
-      padding: 0.7rem 0.9rem;
-      margin-bottom: 0.6rem;
-      border: 1px solid rgba(255,255,255,0.04);
-      transition: 0.2s;
+      background: rgba(255,255,255,0.03); border-radius: 14px;
+      padding: 0.7rem 0.9rem; margin-bottom: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.04); transition: 0.2s;
     }
     .task-item:hover { background: rgba(255,255,255,0.06); }
     .task-item .task-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 8px;
-      flex-wrap: wrap;
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 8px; flex-wrap: wrap;
     }
-    .task-item .task-title {
-      color: #f0f4ff;
-      font-weight: 500;
-      font-size: 0.85rem;
-    }
-    .task-item .task-meta {
-      color: #8b9fc9;
-      font-size: 0.65rem;
-      margin-top: 0.2rem;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .task-item .task-title { color: #f0f4ff; font-weight: 500; font-size: 0.85rem; }
+    .task-item .task-meta { color: #8b9fc9; font-size: 0.65rem; margin-top: 0.2rem; display: flex; gap: 10px; flex-wrap: wrap; }
     .task-item .task-meta i { margin-right: 3px; }
-    .task-item .task-actions {
-      display: flex;
-      gap: 5px;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-    }
+    .task-item .task-actions { display: flex; gap: 5px; flex-shrink: 0; flex-wrap: wrap; }
     .task-item .task-actions button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.06);
-      color: #d3def5;
-      padding: 0.15rem 0.5rem;
-      border-radius: 10px;
-      font-size: 0.6rem;
-      cursor: pointer;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 3px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06);
+      color: #d3def5; padding: 0.15rem 0.5rem; border-radius: 10px;
+      font-size: 0.6rem; cursor: pointer; transition: 0.2s;
+      display: flex; align-items: center; gap: 3px;
     }
     .task-item .task-actions .edit-btn:hover { background: rgba(255,215,0,0.15); border-color: #ffd700; color: #ffd700; }
     .task-item .task-actions .delete-btn:hover { background: rgba(255,70,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
     .task-item .task-actions .sign-task-btn:hover { background: rgba(108,92,231,0.15); border-color: #a29bfe; color: #a29bfe; }
-    .task-item .task-desc {
-      color: #b0c4e8;
-      font-size: 0.75rem;
-      margin-top: 0.3rem;
-      padding-top: 0.3rem;
-      border-top: 1px solid rgba(255,255,255,0.03);
-    }
-    .task-item .task-status {
-      display: inline-block;
-      font-size: 0.55rem;
-      padding: 0.05rem 0.4rem;
-      border-radius: 30px;
-      margin-left: 4px;
-    }
+    .task-item .task-desc { color: #b0c4e8; font-size: 0.75rem; margin-top: 0.3rem; padding-top: 0.3rem; border-top: 1px solid rgba(255,255,255,0.03); }
+    .task-item .task-status { display: inline-block; font-size: 0.55rem; padding: 0.05rem 0.4rem; border-radius: 30px; margin-left: 4px; }
     .task-status.pending { background: rgba(255,215,0,0.15); color: #ffd700; }
     .task-status.done { background: rgba(0,206,209,0.15); color: #00ced1; }
 
-    .task-comments {
-      margin-top: 0.5rem;
-      padding-top: 0.5rem;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    .task-comments .comment-list {
-      max-height: 150px;
-      overflow-y: auto;
-      margin-bottom: 0.3rem;
-    }
+    .task-comments { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); }
+    .task-comments .comment-list { max-height: 150px; overflow-y: auto; margin-bottom: 0.3rem; }
     .task-comments .comment-list::-webkit-scrollbar { width: 3px; }
     .task-comments .comment-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
     .task-comments .comment-list::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.3); border-radius: 10px; }
-    .task-comments .comment-item {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding: 0.3rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
+    .task-comments .comment-item { display: flex; flex-direction: column; gap: 2px; padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
     .task-comments .comment-item:last-child { border-bottom: none; }
-    .task-comments .comment-user {
-      font-size: 0.6rem;
-      color: #a29bfe;
-      font-weight: 600;
-    }
-    .task-comments .comment-text {
-      font-size: 0.75rem;
-      color: #d3def5;
-      padding-left: 0.5rem;
-      border-left: 2px solid rgba(108,92,231,0.3);
-      word-wrap: break-word;
-    }
-    .task-comments .comment-time {
-      font-size: 0.5rem;
-      color: #68769e;
-      margin-left: 0.5rem;
-    }
-    .task-comments .comment-form {
-      display: flex;
-      gap: 6px;
-      margin-top: 0.3rem;
-    }
+    .task-comments .comment-user { font-size: 0.6rem; color: #a29bfe; font-weight: 600; }
+    .task-comments .comment-text { font-size: 0.75rem; color: #d3def5; padding-left: 0.5rem; border-left: 2px solid rgba(108,92,231,0.3); word-wrap: break-word; }
+    .task-comments .comment-time { font-size: 0.5rem; color: #68769e; margin-left: 0.5rem; }
+    .task-comments .comment-form { display: flex; gap: 6px; margin-top: 0.3rem; }
     .task-comments .comment-form input {
-      flex: 1;
-      padding: 0.3rem 0.6rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      font-size: 0.7rem;
-      color: #f0f4ff;
-      outline: none;
+      flex: 1; padding: 0.3rem 0.6rem;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; font-size: 0.7rem; color: #f0f4ff; outline: none;
     }
     .task-comments .comment-form input:focus { border-color: #6c5ce7; }
     .task-comments .comment-form input::placeholder { color: #4a5a7a; }
     .task-comments .comment-form button {
       padding: 0.3rem 0.7rem;
       background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-      border: none;
-      border-radius: 10px;
-      font-size: 0.6rem;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-      white-space: nowrap;
+      border: none; border-radius: 10px; font-size: 0.6rem;
+      color: white; cursor: pointer; transition: 0.2s; white-space: nowrap;
     }
     .task-comments .comment-form button:hover { opacity: 0.8; }
     .task-comments .comment-form button:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -979,105 +537,59 @@
     }
     .modal-overlay.show { display: flex; }
     .modal-box {
-      background: #1a2332;
-      max-width: 500px; width: 100%;
-      max-height: 90vh;
-      border-radius: 24px;
+      background: #1a2332; max-width: 500px; width: 100%;
+      max-height: 90vh; border-radius: 24px;
       padding: 1.5rem 1.2rem;
       box-shadow: 0 30px 60px rgba(0,0,0,0.8);
       border: 1px solid rgba(255,255,255,0.05);
-      color: #f0f4ff;
-      position: relative;
-      animation: fadeUp 0.3s ease;
-      overflow-y: auto;
+      color: #f0f4ff; position: relative;
+      animation: fadeUp 0.3s ease; overflow-y: auto;
     }
     .modal-box h3 {
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-weight: 600; margin-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.05);
       padding-bottom: 0.6rem;
     }
     .modal-box h3 i { color: #a29bfe; }
     .modal-close {
       position: absolute; top: 12px; right: 16px;
-      background: none; border: none;
-      color: #9aa9c9; font-size: 1.4rem;
-      cursor: pointer; transition: 0.2s;
+      background: none; border: none; color: #9aa9c9;
+      font-size: 1.4rem; cursor: pointer; transition: 0.2s;
     }
     .modal-close:hover { color: #ffbaba; transform: rotate(90deg); }
     .modal-content { font-size: 0.9rem; line-height: 1.6; color: #d3def5; }
     .modal-content .item { padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .modal-content .item:last-child { border-bottom: none; }
     .modal-content .badge {
-      background: rgba(108,92,231,0.2);
-      padding: 0.05rem 0.7rem;
-      border-radius: 30px;
-      font-size: 0.6rem;
-      color: #b8aaff;
-      display: inline-block;
-      margin-left: auto;
+      background: rgba(108,92,231,0.2); padding: 0.05rem 0.7rem;
+      border-radius: 30px; font-size: 0.6rem; color: #b8aaff;
+      display: inline-block; margin-left: auto;
     }
 
-    .stat-title {
-      color: #f0f4ff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .stat-title { color: #f0f4ff; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; }
     .stat-title i { color: #00ced1; }
 
-    .filter-bar {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 0.8rem;
-      flex-wrap: wrap;
-    }
+    .filter-bar { display: flex; gap: 6px; margin-bottom: 0.8rem; flex-wrap: wrap; }
     .filter-bar button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.06);
-      color: #8b9fc9;
-      padding: 0.25rem 0.7rem;
-      border-radius: 30px;
-      font-size: 0.65rem;
-      cursor: pointer;
-      transition: 0.2s;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06);
+      color: #8b9fc9; padding: 0.25rem 0.7rem;
+      border-radius: 30px; font-size: 0.65rem; cursor: pointer; transition: 0.2s;
     }
-    .filter-bar button.active {
-      background: rgba(108,92,231,0.2);
-      border-color: #6c5ce7;
-      color: #a29bfe;
-    }
+    .filter-bar button.active { background: rgba(108,92,231,0.2); border-color: #6c5ce7; color: #a29bfe; }
     .filter-bar button:hover { background: rgba(255,255,255,0.08); }
 
     .home-activity {
-      margin-top: 1.2rem;
-      background: rgba(255,255,255,0.02);
-      border-radius: 18px;
-      padding: 0.8rem 1rem;
+      margin-top: 1.2rem; background: rgba(255,255,255,0.02);
+      border-radius: 18px; padding: 0.8rem 1rem;
       border: 1px solid rgba(255,255,255,0.03);
     }
-    .home-activity h4 {
-      color: #ffffff;
-      font-weight: 500;
-      font-size: 0.85rem;
-      margin-bottom: 0.5rem;
-    }
+    .home-activity h4 { color: #ffffff; font-weight: 500; font-size: 0.85rem; margin-bottom: 0.5rem; }
     .home-activity h4 i { color: #a29bfe; }
     .activity-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #ffffff;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: 0.8rem;
+      display: flex; align-items: center; gap: 10px;
+      color: #ffffff; padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem;
     }
     .activity-item:last-child { border-bottom: none; }
     .activity-item i { color: #a29bfe; width: 20px; font-size: 0.85rem; }
@@ -1085,77 +597,42 @@
     .activity-item small { color: #aab8d4; font-size: 0.6rem; white-space: nowrap; margin-left: auto; }
 
     .db-status {
-      font-size: 0.65rem;
-      color: #5f7197;
-      text-align: center;
-      margin-top: 0.5rem;
-      padding: 0.2rem;
-      background: rgba(255,255,255,0.02);
-      border-radius: 12px;
+      font-size: 0.65rem; color: #5f7197; text-align: center;
+      margin-top: 0.5rem; padding: 0.2rem;
+      background: rgba(255,255,255,0.02); border-radius: 12px;
     }
     .db-status.online { color: #46d47c; }
     .db-status.offline { color: #ff6b6b; }
     .db-status.sync { color: #ffd93d; animation: pulse 1.5s ease-in-out infinite; }
 
     .home-footer {
-      text-align: center;
-      margin-top: 1rem;
-      color: #4a5a7a;
-      font-size: 0.6rem;
-      border-top: 1px solid rgba(255,255,255,0.03);
-      padding-top: 0.8rem;
-      letter-spacing: 0.5px;
+      text-align: center; margin-top: 1rem; color: #4a5a7a;
+      font-size: 0.6rem; border-top: 1px solid rgba(255,255,255,0.03);
+      padding-top: 0.8rem; letter-spacing: 0.5px;
     }
 
     .stat-table-wrap {
-      background: rgba(255,255,255,0.03);
-      border-radius: 16px;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      background: rgba(255,255,255,0.03); border-radius: 16px;
+      padding: 1rem; margin: 0.5rem 0;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
     }
-    .stat-table-wrap table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.75rem;
-      min-width: 280px;
-    }
+    .stat-table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.75rem; min-width: 280px; }
     .stat-table-wrap th {
-      color: #a29bfe;
-      font-weight: 600;
-      text-align: left;
-      padding: 0.5rem 0.4rem;
-      border-bottom: 2px solid rgba(255,255,255,0.06);
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      color: #a29bfe; font-weight: 600; text-align: left;
+      padding: 0.5rem 0.4rem; border-bottom: 2px solid rgba(255,255,255,0.06);
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;
     }
-    .stat-table-wrap td {
-      color: #d3def5;
-      padding: 0.5rem 0.4rem;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
+    .stat-table-wrap td { color: #d3def5; padding: 0.5rem 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
     .stat-table-wrap tr:last-child td { border-bottom: none; }
     .stat-table-wrap .label-cell { color: #8b9fc9; font-weight: 500; }
     .stat-table-wrap .value-cell { color: #f0f4ff; font-weight: 500; }
     .stat-table-wrap .highlight-cell { color: #00ced1; font-weight: 600; }
-    .stat-table-wrap .note-cell {
-      color: #68769e;
-      font-size: 0.65rem;
-      font-style: italic;
-      padding-top: 0.8rem;
-      border-top: 1px solid rgba(255,255,255,0.04);
-    }
+    .stat-table-wrap .note-cell { color: #68769e; font-size: 0.65rem; font-style: italic; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.04); }
 
     .user-list-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      flex-wrap: wrap;
-      gap: 0.3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-wrap: wrap; gap: 0.3rem;
     }
     .user-list-item:last-child { border-bottom: none; }
     .user-list-item .user-info { display: flex; flex-direction: column; gap: 2px; }
@@ -1163,27 +640,18 @@
     .user-list-item .user-detail { color: #8b9fc9; font-size: 0.65rem; }
     .user-list-item .user-actions { display: flex; gap: 5px; flex-wrap: wrap; }
     .user-list-item .user-actions button {
-      padding: 0.2rem 0.5rem;
-      border-radius: 10px;
-      border: none;
-      font-size: 0.6rem;
-      cursor: pointer;
-      transition: 0.2s;
+      padding: 0.2rem 0.5rem; border-radius: 10px; border: none;
+      font-size: 0.6rem; cursor: pointer; transition: 0.2s;
     }
-    .user-list-item .user-actions .edit-user-btn { background: rgba(253, 203, 110, 0.15); color: #fdcb6e; border: 1px solid rgba(253, 203, 110, 0.15); }
-    .user-list-item .user-actions .edit-user-btn:hover { background: rgba(253, 203, 110, 0.25); }
-    .user-list-item .user-actions .delete-user-btn { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.15); }
-    .user-list-item .user-actions .delete-user-btn:hover { background: rgba(255, 107, 107, 0.25); }
-    .user-list-item .user-actions .reset-pass-btn { background: rgba(0, 206, 209, 0.15); color: #00ced1; border: 1px solid rgba(0, 206, 209, 0.15); }
-    .user-list-item .user-actions .reset-pass-btn:hover { background: rgba(0, 206, 209, 0.25); }
-    .user-list-item .user-actions .make-admin-btn { background: rgba(255, 215, 0, 0.15); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.15); }
-    .user-list-item .user-actions .make-admin-btn:hover { background: rgba(255, 215, 0, 0.25); }
-    .user-role-badge {
-      font-size: 0.5rem;
-      padding: 0.05rem 0.5rem;
-      border-radius: 30px;
-      display: inline-block;
-    }
+    .user-list-item .user-actions .edit-user-btn { background: rgba(253,203,110,0.15); color: #fdcb6e; border: 1px solid rgba(253,203,110,0.15); }
+    .user-list-item .user-actions .edit-user-btn:hover { background: rgba(253,203,110,0.25); }
+    .user-list-item .user-actions .delete-user-btn { background: rgba(255,107,107,0.15); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.15); }
+    .user-list-item .user-actions .delete-user-btn:hover { background: rgba(255,107,107,0.25); }
+    .user-list-item .user-actions .reset-pass-btn { background: rgba(0,206,209,0.15); color: #00ced1; border: 1px solid rgba(0,206,209,0.15); }
+    .user-list-item .user-actions .reset-pass-btn:hover { background: rgba(0,206,209,0.25); }
+    .user-list-item .user-actions .make-admin-btn { background: rgba(255,215,0,0.15); color: #ffd700; border: 1px solid rgba(255,215,0,0.15); }
+    .user-list-item .user-actions .make-admin-btn:hover { background: rgba(255,215,0,0.25); }
+    .user-role-badge { font-size: 0.5rem; padding: 0.05rem 0.5rem; border-radius: 30px; display: inline-block; }
     .user-role-badge.admin { background: rgba(255,107,107,0.2); color: #ff6b6b; }
     .user-role-badge.user { background: rgba(108,92,231,0.2); color: #a29bfe; }
 
@@ -1261,7 +729,7 @@
         <div class="task-icon-small"><i class="fas fa-database"></i></div>
         <div class="task-info">
           <div class="task-name">Mengambil data user dari cloud</div>
-          <div class="task-meta">jsonbin.io · <span id="task1Status">Connecting...</span></div>
+          <div class="task-meta">GitHub Gist · <span id="task1Status">Connecting...</span></div>
         </div>
         <span class="task-status-badge" id="task1Badge">⏳</span>
       </div>
@@ -1292,7 +760,7 @@
     </div>
 
     <div class="loading-footer">
-      <span><i class="fas fa-circle" style="color:#6c5ce7; font-size:0.3rem; vertical-align:middle;"></i>  Cloud Sync</span>
+      <span><i class="fas fa-circle" style="color:#6c5ce7; font-size:0.3rem; vertical-align:middle;"></i>  GitHub Gist Sync</span>
       <span class="badge"><i class="fas fa-shield-alt"></i>  Secure</span>
       <span id="timerEl"><i class="far fa-clock"></i>  0s</span>
     </div>
@@ -1319,7 +787,7 @@
         <button type="submit" class="btn-primary" id="loginBtn"><i class="fas fa-arrow-right-to-bracket"></i> Masuk</button>
       </form>
       <div class="auth-footer">Belum punya akun? <a id="goToRegister">Daftar di sini</a></div>
-      <div class="db-status" id="dbStatus">□ Menghubungkan ke cloud...</div>
+      <div class="db-status" id="dbStatus">□ Menghubungkan ke GitHub Gist...</div>
     </div>
 
     <!-- REGISTER -->
@@ -1352,7 +820,7 @@
           <div class="avatar" id="userAvatar">M</div>
           <div class="greeting">
             <h2 id="greetingUser">Halo, User <span class="role-badge user" id="roleBadge">User</span></h2>
-            <p><i class="fas fa-circle" style="color:#46d47c; font-size:0.4rem; vertical-align:middle;"></i> online · cloud sync</p>
+            <p><i class="fas fa-circle" style="color:#46d47c; font-size:0.4rem; vertical-align:middle;"></i> online · gist sync</p>
           </div>
         </div>
         <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Keluar</button>
@@ -1416,7 +884,7 @@
         <h4><i class="fas fa-clock" style="margin-right:6px;"></i> Aktivitas & Notifikasi</h4>
         <div id="activityList"></div>
       </div>
-      <div class="home-footer"><i class="fas fa-circle" style="color:#6c5ce7; font-size:0.3rem; vertical-align:middle;"></i>  Daily Work · Cloud Sync</div>
+      <div class="home-footer"><i class="fas fa-circle" style="color:#6c5ce7; font-size:0.3rem; vertical-align:middle;"></i>  Daily Work · GitHub Gist Sync</div>
     </div>
   </div>
 
@@ -1560,16 +1028,17 @@
     })();
 
     // ============================================================
-    // MAIN APP
+    // MAIN APP - GITHUB GIST VERSION
     // ============================================================
     (function() {
       // ============================================================
-      // KONFIGURASI CLOUD DATABASE
+      // KONFIGURASI GITHUB GIST
       // ============================================================
       const CONFIG = {
-        API_KEY: '$2a$10$7rZHV/iWgXI04P/PbrTY1.Z3OpbyiN./CgUQydbDe/IPPcPpTduEK',
-        BIN_ID: '6a9e71e6ffd5d16053e852a5',
-        BASE_URL: 'https://api.jsonbin.io/v3'
+        GIST_ID: 'e72596072e35b31864d2c17fb1f81543',
+        GITHUB_TOKEN: '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',
+        BASE_URL: 'https://api.github.com',
+        DATA_FILE: 'data.json'
       };
 
       const ADMIN_USERNAME = 'marco';
@@ -1588,40 +1057,85 @@
         note: 'BTO TIDAK DALAM AVERAGE TAPI DALAM JUMLAH SETAHUN'
       };
 
-      // ============ CLOUD DATABASE FUNCTIONS ============
+      // ============ GITHUB GIST FUNCTIONS ============
+      function getGitHubToken() {
+        return sessionStorage.getItem('githubToken') || CONFIG.GITHUB_TOKEN;
+      }
+
       async function getUsersFromCloud() {
+        const token = getGitHubToken();
         try {
-          const response = await fetch(`${CONFIG.BASE_URL}/b/${CONFIG.BIN_ID}/latest`, {
-            headers: { 'X-Master-Key': CONFIG.API_KEY }
+          const response = await fetch(`${CONFIG.BASE_URL}/gists/${CONFIG.GIST_ID}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/vnd.github+json'
+            }
           });
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const data = await response.json();
-          return data.record || {};
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const gist = await response.json();
+          if (gist.files && gist.files[CONFIG.DATA_FILE]) {
+            const content = gist.files[CONFIG.DATA_FILE].content;
+            return content ? JSON.parse(content) : {};
+          }
+          return {};
         } catch (error) {
-          console.error('❌ Gagal mengambil data dari cloud:', error);
+          console.error('❌ Gagal baca dari Gist:', error);
           return getUsersFromLocal();
         }
       }
 
       async function saveUsersToCloud(users) {
+        const token = getGitHubToken();
         try {
-          const response = await fetch(`${CONFIG.BASE_URL}/b/${CONFIG.BIN_ID}`, {
-            method: 'PUT',
+          const response = await fetch(`${CONFIG.BASE_URL}/gists/${CONFIG.GIST_ID}`, {
+            method: 'PATCH',
             headers: {
-              'Content-Type': 'application/json',
-              'X-Master-Key': CONFIG.API_KEY
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/vnd.github+json',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify(users)
+            body: JSON.stringify({
+              files: {
+                [CONFIG.DATA_FILE]: {
+                  content: JSON.stringify(users)
+                }
+              }
+            })
           });
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          console.log('✅ Data berhasil disimpan ke cloud');
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          console.log('✅ Data tersimpan ke GitHub Gist');
           saveUsersToLocal(users);
           return true;
         } catch (error) {
-          console.error('❌ Gagal menyimpan ke cloud:', error);
+          console.error('❌ Gagal simpan ke Gist:', error);
           saveUsersToLocal(users);
           return false;
         }
+      }
+
+      // ============ KOMPRESI TANDA TANGAN ============
+      function compressSignature(dataUrl, maxWidth = 200) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              const scale = Math.min(1, maxWidth / img.width);
+              canvas.width = img.width * scale;
+              canvas.height = img.height * scale;
+              const ctx = canvas.getContext('2d');
+              // Background putih supaya JPEG tidak transparan jadi hitam
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL('image/jpeg', 0.5));
+            } catch (e) {
+              resolve(dataUrl);
+            }
+          };
+          img.onerror = () => resolve(dataUrl);
+          img.src = dataUrl;
+        });
       }
 
       const DB_KEY = 'dailywork_users_cloud';
@@ -1646,10 +1160,10 @@
 
       async function loadUsers() {
         try {
-          updateDbStatus('□ Menghubungkan ke cloud...', 'sync');
+          updateDbStatus('□ Menghubungkan ke GitHub Gist...', 'sync');
           currentUsers = await getUsersFromCloud();
           const count = Object.keys(currentUsers).length;
-          updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
+          updateDbStatus(`✅ ${count} akun tersimpan di Gist`, 'online');
           return currentUsers;
         } catch (error) {
           currentUsers = getUsersFromLocal();
@@ -1664,7 +1178,7 @@
         const cloudSuccess = await saveUsersToCloud(users);
         const count = Object.keys(users).length;
         if (cloudSuccess) {
-          updateDbStatus(`✅ ${count} akun tersimpan di cloud`, 'online');
+          updateDbStatus(`✅ ${count} akun tersimpan di Gist`, 'online');
         } else {
           updateDbStatus(`⚠️ ${count} akun (disimpan lokal)`, 'offline');
         }
@@ -1679,7 +1193,7 @@
         }
       }
 
-      // ============ TASK SIGNATURE FUNCTIONS ============
+      // ============ TASK SIGNATURE ============
       function getTaskSignatures(taskUsername, taskId) {
         if (!currentUsers[taskUsername]) return [];
         const tasks = currentUsers[taskUsername].tasks || [];
@@ -1698,7 +1212,6 @@
         return true;
       }
 
-      // ============ SIGNATURE PERMISSION FUNCTIONS ============
       function getTaskSignaturePermission(taskUsername, taskId) {
         if (!currentUsers[taskUsername]) return { allowedUsers: [], allowAll: false };
         const tasks = currentUsers[taskUsername].tasks || [];
@@ -1729,7 +1242,6 @@
         return false;
       }
 
-      // ============ SIGN TASK ============
       async function signTask(taskUsername, taskId, signatureData) {
         if (!signatureData || signatureData.length < 100) {
           return { success: false, message: '❌ Tanda tangan tidak valid! Silakan buat ulang.' };
@@ -1755,7 +1267,6 @@
         return { success: true, message: '✅ Tugas berhasil ditandatangani!' };
       }
 
-      // ============ UNSIGN TASK ============
       async function unsignTask(taskUsername, taskId) {
         const isAdmin = currentUserRole === 'admin';
         
@@ -1776,7 +1287,6 @@
         
         const task = tasks[taskIndex];
         const signatures = task.signatures || [];
-        
         const signIndex = signatures.findIndex(s => s.signer === currentUsername);
         
         if (signIndex === -1) {
@@ -1797,7 +1307,7 @@
         }
       }
 
-      // ============ REPORT FUNCTIONS ============
+      // ============ REPORTS ============
       function getReports(username) {
         if (!currentUsers[username]) return [];
         return currentUsers[username].reports || [];
@@ -1909,7 +1419,7 @@
         return div.innerHTML;
       }
 
-      // ============ FUNGSI REGISTER & LOGIN ============
+      // ============ REGISTER & LOGIN ============
       async function registerUser(username, fullname, password) {
         await loadUsers();
         if (currentUsers[username]) {
@@ -1926,9 +1436,9 @@
         };
         const saved = await saveUsers(currentUsers);
         if (saved) {
-          return { success: true, message: '✅ Akun berhasil dibuat dan tersimpan di cloud!' };
+          return { success: true, message: '✅ Akun berhasil dibuat dan tersimpan di Gist!' };
         } else {
-          return { success: true, message: '⚠️ Akun tersimpan di lokal (cloud offline)' };
+          return { success: true, message: '⚠️ Akun tersimpan di lokal (Gist offline)' };
         }
       }
 
@@ -1944,7 +1454,7 @@
         return { success: true, user: currentUsers[username], role: role };
       }
 
-      // ============ FUNGSI MANAJEMEN USER ============
+      // ============ MANAJEMEN USER ============
       async function updateUser(oldUsername, newUsername, newFullname, newPassword, newRole) {
         await loadUsers();
         
@@ -1974,7 +1484,7 @@
         if (saved) {
           return { success: true, message: '✅ User berhasil diupdate!' };
         }
-        return { success: false, message: '❌ Gagal menyimpan ke cloud.' };
+        return { success: false, message: '❌ Gagal menyimpan ke Gist.' };
       }
 
       async function deleteUser(username) {
@@ -1993,7 +1503,7 @@
         if (saved) {
           return { success: true, message: '✅ User berhasil dihapus!' };
         }
-        return { success: false, message: '❌ Gagal menyimpan ke cloud.' };
+        return { success: false, message: '❌ Gagal menyimpan ke Gist.' };
       }
 
       async function resetPassword(username, newPassword) {
@@ -2008,10 +1518,10 @@
         if (saved) {
           return { success: true, message: '✅ Password berhasil direset!' };
         }
-        return { success: false, message: '❌ Gagal menyimpan ke cloud.' };
+        return { success: false, message: '❌ Gagal menyimpan ke Gist.' };
       }
 
-      // ============ TASK FUNCTIONS ============
+      // ============ TASKS ============
       function getTasks(username) {
         if (!currentUsers[username]) return [];
         return currentUsers[username].tasks || [];
@@ -2060,7 +1570,7 @@
         return true;
       }
 
-      // ============ FUNGSI KOMENTAR ============
+      // ============ KOMENTAR ============
       async function addComment(taskUsername, taskId, commentText) {
         try {
           await loadUsers();
@@ -2098,11 +1608,11 @@
           const saved = await saveUsers(currentUsers);
           
           if (saved) {
-            console.log('✅ Komentar berhasil disimpan ke cloud');
+            console.log('✅ Komentar berhasil disimpan ke Gist');
             await loadUsers();
             return true;
           } else {
-            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke cloud');
+            console.warn('⚠️ Komentar tersimpan di lokal tapi gagal ke Gist');
             return true;
           }
         } catch (error) {
@@ -2161,7 +1671,6 @@
         }
       }
 
-      // ============ GET ALL TASKS ============
       function getAllTasks() {
         let allTasks = [];
         Object.keys(currentUsers).forEach(username => {
@@ -2197,7 +1706,6 @@
         return map[day] || '□ Tidak ada notifikasi khusus';
       }
 
-      // ============ DATA KONTEN ============
       const dataStatistikAdmin = `
         <div class="item"><i class="fas fa-briefcase"></i> <span class="highlight">Marco Fajar Setiawan, S.K.M, CAHSE</span> <span class="badge">Admin</span></div>
         <div class="item"><span>□ 2020 · Medical Record Menteng</span> <span class="badge">90%</span></div>
@@ -2234,7 +1742,6 @@
         <div class="item small-note" style="margin-top:6px; color:#68769e; font-size:0.8rem;"><i class="fas fa-clock"></i> Minggu libur</div>
       `;
 
-      // ============ RENDER SIGNATURE PERMISSION ============
       function renderSignaturePermission(taskId, taskUsername) {
         const isAdmin = currentUserRole === 'admin';
         if (!isAdmin) return '';
@@ -2254,9 +1761,6 @@
               <span style="font-size:0.55rem; color:#68769e;">
                 ${allowAll ? '✅ Semua user diizinkan' : `✅ ${allowedUsers.length} user diizinkan`}
               </span>
-            </div>
-            <div class="permission-desc">
-              <i class="fas fa-info-circle"></i> Admin dapat mengatur siapa saja yang dapat menandatangani tugas ini
             </div>
             ${!allowAll ? `
               <div class="allowed-users" id="allowedUsers_${taskId}">
@@ -2284,7 +1788,6 @@
         return html;
       }
 
-      // ============ RENDER TASK SIGNATURE ============
       function renderTaskSignature(taskId, taskUsername) {
         const signatures = getTaskSignatures(taskUsername, taskId);
         const hasSigned = signatures.some(s => s.signer === currentUsername);
@@ -2360,7 +1863,6 @@
         return html;
       }
 
-      // ============ RENDER REPORTS ============
       function renderReports() {
         const allReports = getAllReports();
         const isAdmin = currentUserRole === 'admin';
@@ -2481,7 +1983,6 @@
         return html;
       }
 
-      // ============ RENDER TASK MANAGER ============
       function renderTaskManager() {
         const allTasks = getAllTasks();
         const isAdmin = currentUserRole === 'admin';
@@ -2676,7 +2177,6 @@
       const goToLogin = document.getElementById('goToLogin');
       const logoutBtn = document.getElementById('logoutBtn');
 
-      // ============ FUNGSI NAVIGASI ============
       function showPage(page) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         page.classList.add('active');
@@ -2688,7 +2188,6 @@
         registerInfo.classList.remove('show');
       }
 
-      // ============ UPDATE COUNTS ============
       function updateCounts() {
         const allTasks = getAllTasks();
         const allReports = getAllReports();
@@ -2703,7 +2202,6 @@
         reportPreview.textContent = allReports.length > 0 ? `${allReports.length} laporan tersimpan` : 'Upload & Lihat Laporan';
       }
 
-      // ============ UPDATE UI BERDASARKAN ROLE ============
       function updateUIForRole(role, username) {
         const isAdmin = role === 'admin';
         currentUserRole = role;
@@ -2734,7 +2232,6 @@
         updateCounts();
       }
 
-      // ============ RENDER AKTIVITAS ============
       function renderActivity() {
         const pesanHari = getPesanByDay(dayName);
         let notifText = dayName === 'Minggu' ? '☕ Hari Minggu · tidak ada jadwal kerja' : `□ ${dayName} · ${pesanHari}`;
@@ -2753,12 +2250,11 @@
           <div class="activity-item"><i class="fas fa-tasks"></i><span>Total: ${allTasks.length} tugas (${pendingTasks} pending) · ${totalComments} komentar · ${totalSignatures} tanda tangan</span><small>${timeStr}</small></div>
           <div class="activity-item"><i class="fas fa-file-alt"></i><span>Laporan: ${allReports.length} laporan</span><small>${timeStr}</small></div>
           <div class="activity-item"><i class="fas fa-users"></i><span>User terdaftar: ${totalUsers} akun</span><small>${timeStr}</small></div>
-          <div class="activity-item"><i class="fas fa-cloud"></i><span>Database: Cloud Sync</span><small>✅</small></div>
+          <div class="activity-item"><i class="fab fa-github"></i><span>Database: GitHub Gist Sync</span><small>✅</small></div>
         `;
         pesanPreview.textContent = dayName;
       }
 
-      // ============ LOGIN ============
       async function handleLogin(e) {
         e.preventDefault();
         const username = loginUsername.value.trim().toLowerCase();
@@ -2806,7 +2302,6 @@
         }
       }
 
-      // ============ REGISTER ============
       async function handleRegister(e) {
         e.preventDefault();
         const username = regUsername.value.trim().toLowerCase();
@@ -2844,7 +2339,7 @@
 
         registerBtn.disabled = true;
         registerBtn.innerHTML = '<span class="loading-spinner"></span> Menyimpan...';
-        registerInfoText.textContent = '☁️ Menyimpan ke cloud...';
+        registerInfoText.textContent = '☁️ Menyimpan ke GitHub Gist...';
         registerInfo.classList.add('show');
 
         try {
@@ -2864,7 +2359,7 @@
               showPage(loginPage);
               loginUsername.value = username;
               loginPassword.value = '';
-              loginSuccessText.textContent = '✅ Akun berhasil dibuat dan tersimpan di cloud!';
+              loginSuccessText.textContent = '✅ Akun berhasil dibuat dan tersimpan di Gist!';
               loginSuccess.classList.add('show');
               setTimeout(() => {
                 loginSuccess.classList.remove('show');
@@ -2875,7 +2370,7 @@
             registerError.classList.add('show');
           }
         } catch (error) {
-          registerErrorText.textContent = 'Gagal menyimpan ke cloud. Coba lagi.';
+          registerErrorText.textContent = 'Gagal menyimpan ke Gist. Coba lagi.';
           registerError.classList.add('show');
           console.error('❌ Register error:', error);
         } finally {
@@ -2884,7 +2379,6 @@
         }
       }
 
-      // ============ LOGOUT ============
       function handleLogout() {
         sessionStorage.removeItem('currentUser');
         sessionStorage.removeItem('userRole');
@@ -2899,7 +2393,6 @@
         loadUsers();
       }
 
-      // ============ CEK SESSION ============
       async function checkSession() {
         const currentUser = sessionStorage.getItem('currentUser');
         const userRole = sessionStorage.getItem('userRole') || 'user';
@@ -2973,7 +2466,6 @@
       modalClose.addEventListener('click', closeModal);
       modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
-      // ============ ATTACH REPORT EVENTS ============
       function attachReportEvents() {
         const form = document.getElementById('reportUploadForm');
         if (form) {
@@ -2997,8 +2489,8 @@
               return;
             }
 
-            if (file.size > 10 * 1024 * 1024) {
-              alert('Ukuran file maksimal 10MB!');
+            if (file.size > 5 * 1024 * 1024) {
+              alert('Ukuran file maksimal 5MB untuk menjaga ukuran Gist!');
               return;
             }
             
@@ -3140,7 +2632,6 @@
         }
       }
 
-      // ============ ATTACH USER MANAGEMENT EVENTS ============
       function attachUserManagementEvents() {
         const form = document.getElementById('addUserForm');
         if (form) {
@@ -3185,7 +2676,6 @@
         }
       }
 
-      // ============ ATTACH COMMENT EVENTS ============
       function attachCommentEvents() {
         document.querySelectorAll('.comment-form').forEach(form => {
           const newForm = form.cloneNode(true);
@@ -3216,19 +2706,6 @@
                 await refreshTaskModal();
                 updateCounts();
                 renderActivity();
-                const successMsg = document.createElement('div');
-                successMsg.className = 'success-msg show';
-                successMsg.style.marginTop = '0.5rem';
-                successMsg.style.padding = '0.4rem 0.8rem';
-                successMsg.style.fontSize = '0.75rem';
-                successMsg.innerHTML = '<i class="fas fa-check-circle"></i> Komentar berhasil ditambahkan!';
-                const container = this.closest('.task-item');
-                if (container) {
-                  container.appendChild(successMsg);
-                  setTimeout(() => {
-                    successMsg.remove();
-                  }, 3000);
-                }
               } else {
                 alert('❌ Gagal menambah komentar. Silakan coba lagi.');
               }
@@ -3243,7 +2720,6 @@
         });
       }
 
-      // ============ ATTACH TASK EVENTS ============
       function attachTaskEvents() {
         const form = document.getElementById('taskForm');
         if (form) {
@@ -3410,7 +2886,6 @@
         }
       }
 
-      // ============ SIGNATURE PERMISSION GLOBAL FUNCTIONS ============
       window.addAllowedUser = async function(taskId, taskUsername) {
         const select = document.getElementById(`addUserSelect_${taskId}`);
         if (!select) return;
@@ -3455,7 +2930,7 @@
         }
       }
 
-      // ============ TASK SIGNATURE CANVAS - PERBAIKAN UTAMA ============
+      // ============ TASK SIGNATURE CANVAS ============
       let taskSignatureCanvas = null;
       let taskSignatureCtx = null;
       let taskIsDrawing = false;
@@ -3463,30 +2938,24 @@
       let taskLastY = 0;
       let currentTaskId = '';
       let currentTaskUsername = '';
-      let canvasHasDrawing = false; // PERBAIKAN: Flag untuk tracking apakah user sudah menggambar
+      let canvasHasDrawing = false;
 
       function initTaskSignatureCanvas(taskId, username) {
         let canvas = document.getElementById(`signCanvas_${taskId}`);
         
         if (!canvas) {
-          console.warn('Canvas belum ditemukan, mencoba mencari ulang...');
-          setTimeout(() => {
-            initTaskSignatureCanvas(taskId, username);
-          }, 300);
+          setTimeout(() => initTaskSignatureCanvas(taskId, username), 300);
           return;
         }
 
         if (canvas.offsetParent === null) {
-          console.warn('Canvas tidak terlihat, menunggu...');
-          setTimeout(() => {
-            initTaskSignatureCanvas(taskId, username);
-          }, 200);
+          setTimeout(() => initTaskSignatureCanvas(taskId, username), 200);
           return;
         }
 
         currentTaskId = taskId;
         currentTaskUsername = username;
-        canvasHasDrawing = false; // RESET FLAG
+        canvasHasDrawing = false;
 
         const rect = canvas.getBoundingClientRect();
         let width = rect.width || 600;
@@ -3511,7 +2980,6 @@
         taskSignatureCtx.setTransform(1, 0, 0, 1, 0, 0);
         taskSignatureCtx.scale(dpr, dpr);
         
-        // Bersihkan canvas dengan background transparan
         taskSignatureCtx.clearRect(0, 0, width, height);
         
         taskSignatureCtx.lineWidth = 3;
@@ -3522,7 +2990,6 @@
         const placeholder = canvas.parentElement?.querySelector('.placeholder-text');
         if (placeholder) placeholder.style.display = 'block';
 
-        // ===== TOMBOL CLEAR =====
         const clearBtn = document.getElementById(`clearBtn_${taskId}`);
         if (clearBtn) {
           clearBtn.disabled = true;
@@ -3530,21 +2997,18 @@
             e.stopPropagation();
             clearTaskCanvas();
             this.disabled = true;
-            canvasHasDrawing = false; // RESET FLAG
+            canvasHasDrawing = false;
           };
         }
 
-        // ===== TOMBOL SIGN =====
         const signBtn = document.getElementById(`signBtn_${taskId}`);
         if (signBtn) {
-          // Clone untuk menghapus event listener lama
           const newSignBtn = signBtn.cloneNode(true);
           signBtn.parentNode.replaceChild(newSignBtn, signBtn);
           
           newSignBtn.onclick = function(e) {
             e.stopPropagation();
             try {
-              // PERBAIKAN: Cek flag drawing, bukan data URL
               if (!canvasHasDrawing) {
                 alert('Silakan buat tanda tangan terlebih dahulu!');
                 return;
@@ -3552,7 +3016,6 @@
               
               const dataUrl = canvas.toDataURL('image/png');
               
-              // Validasi data URL
               if (!dataUrl || dataUrl.length < 500) {
                 alert('Tanda tangan tidak valid. Silakan buat ulang!');
                 return;
@@ -3568,10 +3031,8 @@
           document.getElementById(`signBtn_${taskId}`).disabled = false;
         }
 
-        // Simpan state kosong
         canvas.setAttribute('data-empty', canvas.toDataURL('image/png'));
 
-        // Hapus event listener lama
         canvas.removeEventListener('mousedown', startTaskDrawing);
         canvas.removeEventListener('mousemove', taskDraw);
         canvas.removeEventListener('mouseup', stopTaskDrawing);
@@ -3580,18 +3041,16 @@
         canvas.removeEventListener('touchmove', taskDrawTouch);
         canvas.removeEventListener('touchend', stopTaskDrawing);
 
-        // Event listener untuk mouse
         canvas.addEventListener('mousedown', startTaskDrawing);
         canvas.addEventListener('mousemove', taskDraw);
         canvas.addEventListener('mouseup', stopTaskDrawing);
         canvas.addEventListener('mouseleave', stopTaskDrawing);
 
-        // Event listener untuk touch (mobile)
         canvas.addEventListener('touchstart', startTaskDrawingTouch, { passive: false });
         canvas.addEventListener('touchmove', taskDrawTouch, { passive: false });
         canvas.addEventListener('touchend', stopTaskDrawing, { passive: false });
 
-        console.log('✅ Canvas signature siap untuk task:', taskId, 'drawing flag:', canvasHasDrawing);
+        console.log('✅ Canvas signature siap untuk task:', taskId);
       }
 
       function getTaskPosition(e) {
@@ -3623,7 +3082,7 @@
         if (signBtn && signBtn.disabled) return;
         
         taskIsDrawing = true;
-        canvasHasDrawing = true; // PERBAIKAN: Set flag saat mulai menggambar
+        canvasHasDrawing = true;
         
         const pos = getTaskPosition(e);
         taskLastX = pos.x;
@@ -3672,7 +3131,6 @@
         const width = rect.width || 600;
         const height = rect.height || 200;
         
-        // Bersihkan canvas
         taskSignatureCtx.clearRect(0, 0, width * dpr, height * dpr);
         
         const placeholder = taskSignatureCanvas.parentElement?.querySelector('.placeholder-text');
@@ -3681,10 +3139,10 @@
         const clearBtn = document.getElementById(`clearBtn_${currentTaskId}`);
         if (clearBtn) clearBtn.disabled = true;
         
-        canvasHasDrawing = false; // RESET FLAG
+        canvasHasDrawing = false;
       }
 
-      // ============ TASK SIGNATURE GLOBAL FUNCTIONS ============
+      // ============ GLOBAL FUNCTIONS - TASK SIGNATURE ============
       window.showTaskSignature = async function(taskId, username) {
         try {
           await loadUsers();
@@ -3721,7 +3179,6 @@
             ${signatureHtml}
           `);
 
-          // Inisialisasi canvas setelah modal terbuka
           setTimeout(() => {
             initTaskSignatureCanvas(taskId, foundUsername);
             attachSignaturePermissionEvents(taskId, foundUsername);
@@ -3735,7 +3192,6 @@
 
       window.signTaskAction = async function(taskId, taskUsername, signatureData) {
         try {
-          // PERBAIKAN: Validasi data dengan lebih baik
           if (!signatureData) {
             alert('❌ Tanda tangan tidak valid. Silakan buat ulang.');
             return;
@@ -3746,12 +3202,10 @@
             return;
           }
           
-          if (!signatureData.startsWith('data:image/png;base64,')) {
-            alert('❌ Format tanda tangan tidak valid. Silakan buat ulang.');
-            return;
-          }
+          // Kompres tanda tangan sebelum disimpan
+          const compressed = await compressSignature(signatureData, 200);
           
-          const result = await signTask(taskUsername, taskId, signatureData);
+          const result = await signTask(taskUsername, taskId, compressed);
           if (result.success) {
             alert('✅ Tanda tangan berhasil disimpan!');
             window.showTaskSignature(taskId, taskUsername);
@@ -3793,7 +3247,7 @@
         });
       }
 
-      // ============ GLOBAL FUNCTIONS ============
+      // ============ GLOBAL FUNCTIONS - TASK ============
       window.editTask = async function(taskId, username) {
         await loadUsers();
         const tasks = getTasks(username);
@@ -3845,7 +3299,7 @@
         }
       };
 
-      // ============ REPORT GLOBAL FUNCTIONS ============
+      // ============ GLOBAL FUNCTIONS - REPORT ============
       window.viewReport = async function(reportId, username) {
         try {
           await loadUsers();
@@ -4036,7 +3490,7 @@
         }
       };
 
-      // ============ USER MANAGEMENT GLOBAL FUNCTIONS ============
+      // ============ GLOBAL FUNCTIONS - USER MANAGEMENT ============
       window.editUser = async function(username) {
         const user = currentUsers[username];
         if (!user) return;
@@ -4375,7 +3829,7 @@
             createdAt: new Date().toISOString()
           };
           await saveUsers(currentUsers);
-          console.log('✅ User admin "marco" dibuat di cloud');
+          console.log('✅ User admin "marco" dibuat di Gist');
         } else if (!currentUsers['marco'].role) {
           currentUsers['marco'].role = 'admin';
           if (!currentUsers['marco'].tasks) currentUsers['marco'].tasks = [];
@@ -4412,9 +3866,8 @@
           showPage(loginPage);
         }
 
-        console.log('□ Aplikasi siap dengan Task Manager + Tanda Tangan Drawing!');
-        console.log('□ SEMUA user dapat menandatangani tugas manapun!');
-        console.log('□ HANYA ADMIN yang dapat menghapus tanda tangan!');
+        console.log('□ Aplikasi siap dengan GitHub Gist Database!');
+        console.log('□ GIST_ID:', CONFIG.GIST_ID);
         console.log('□ Total user terdaftar:', Object.keys(currentUsers).length);
         console.log('□ Admin:', Object.keys(currentUsers).filter(k => currentUsers[k].role === 'admin'));
       };
